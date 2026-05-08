@@ -1242,3 +1242,6 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 
     return WindowMethods 
 end
+
+return Zyqril
+
