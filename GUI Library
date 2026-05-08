@@ -783,7 +783,7 @@ local AllElements = {}
         -- [[ ELEMENT: TOGGLE ]] --
         function TabMethods:CreateToggle(Config)
             local TglFrame = Instance.new("Frame")
-            TglFrame.Size = UDim2.new(1, -5, 0, 40)
+            TglFrame.Size = UDim2.new(1, -5, 0, 30)
             TglFrame.BackgroundColor3 = Settings.Element
             TglFrame.Parent = TabPage
             Instance.new("UICorner", TglFrame).CornerRadius = UDim.new(0, 8)
@@ -838,7 +838,7 @@ local AllElements = {}
        -- [[ ELEMENT: SLIDER ]] --
         function TabMethods:CreateSlider(Config)
             local SliderFrame = Instance.new("Frame")
-            SliderFrame.Size = UDim2.new(1, -5, 0, 40)
+            SliderFrame.Size = UDim2.new(1, -5, 0, 30)
             SliderFrame.BackgroundColor3 = Settings.Element
             SliderFrame.Parent = TabPage
             Instance.new("UICorner", SliderFrame).CornerRadius = UDim.new(0, 8)
@@ -926,7 +926,7 @@ local AllElements = {}
         -- [[ ELEMENT: DROPDOWN ]] --
         function TabMethods:CreateDropdown(Config)
             local DropdownFrame = Instance.new("Frame")
-            DropdownFrame.Size = UDim2.new(1, -5, 0, 40)
+            DropdownFrame.Size = UDim2.new(1, -5, 0, 30)
             DropdownFrame.BackgroundColor3 = Settings.Element
             DropdownFrame.ClipsDescendants = true
             DropdownFrame.Parent = TabPage
@@ -1003,7 +1003,7 @@ local AllElements = {}
         -- [[ ELEMENT: BUTTON ]] --
         function TabMethods:CreateButton(Config)
             local ButtonFrame = Instance.new("Frame")
-            ButtonFrame.Size = UDim2.new(1, -5, 0, 40)
+            ButtonFrame.Size = UDim2.new(1, -5, 0, 30)
             ButtonFrame.BackgroundColor3 = Settings.Element
             ButtonFrame.Parent = TabPage
             Instance.new("UICorner", ButtonFrame).CornerRadius = UDim.new(0, 8)
@@ -1056,7 +1056,7 @@ local AllElements = {}
         -- [[ ELEMENT: TIGHT & WIDE PARAGRAPH ]] --
        function TabMethods:CreateParagraph(Config)
             local ParagraphFrame = Instance.new("Frame")
-            ParagraphFrame.Size = UDim2.new(1, -5, 0, 40) 
+            ParagraphFrame.Size = UDim2.new(1, -5, 0, 30) 
             ParagraphFrame.BackgroundColor3 = Settings.Element
             ParagraphFrame.BackgroundTransparency = 0.1
             ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y
