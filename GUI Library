@@ -895,11 +895,12 @@ function WindowMethods:CreateTab(TabName, ImageID)
             return ToggleMethods
         end
 
-      -- [[ ELEMENT: SLIDER ]] --
+     -- [[ ELEMENT: SLIDER ]] --
         function TabMethods:CreateSlider(Config)
             local SliderFrame = Instance.new("Frame")
-            SliderFrame.Size = UDim2.new(1, -5, 0, 35)
+            SliderFrame.Size = UDim2.new(1, -5, 0, 0)
             SliderFrame.BackgroundColor3 = Settings.Element
+            SliderFrame.BackgroundTransparency = 0.1
             SliderFrame.AutomaticSize = Enum.AutomaticSize.Y
             SliderFrame.Parent = TabPage
             Instance.new("UICorner", SliderFrame).CornerRadius = UDim.new(0, 8)
@@ -907,7 +908,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             table.insert(AllElements, {Frame = SliderFrame, Name = Config.Name, Tab = TabPage})
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -95, 0, 0)
+            Label.Size = UDim2.new(1, -165, 0, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
@@ -957,7 +958,6 @@ function WindowMethods:CreateTab(TabName, ImageID)
             local ValueLabel = Instance.new("TextLabel")
             ValueLabel.Size = UDim2.new(1, 0, 1, 0)
             ValueLabel.BackgroundTransparency = 1
-            -- Added space between value and suffix
             ValueLabel.Text = tostring(Config.CurrentValue) .. " " .. Suffix
             ValueLabel.TextColor3 = Settings.Text 
             ValueLabel.Font = Enum.Font.GothamBold
@@ -1000,6 +1000,16 @@ function WindowMethods:CreateTab(TabName, ImageID)
             RunService.RenderStepped:Connect(function() 
                 if isDragging then Update() end 
             end)
+
+            local SliderMethods = {}
+            function SliderMethods:Set(NewValue)
+                local Val = math.clamp(NewValue, Min, Max)
+                local DisplayPercent = math.clamp((Val - Min) / (Max - Min), 0, 1)
+                ValueLabel.Text = tostring(Val) .. " " .. Suffix
+                Fill.Size = UDim2.new(DisplayPercent, 0, 1, 0)
+                Config.Callback(Val)
+            end
+            return SliderMethods
         end
 
         -- [[ ELEMENT: DROPDOWN ]] --
@@ -1161,51 +1171,45 @@ function WindowMethods:CreateTab(TabName, ImageID)
             return ButtonMethods
         end
 
-        -- [[ ELEMENT: PARAGRAPH ]] --
+       -- [[ ELEMENT: PARAGRAPH ]] --
        function TabMethods:CreateParagraph(Config)
             local ParagraphFrame = Instance.new("Frame")
-            ParagraphFrame.Size = UDim2.new(1, -5, 0, 30) 
+            ParagraphFrame.Size = UDim2.new(1, -5, 0, 0) 
             ParagraphFrame.BackgroundColor3 = Settings.Element
-            ParagraphFrame.BackgroundTransparency = 1
+            ParagraphFrame.BackgroundTransparency = 0.1
             ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y
             ParagraphFrame.Parent = TabPage
-            
             Instance.new("UICorner", ParagraphFrame).CornerRadius = UDim.new(0, 8)
+            
             local UIListLayout = Instance.new("UIListLayout", ParagraphFrame)
             UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            UIListLayout.Padding = UDim.new(0, 5) 
+            UIListLayout.Padding = UDim.new(0, 2) 
 
             local UIPadding = Instance.new("UIPadding", ParagraphFrame)
-            UIPadding.PaddingTop = UDim.new(0, 6)
-            UIPadding.PaddingBottom = UDim.new(0, 6)
-            UIPadding.PaddingLeft = UDim.new(0, 10)
-            UIPadding.PaddingRight = UDim.new(0, 10)
-
-            local TitleContainer = Instance.new("Frame")
-            TitleContainer.Size = UDim2.new(1, 0, 0, 0)
-            TitleContainer.BackgroundTransparency = 1
-            TitleContainer.AutomaticSize = Enum.AutomaticSize.Y
-            TitleContainer.LayoutOrder = 1
-            TitleContainer.Parent = ParagraphFrame
+            UIPadding.PaddingTop = UDim.new(0, 10)
+            UIPadding.PaddingBottom = UDim.new(0, 10)
+            UIPadding.PaddingLeft = UDim.new(0, 15) -- Matches Button/Toggle Label Position
+            UIPadding.PaddingRight = UDim.new(0, 15)
 
             local TitleLabel = Instance.new("TextLabel")
             TitleLabel.Size = UDim2.new(1, 0, 0, 0)
             TitleLabel.BackgroundTransparency = 1
             TitleLabel.Text = Config.Title:upper() or "INFO"
             TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-            TitleLabel.TextSize = 12
+            TitleLabel.TextSize = 14 -- Matched to Button Label Size
             TitleLabel.Font = Enum.Font.GothamBold
             TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
             TitleLabel.TextWrapped = true
             TitleLabel.AutomaticSize = Enum.AutomaticSize.Y
-            TitleLabel.Parent = TitleContainer
+            TitleLabel.LayoutOrder = 1
+            TitleLabel.Parent = ParagraphFrame
 
             local ContentLabel = Instance.new("TextLabel")
             ContentLabel.Size = UDim2.new(1, 0, 0, 0)
             ContentLabel.BackgroundTransparency = 1
             ContentLabel.Text = Config.Content or ""
             ContentLabel.TextColor3 = Settings.Text
-            ContentLabel.TextSize = 10
+            ContentLabel.TextSize = 12
             ContentLabel.Font = Enum.Font.GothamMedium
             ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
             ContentLabel.TextWrapped = true
@@ -1228,7 +1232,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             return ParagraphMethods
         end
 
-      -- [[ LABEL CREATION METHOD ]] --
+     -- [[ LABEL ]] --
         function TabMethods:CreateLabel(LabelText)
             local LabelFrame = Instance.new("Frame")
             LabelFrame.Size = UDim2.new(1, -5, 0, 0) 
@@ -1239,8 +1243,8 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Instance.new("UICorner", LabelFrame).CornerRadius = UDim.new(0, 8)
 
             local TextLabel = Instance.new("TextLabel")
-            TextLabel.Size = UDim2.new(1, -20, 0, 0) -- Adjusted width and reset Y
-            TextLabel.Position = UDim2.new(0, 10, 0, 0)
+            TextLabel.Size = UDim2.new(1, -95, 0, 0)
+            TextLabel.Position = UDim2.new(0, 15, 0, 0)
             TextLabel.BackgroundTransparency = 1
             TextLabel.Text = LabelText
             TextLabel.TextColor3 = Settings.Text
@@ -1268,7 +1272,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
        -- [[ ELEMENT: INPUT BOX ]] --
         function TabMethods:CreateInput(Config)
             local InputFrame = Instance.new("Frame")
-            InputFrame.Size = UDim2.new(1, -5, 0, 40)
+            InputFrame.Size = UDim2.new(1, -5, 0, 0) 
             InputFrame.BackgroundColor3 = Settings.Element
             InputFrame.BackgroundTransparency = 0.1
             InputFrame.AutomaticSize = Enum.AutomaticSize.Y
@@ -1277,14 +1281,14 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Instance.new("UICorner", InputFrame).CornerRadius = UDim.new(0, 8)
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -110, 0, 40) -- Adjusted width to prevent overlap
+            Label.Size = UDim2.new(1, -110, 0, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 15
+            Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
             Label.Parent = InputFrame
@@ -1295,17 +1299,17 @@ function WindowMethods:CreateTab(TabName, ImageID)
             LabelPadding.Parent = Label
 
             local InputHolder = Instance.new("Frame")
-            InputHolder.Size = UDim2.new(0, 85, 0, 26)
+            InputHolder.Size = UDim2.new(0, 85, 0, 24) -- Height reduced to 24 to match button's InteractFrame
             InputHolder.AnchorPoint = Vector2.new(1, 0.5)
             InputHolder.Position = UDim2.new(1, -10, 0.5, 0)
             InputHolder.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
             InputHolder.Parent = InputFrame
 
-            Instance.new("UICorner", InputHolder).CornerRadius = UDim.new(0, 4)
+            Instance.new("UICorner", InputHolder).CornerRadius = UDim.new(0, 6) -- Corner radius matched to button
             local HolderStroke = Instance.new("UIStroke", InputHolder)
             HolderStroke.Color = Settings.Accent
-            HolderStroke.Transparency = 0.6
-            HolderStroke.Thickness = 1
+            HolderStroke.Transparency = 0.5
+            HolderStroke.Thickness = 1.2
 
             local TextBox = Instance.new("TextBox")
             TextBox.Size = UDim2.new(1, -10, 1, 0)
@@ -1315,8 +1319,8 @@ function WindowMethods:CreateTab(TabName, ImageID)
             TextBox.PlaceholderText = Config.PlaceholderText or "Type..."
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
             TextBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
-            TextBox.TextSize = 12
-            TextBox.Font = Enum.Font.Gotham
+            TextBox.TextSize = 11 -- Text size matched to button's interact text
+            TextBox.Font = Enum.Font.GothamBold
             TextBox.ClipsDescendants = true
             TextBox.Parent = InputHolder
 
@@ -1382,3 +1386,4 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
