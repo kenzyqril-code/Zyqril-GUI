@@ -1238,7 +1238,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Instance.new("UICorner", LabelFrame).CornerRadius = UDim.new(0, 8)
 
             local TextLabel = Instance.new("TextLabel")
-            TextLabel.Size = UDim2.new(1, -20, 0, 30)
+            TextLabel.Size = UDim2.new(1, -95, 0, 35)
             TextLabel.Position = UDim2.new(0, 10, 0, 0)
             TextLabel.BackgroundTransparency = 1
             TextLabel.Text = LabelText
