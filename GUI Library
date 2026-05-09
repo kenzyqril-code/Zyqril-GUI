@@ -254,7 +254,7 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
-    -- Main UI Frame
+-- [[ MAIN GUI 2ND GUI ]] --
     local Main = Instance.new("Frame")
     Main.Name = "Main"
     Main.Size = UDim2.new(0, 450, 0, 300)
@@ -293,103 +293,177 @@ MobileToggle.MouseButton1Click:Connect(function()
     ContentContainer.Parent = Main
     Instance.new("UICorner", ContentContainer).CornerRadius = UDim.new(0, 12)
 
-   local LoadingFrame = Instance.new("Frame")
-    LoadingFrame.Size = UDim2.new(0, 340, 0, 160)
-    LoadingFrame.Position = UDim2.new(0.5, -170, 0.5, -80)
+-- [[ MAIN GUI 1ST GUI ]] --
+   local LTitle = Config.LoadingTitle or "Zyqril Hub"
+    local LSub = Config.LoadingSubtitle or "Preparing your experience..."
+
+    local LoadingFrame = Instance.new("Frame")
+    LoadingFrame.Size = UDim2.new(0, 360, 0, 190)
     LoadingFrame.BackgroundColor3 = Settings.Background
     LoadingFrame.Parent = GUI
-    Instance.new("UICorner", LoadingFrame).CornerRadius = UDim.new(0, 12)
+    Instance.new("UICorner", LoadingFrame).CornerRadius = UDim.new(0, 16)
 
-    local LShadow = Instance.new("ImageLabel")
-    LShadow.Name = "Shadow"
-    LShadow.Size = UDim2.new(1, 40, 1, 40)
-    LShadow.Position = UDim2.new(0, -20, 0, -20)
-    LShadow.BackgroundTransparency = 1
-    LShadow.Image = "rbxassetid://5587865193"
-    LShadow.ImageColor3 = Settings.Shadow
-    LShadow.ImageTransparency = 0.5
-    LShadow.Parent = LoadingFrame
+    LoadingFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    LoadingFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+
+    local TopBar = Instance.new("Frame")
+    TopBar.Name = "TopBar"
+    TopBar.Size = UDim2.new(1, 0, 0, 55)
+    TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    TopBar.BorderSizePixel = 0
+    TopBar.Parent = LoadingFrame
+    local TBCorner = Instance.new("UICorner", TopBar)
+    TBCorner.CornerRadius = UDim.new(0, 16)
+    
+    local HideCorners = Instance.new("Frame")
+    HideCorners.Size = UDim2.new(1, 0, 0, 10)
+    HideCorners.Position = UDim2.new(0, 0, 1, -10)
+    HideCorners.BackgroundColor3 = TopBar.BackgroundColor3
+    HideCorners.BorderSizePixel = 0
+    HideCorners.Parent = TopBar
 
     local LT = Instance.new("TextLabel")
-    LT.Size = UDim2.new(1, -30, 0, 40)
-    LT.Position = UDim2.new(0, 15, 0, 5)
+    LT.Size = UDim2.new(1, -30, 0, 25)
+    LT.Position = UDim2.new(0, 15, 0, 10)
     LT.BackgroundTransparency = 1
     LT.Text = LTitle
-    LT.TextColor3 = Settings.Text
-    LT.TextSize = 18
+    LT.TextColor3 = Color3.new(1, 1, 1)
+    LT.TextSize = 17
     LT.Font = Enum.Font.GothamBold
     LT.TextXAlignment = Enum.TextXAlignment.Left
+    LT.ZIndex = 2
     LT.Parent = LoadingFrame
+
+    local LS = Instance.new("TextLabel")
+    LS.Size = UDim2.new(1, -30, 0, 20)
+    LS.Position = UDim2.new(0, 15, 0, 32)
+    LS.BackgroundTransparency = 1
+    LS.Text = LSub
+    LS.TextColor3 = Color3.new(1, 1, 1)
+    LS.TextTransparency = 0.4
+    LS.TextSize = 12
+    LS.Font = Enum.Font.GothamMedium
+    LS.TextXAlignment = Enum.TextXAlignment.Left
+    LS.ZIndex = 2
+    LS.Parent = LoadingFrame
+
+    local StatusText = Instance.new("TextLabel")
+    StatusText.Size = UDim2.new(0, 200, 0, 55) 
+    StatusText.Position = UDim2.new(1, -30, 0, 0)
+    StatusText.AnchorPoint = Vector2.new(1, 0)
+    StatusText.BackgroundTransparency = 1
+    StatusText.Text = "Loading…"
+    StatusText.TextColor3 = Color3.new(1, 1, 1)
+    StatusText.Font = Enum.Font.GothamBold 
+    StatusText.TextSize = 16
+    StatusText.TextXAlignment = Enum.TextXAlignment.Right
+    StatusText.ZIndex = 4
+    StatusText.Parent = LoadingFrame
 
     local TopLine = Instance.new("Frame")
     TopLine.Name = "TopLine"
     TopLine.Size = UDim2.new(1, 0, 0, 1)
-    TopLine.Position = UDim2.new(0, 0, 0, 45)
-    TopLine.BackgroundColor3 = Settings.Element
+    TopLine.Position = UDim2.new(0, 0, 0, 55)
+    TopLine.BackgroundColor3 = Color3.new(1, 1, 1)
+    TopLine.BackgroundTransparency = 0
     TopLine.BorderSizePixel = 0
+    TopLine.ZIndex = 3
     TopLine.Parent = LoadingFrame
 
-    local LS = Instance.new("TextLabel")
-    LS.Size = UDim2.new(1, -30, 0, 30)
-    LS.Position = UDim2.new(0, 15, 0, 55)
-    LS.BackgroundTransparency = 1
-    LS.Text = LSub
-    LS.TextColor3 = Settings.Text
-    LS.TextTransparency = 0.4
-    LS.TextSize = 14
-    LS.Font = Enum.Font.GothamMedium
-    LS.TextXAlignment = Enum.TextXAlignment.Left
-    LS.Parent = LoadingFrame
+    local SpinnerFrame = Instance.new("Frame")
+    SpinnerFrame.Size = UDim2.new(0, 85, 0, 85) 
+    SpinnerFrame.Position = UDim2.new(0.5, 0, 0.65, 0)
+    SpinnerFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    SpinnerFrame.BackgroundTransparency = 1
+    SpinnerFrame.Parent = LoadingFrame
 
-    local LSBox = Instance.new("Frame")
-    LSBox.Name = "Pill"
-    LSBox.Size = UDim2.new(0, 280, 0, 32)
-    LSBox.Position = UDim2.new(0.5, -140, 0.7, 0)
-    LSBox.BackgroundColor3 = Settings.Element
-    LSBox.Parent = LoadingFrame
-    Instance.new("UICorner", LSBox).CornerRadius = UDim.new(1, 0)
+    local SpinImage = Instance.new("ImageLabel")
+    SpinImage.Name = "SpinningImage"
+    SpinImage.Size = UDim2.new(1, 0, 1, 0)
+    SpinImage.BackgroundTransparency = 1
+    SpinImage.Image = "rbxassetid://4463059046"
+    SpinImage.ImageColor3 = Color3.new(1, 1, 1)
+    SpinImage.Parent = SpinnerFrame
 
-    local LBar = Instance.new("Frame")
-    LBar.Name = "Progress"
-    LBar.Size = UDim2.new(0, 0, 1, 0)
-    LBar.BackgroundColor3 = Settings.Accent
-    LBar.BorderSizePixel = 0
-    LBar.Parent = LSBox
-    Instance.new("UICorner", LBar).CornerRadius = UDim.new(1, 0)
+    local SuccessRing = Instance.new("Frame")
+    SuccessRing.Name = "SuccessRing"
+    SuccessRing.Size = UDim2.new(1, 0, 1, 0)
+    SuccessRing.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+    SuccessRing.BackgroundTransparency = 1
+    SuccessRing.Parent = SpinnerFrame
+    Instance.new("UICorner", SuccessRing).CornerRadius = UDim.new(1, 0)
 
-    local LoadingText = Instance.new("TextLabel")
-    LoadingText.Size = UDim2.new(1, 0, 1, 0)
-    LoadingText.BackgroundTransparency = 1
-    LoadingText.Text = "Loading..."
-    LoadingText.TextColor3 = Color3.new(1, 1, 1)
-    LoadingText.TextSize = 13
-    LoadingText.Font = Enum.Font.GothamBold
-    LoadingText.ZIndex = 5
-    LoadingText.Parent = LSBox
+    local Hole = Instance.new("Frame")
+    Hole.Size = UDim2.new(0, 72, 0, 72)
+    Hole.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Hole.AnchorPoint = Vector2.new(0.5, 0.5)
+    Hole.BackgroundColor3 = Settings.Background
+    Hole.ZIndex = 3
+    Hole.Parent = SpinnerFrame
+    Instance.new("UICorner", Hole).CornerRadius = UDim.new(1, 0)
+
+    local CheckImage = Instance.new("ImageLabel")
+    CheckImage.Size = UDim2.new(0, 0, 0, 0)
+    CheckImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+    CheckImage.AnchorPoint = Vector2.new(0.5, 0.5)
+    CheckImage.BackgroundTransparency = 1
+    CheckImage.Image = "rbxassetid://9754130783"
+    CheckImage.ImageColor3 = Color3.fromRGB(100, 255, 100)
+    CheckImage.ZIndex = 4
+    CheckImage.Visible = false
+    CheckImage.Parent = SpinnerFrame
 
     task.spawn(function()
         local TweenService = game:GetService("TweenService")
-        local tween = TweenService:Create(LBar, TweenInfo.new(2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 1, 0)})
-        tween:Play()
-        tween.Completed:Wait()
         
-        task.wait(0.5)
+        local spinTime = math.random(1, 5)
+        local start = tick()
+        
+        task.spawn(function()
+            while tick() - start < spinTime do
+                SpinImage.Rotation = SpinImage.Rotation + 10
+                task.wait()
+            end
+        end)
+        
+        task.wait(spinTime)
 
-        local fadeInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        StatusText.Text = "Success!"
         
+        local flash = SuccessRing:Clone()
+        flash.Parent = SpinnerFrame
+        flash.Size = UDim2.new(1, 0, 1, 0)
+        flash.BackgroundTransparency = 0.5
+        flash.ZIndex = 5
+        TweenService:Create(flash, TweenInfo.new(0.5), {Size = UDim2.new(1.4, 0, 1.4, 0), BackgroundTransparency = 1}):Play()
+        game:GetService("Debris"):AddItem(flash, 0.5)
+
+        SpinImage.Visible = false
+        SuccessRing.BackgroundTransparency = 0
+        TweenService:Create(SuccessRing, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(1, 5, 1, 5)}):Play()
+        task.wait(0.2)
+        TweenService:Create(SuccessRing, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+        
+        CheckImage.Visible = true
+        TweenService:Create(CheckImage, TweenInfo.new(0.6, Enum.EasingStyle.Back), {Size = UDim2.new(0, 50, 0, 50)}):Play()
+        
+        task.wait(1.5)
+
+        local fadeInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut)
         TweenService:Create(LoadingFrame, fadeInfo, {BackgroundTransparency = 1}):Play()
-        TweenService:Create(LShadow, fadeInfo, {ImageTransparency = 1}):Play()
+        TweenService:Create(StatusText, fadeInfo, {TextTransparency = 1}):Play()
         TweenService:Create(LT, fadeInfo, {TextTransparency = 1}):Play()
-        TweenService:Create(TopLine, fadeInfo, {BackgroundTransparency = 1}):Play()
         TweenService:Create(LS, fadeInfo, {TextTransparency = 1}):Play()
-        TweenService:Create(LSBox, fadeInfo, {BackgroundTransparency = 1}):Play()
-        TweenService:Create(LBar, fadeInfo, {BackgroundTransparency = 1}):Play()
-        TweenService:Create(LoadingText, fadeInfo, {TextTransparency = 1}):Play()
+        TweenService:Create(TopBar, fadeInfo, {BackgroundTransparency = 1}):Play()
+        TweenService:Create(TopLine, fadeInfo, {BackgroundTransparency = 1}):Play()
+        TweenService:Create(SuccessRing, fadeInfo, {BackgroundTransparency = 1}):Play()
+        TweenService:Create(Hole, fadeInfo, {BackgroundTransparency = 1}):Play()
+        TweenService:Create(CheckImage, fadeInfo, {ImageTransparency = 1}):Play()
+        TweenService:Create(HideCorners, fadeInfo, {BackgroundTransparency = 1}):Play()
 
-        task.wait(0.5)
-        
+        task.wait(0.8)
         LoadingFrame:Destroy()
-        Main.Visible = true
+        if Main then Main.Visible = true end
     end)
 
 -- [[ TOP BAR ]] --
