@@ -811,7 +811,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
        -- [[ ELEMENT: TOGGLE ]] --
         function TabMethods:CreateToggle(Config)
             local TglFrame = Instance.new("Frame")
-            TglFrame.Size = UDim2.new(1, -5, 0, 35)
+            TglFrame.Size = UDim2.new(1, -5, 0, 30)
             TglFrame.BackgroundColor3 = Settings.Element
             TglFrame.AutomaticSize = Enum.AutomaticSize.Y
             TglFrame.Parent = TabPage
@@ -839,7 +839,6 @@ function WindowMethods:CreateTab(TabName, ImageID)
 
             local TglBtn = Instance.new("TextButton")
             TglBtn.Size = UDim2.new(0, 45, 0, 22)
-            -- AnchorPoint and 0.5 Position ensures it stays centered vertically
             TglBtn.AnchorPoint = Vector2.new(1, 0.5)
             TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
             TglBtn.BackgroundColor3 = Settings.TopBar 
@@ -1061,7 +1060,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
        -- [[ ELEMENT: BUTTON ]] --
         function TabMethods:CreateButton(Config)
             local ButtonFrame = Instance.new("Frame")
-            ButtonFrame.Size = UDim2.new(1, -5, 0, 35)
+            ButtonFrame.Size = UDim2.new(1, -5, 0, 30)
             ButtonFrame.BackgroundColor3 = Settings.Element
             ButtonFrame.AutomaticSize = Enum.AutomaticSize.Y
             ButtonFrame.Parent = TabPage
