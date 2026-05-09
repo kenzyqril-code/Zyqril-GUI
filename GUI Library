@@ -1091,7 +1091,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             table.insert(AllElements, {Frame = ButtonFrame, Name = Config.Name, Tab = TabPage})
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -95, 0, 35) 
+            Label.Size = UDim2.new(1, -70, 0, 35) 
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
@@ -1238,7 +1238,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Instance.new("UICorner", LabelFrame).CornerRadius = UDim.new(0, 8)
 
             local TextLabel = Instance.new("TextLabel")
-            TextLabel.Size = UDim2.new(1, -95, 0, 35)
+            TextLabel.Size = UDim2.new(1, -70, 0, 35)
             TextLabel.Position = UDim2.new(0, 10, 0, 0)
             TextLabel.BackgroundTransparency = 1
             TextLabel.Text = LabelText
