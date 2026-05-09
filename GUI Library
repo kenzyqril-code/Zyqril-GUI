@@ -787,7 +787,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
 
     local TabMethods = {}
 
-       -- [[ ELEMENT: SECTION ]] --
+      -- [[ ELEMENT: SECTION ]] --
         function TabMethods:CreateSection(SectionName)
             local SectionFrame = Instance.new("Frame")
             SectionFrame.Size = UDim2.new(1, -5, 0, 25)
@@ -806,12 +806,18 @@ function WindowMethods:CreateTab(TabName, ImageID)
             SectionLabel.Parent = SectionFrame
             
             table.insert(AllElements, {Frame = SectionFrame, Name = SectionName, Tab = TabPage})
+
+            local SectionMethods = {}
+            function SectionMethods:Set(NewName)
+                SectionLabel.Text = NewName:upper()
+            end
+            return SectionMethods
         end
 
-       -- [[ ELEMENT: TOGGLE ]] --
+      -- [[ ELEMENT: TOGGLE ]] --
         function TabMethods:CreateToggle(Config)
             local TglFrame = Instance.new("Frame")
-            TglFrame.Size = UDim2.new(1, -5, 0, 30)
+            TglFrame.Size = UDim2.new(1, -5, 0, 35)
             TglFrame.BackgroundColor3 = Settings.Element
             TglFrame.AutomaticSize = Enum.AutomaticSize.Y
             TglFrame.Parent = TabPage
@@ -820,21 +826,21 @@ function WindowMethods:CreateTab(TabName, ImageID)
             table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -80, 0, 35)
+            Label.Size = UDim2.new(1, -70, 0, 35)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 15
+            Label.TextSize = 14
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
             Label.Parent = TglFrame
             
             local LabelPadding = Instance.new("UIPadding")
-            LabelPadding.PaddingTop = UDim.new(0, 8)
-            LabelPadding.PaddingBottom = UDim.new(0, 8)
+            LabelPadding.PaddingTop = UDim.new(0, 10)
+            LabelPadding.PaddingBottom = UDim.new(0, 10)
             LabelPadding.Parent = Label
 
             local TglBtn = Instance.new("TextButton")
@@ -854,7 +860,9 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
 
             local Toggled = Config.CurrentValue or false
-            local function Update()
+            local ToggleMethods = {}
+            
+            local function Update(IgnoreCallback)
                 if Toggled then
                     TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Accent}):Play()
                     TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0.5, -9)}):Play()
@@ -862,14 +870,29 @@ function WindowMethods:CreateTab(TabName, ImageID)
                     TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.TopBar}):Play()
                     TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -9)}):Play()
                 end
-                Config.Callback(Toggled)
+                
+                if not IgnoreCallback then
+                    Config.Callback(Toggled)
+                end
             end
 
             TglBtn.MouseButton1Click:Connect(function()
                 Toggled = not Toggled
                 Update()
             end)
-            Update()
+            
+            Update(true)
+            
+            function ToggleMethods:Set(NewName)
+                Label.Text = NewName
+            end
+
+            function ToggleMethods:SetState(NewState, IgnoreCallback)
+                Toggled = NewState
+                Update(IgnoreCallback)
+            end
+
+            return ToggleMethods
         end
 
       -- [[ ELEMENT: SLIDER ]] --
@@ -954,7 +977,6 @@ function WindowMethods:CreateTab(TabName, ImageID)
                 
                 local DisplayPercent = math.clamp((Value - Min) / (Max - Min), 0, 1)
                 
-                -- Updated update loop with the same space fix
                 ValueLabel.Text = tostring(Value) .. " " .. Suffix
                 Fill.Size = UDim2.new(DisplayPercent, 0, 1, 0)
                 Config.Callback(Value)
@@ -1057,10 +1079,10 @@ function WindowMethods:CreateTab(TabName, ImageID)
             end
         end
 
-       -- [[ ELEMENT: BUTTON ]] --
+      -- [[ ELEMENT: BUTTON ]] --
         function TabMethods:CreateButton(Config)
             local ButtonFrame = Instance.new("Frame")
-            ButtonFrame.Size = UDim2.new(1, -5, 0, 30)
+            ButtonFrame.Size = UDim2.new(1, -5, 0, 35)
             ButtonFrame.BackgroundColor3 = Settings.Element
             ButtonFrame.AutomaticSize = Enum.AutomaticSize.Y
             ButtonFrame.Parent = TabPage
@@ -1069,21 +1091,21 @@ function WindowMethods:CreateTab(TabName, ImageID)
             table.insert(AllElements, {Frame = ButtonFrame, Name = Config.Name, Tab = TabPage})
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -95, 0, 35)
+            Label.Size = UDim2.new(1, -95, 0, 35) 
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 13 
+            Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
             Label.Parent = ButtonFrame
             
             local LabelPadding = Instance.new("UIPadding")
-            LabelPadding.PaddingTop = UDim.new(0, 8)
-            LabelPadding.PaddingBottom = UDim.new(0, 8)
+            LabelPadding.PaddingTop = UDim.new(0, 10)
+            LabelPadding.PaddingBottom = UDim.new(0, 10)
             LabelPadding.Parent = Label
 
             local InteractFrame = Instance.new("Frame")
@@ -1104,7 +1126,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             local InteractText = Instance.new("TextLabel")
             InteractText.Size = UDim2.new(1, 0, 1, 0)
             InteractText.BackgroundTransparency = 1
-            InteractText.Text = "Button"
+            InteractText.Text = "Interact"
             InteractText.TextSize = 11
             InteractText.Font = Enum.Font.GothamBold
             InteractText.TextColor3 = Settings.Text
@@ -1126,9 +1148,15 @@ function WindowMethods:CreateTab(TabName, ImageID)
             end)
 
             local ButtonMethods = {}
+            
             function ButtonMethods:Set(NewText)
                 Label.Text = NewText
             end
+
+            function ButtonMethods:SetInteract(NewInteractText)
+                InteractText.Text = NewInteractText
+            end
+
             return ButtonMethods
         end
 
@@ -1228,18 +1256,19 @@ function WindowMethods:CreateTab(TabName, ImageID)
             return LabelMethods
         end
 
-        -- [[ ELEMENT: INPUT BOX ]] --
+       -- [[ ELEMENT: INPUT BOX ]] --
         function TabMethods:CreateInput(Config)
             local InputFrame = Instance.new("Frame")
             InputFrame.Size = UDim2.new(1, -5, 0, 40)
             InputFrame.BackgroundColor3 = Settings.Element
             InputFrame.BackgroundTransparency = 0.1
+            InputFrame.AutomaticSize = Enum.AutomaticSize.Y
             InputFrame.Parent = TabPage
 
             Instance.new("UICorner", InputFrame).CornerRadius = UDim.new(0, 8)
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -90, 1, 0)
+            Label.Size = UDim2.new(1, -110, 0, 40) -- Adjusted width to prevent overlap
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
@@ -1247,11 +1276,19 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
             Label.TextSize = 15
+            Label.TextWrapped = true
+            Label.AutomaticSize = Enum.AutomaticSize.Y
             Label.Parent = InputFrame
+            
+            local LabelPadding = Instance.new("UIPadding")
+            LabelPadding.PaddingTop = UDim.new(0, 10)
+            LabelPadding.PaddingBottom = UDim.new(0, 10)
+            LabelPadding.Parent = Label
 
             local InputHolder = Instance.new("Frame")
-            InputHolder.Size = UDim2.new(0.5, 0, 0, 26)
-            InputHolder.Position = UDim2.new(0.45, 0, 0.5, -13)
+            InputHolder.Size = UDim2.new(0, 85, 0, 26)
+            InputHolder.AnchorPoint = Vector2.new(1, 0.5)
+            InputHolder.Position = UDim2.new(1, -10, 0.5, 0)
             InputHolder.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
             InputHolder.Parent = InputFrame
 
@@ -1266,7 +1303,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             TextBox.Position = UDim2.new(0, 5, 0, 0)
             TextBox.BackgroundTransparency = 1
             TextBox.Text = ""
-            TextBox.PlaceholderText = Config.PlaceholderText or "Type here..."
+            TextBox.PlaceholderText = Config.PlaceholderText or "Type..."
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
             TextBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
             TextBox.TextSize = 12
@@ -1282,6 +1319,19 @@ function WindowMethods:CreateTab(TabName, ImageID)
             end)
 
             table.insert(AllElements, {Frame = InputFrame, Name = Config.Name, Tab = TabPage})
+
+            local InputMethods = {}
+            
+            function InputMethods:Set(NewValue)
+                TextBox.Text = NewValue
+                Config.Callback(NewValue)
+            end
+
+            function InputMethods:SetName(NewName)
+                Label.Text = NewName
+            end
+
+            return InputMethods
         end
 
         return TabMethods
@@ -1323,8 +1373,3 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
-
-
-
-
-
