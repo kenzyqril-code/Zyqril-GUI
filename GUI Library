@@ -826,7 +826,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -70, 0, 35)
+            Label.Size = UDim2.new(1, -95, 0, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
@@ -898,7 +898,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
       -- [[ ELEMENT: SLIDER ]] --
         function TabMethods:CreateSlider(Config)
             local SliderFrame = Instance.new("Frame")
-            SliderFrame.Size = UDim2.new(1, -5, 0, 45)
+            SliderFrame.Size = UDim2.new(1, -5, 0, 35)
             SliderFrame.BackgroundColor3 = Settings.Element
             SliderFrame.AutomaticSize = Enum.AutomaticSize.Y
             SliderFrame.Parent = TabPage
@@ -907,7 +907,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             table.insert(AllElements, {Frame = SliderFrame, Name = Config.Name, Tab = TabPage})
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -165, 0, 45)
+            Label.Size = UDim2.new(1, -95, 0, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = Config.Name
