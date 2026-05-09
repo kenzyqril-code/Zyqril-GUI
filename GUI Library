@@ -1077,7 +1077,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 15
+            Label.TextSize = 13 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
             Label.Parent = ButtonFrame
@@ -1095,7 +1095,6 @@ function WindowMethods:CreateTab(TabName, ImageID)
             InteractFrame.Parent = ButtonFrame
             Instance.new("UICorner", InteractFrame).CornerRadius = UDim.new(0, 6)
 
-            -- Added Themed Stroke
             local InteractStroke = Instance.new("UIStroke")
             InteractStroke.Thickness = 1.2
             InteractStroke.Color = Settings.Accent
@@ -1107,7 +1106,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             InteractText.Size = UDim2.new(1, 0, 1, 0)
             InteractText.BackgroundTransparency = 1
             InteractText.Text = "Button"
-            InteractText.TextSize = 12
+            InteractText.TextSize = 11
             InteractText.Font = Enum.Font.GothamBold
             InteractText.TextColor3 = Settings.Text
             InteractText.Parent = InteractFrame
@@ -1121,13 +1120,17 @@ function WindowMethods:CreateTab(TabName, ImageID)
             ActualBtn.MouseButton1Click:Connect(function()
                 TweenService:Create(InteractFrame, TweenInfo.new(0.1), {BackgroundColor3 = Settings.Accent}):Play()
                 TweenService:Create(InteractStroke, TweenInfo.new(0.1), {Transparency = 0}):Play()
-                TweenService:Create(InteractText, TweenInfo.new(0.1), {TextSize = 10}):Play()
                 task.wait(0.1)
                 TweenService:Create(InteractFrame, TweenInfo.new(0.1), {BackgroundColor3 = Settings.TopBar}):Play()
                 TweenService:Create(InteractStroke, TweenInfo.new(0.1), {Transparency = 0.5}):Play()
-                TweenService:Create(InteractText, TweenInfo.new(0.1), {TextSize = 12}):Play()
                 Config.Callback()
             end)
+
+            local ButtonMethods = {}
+            function ButtonMethods:Set(NewText)
+                Label.Text = NewText
+            end
+            return ButtonMethods
         end
 
         -- [[ ELEMENT: TIGHT & WIDE PARAGRAPH ]] --
@@ -1321,3 +1324,8 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
+
+
+
+
