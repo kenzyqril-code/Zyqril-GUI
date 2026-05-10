@@ -888,86 +888,86 @@ function WindowMethods:CreateTab(TabName, ImageID)
             return SectionMethods
         end
 
-      -- [[ ELEMENT: TOGGLE ]] --
-        function TabMethods:CreateToggle(Config)
-            local TglFrame = Instance.new("Frame")
-            TglFrame.Size = UDim2.new(1, -5, 0, 35)
-            TglFrame.BackgroundColor3 = Settings.Element
-            TglFrame.AutomaticSize = Enum.AutomaticSize.Y
-            TglFrame.Parent = TabPage
-            Instance.new("UICorner", TglFrame).CornerRadius = UDim.new(0, 8)
-            
-            table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
+-- [[ ELEMENT: TOGGLE ]] --
+function TabMethods:CreateToggle(Config)
+    local TglFrame = Instance.new("Frame")
+    TglFrame.Size = UDim2.new(1, -5, 0, 35)
+    TglFrame.BackgroundColor3 = Settings.Element
+    TglFrame.AutomaticSize = Enum.AutomaticSize.Y
+    TglFrame.Parent = TabPage
+    Instance.new("UICorner", TglFrame).CornerRadius = UDim.new(0, 8)
+    
+    table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
 
-            local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -95, 0, 0)
-            Label.Position = UDim2.new(0, 15, 0, 0)
-            Label.BackgroundTransparency = 1
-            Label.Text = Config.Name
-            Label.TextColor3 = Settings.Text
-            Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 14
-            Label.TextWrapped = true
-            Label.AutomaticSize = Enum.AutomaticSize.Y
-            Label.Parent = TglFrame
-            
-            local LabelPadding = Instance.new("UIPadding")
-            LabelPadding.PaddingTop = UDim.new(0, 10)
-            LabelPadding.PaddingBottom = UDim.new(0, 10)
-            LabelPadding.Parent = Label
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(1, -95, 0, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Name
+    Label.TextColor3 = Settings.Text
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.Font = Enum.Font.GothamSemibold
+    Label.TextSize = 14
+    Label.TextWrapped = true
+    Label.AutomaticSize = Enum.AutomaticSize.Y
+    Label.Parent = TglFrame
+    
+    local LabelPadding = Instance.new("UIPadding")
+    LabelPadding.PaddingTop = UDim.new(0, 10)
+    LabelPadding.PaddingBottom = UDim.new(0, 10)
+    LabelPadding.Parent = Label
 
-            local TglBtn = Instance.new("TextButton")
-            TglBtn.Size = UDim2.new(0, 45, 0, 22)
-            TglBtn.AnchorPoint = Vector2.new(1, 0.5)
-            TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
-            TglBtn.BackgroundColor3 = Settings.TopBar 
-            TglBtn.Text = ""
-            TglBtn.Parent = TglFrame
-            Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
+    local TglBtn = Instance.new("TextButton")
+    TglBtn.Size = UDim2.new(0, 45, 0, 22)
+    TglBtn.AnchorPoint = Vector2.new(1, 0.5)
+    TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
+    TglBtn.BackgroundColor3 = Settings.TopBar 
+    TglBtn.Text = ""
+    TglBtn.Parent = TglFrame
+    Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
 
-            local Circle = Instance.new("Frame")
-            Circle.Size = UDim2.new(0, 18, 0, 18)
-            Circle.Position = UDim2.new(0, 2, 0.5, -9)
-            Circle.BackgroundColor3 = Settings.Text 
-            Circle.Parent = TglBtn
-            Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
+    local Circle = Instance.new("Frame")
+    Circle.Size = UDim2.new(0, 18, 0, 18)
+    Circle.Position = UDim2.new(0, 2, 0.5, -9)
+    Circle.BackgroundColor3 = Settings.Text 
+    Circle.Parent = TglBtn
+    Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
 
-            local Toggled = Config.CurrentValue or false
-            local ToggleMethods = {}
-            
-            local function Update(IgnoreCallback)
-                if Toggled then
-                    TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Accent}):Play()
-                    TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0.5, -9)}):Play()
-                else
-                    TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.TopBar}):Play()
-                    TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -9)}):Play()
-                end
-                
-                if not IgnoreCallback then
-                    Config.Callback(Toggled)
-                end
-            end
-
-            TglBtn.MouseButton1Click:Connect(function()
-                Toggled = not Toggled
-                Update()
-            end)
-            
-            Update(true)
-            
-            function ToggleMethods:Set(NewName)
-                Label.Text = NewName
-            end
-
-            function ToggleMethods:SetState(NewState, IgnoreCallback)
-                Toggled = NewState
-                Update(IgnoreCallback)
-            end
-
-            return ToggleMethods
+    local ToggleMethods = {
+        CurrentValue = Config.CurrentValue or false -- Now accessible as HighlightToggle.CurrentValue
+    }
+    
+    local function Update(IgnoreCallback)
+        if ToggleMethods.CurrentValue then
+            TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Accent}):Play()
+            TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0.5, -9)}):Play()
+        else
+            TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.TopBar}):Play()
+            TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -9)}):Play()
         end
+        
+        if not IgnoreCallback then
+            Config.Callback(ToggleMethods.CurrentValue)
+        end
+    end
+
+    TglBtn.MouseButton1Click:Connect(function()
+        ToggleMethods.CurrentValue = not ToggleMethods.CurrentValue
+        Update()
+    end)
+    
+    function ToggleMethods:SetName(NewName)
+        Label.Text = NewName
+    end
+
+    function ToggleMethods:Set(NewState, IgnoreCallback)
+        ToggleMethods.CurrentValue = NewState
+        Update(IgnoreCallback)
+    end
+
+    Update(true)
+    return ToggleMethods
+end
 
      -- [[ ELEMENT: SLIDER ]] --
         function TabMethods:CreateSlider(Config)
