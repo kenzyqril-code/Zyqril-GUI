@@ -309,7 +309,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     local TopBar = Instance.new("Frame")
     TopBar.Name = "TopBar"
     TopBar.Size = UDim2.new(1, 0, 0, 55)
-    TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    TopBar.BackgroundColor3 = Settings.TopBar
     TopBar.BorderSizePixel = 0
     TopBar.Parent = LoadingFrame
     local TBCorner = Instance.new("UICorner", TopBar)
@@ -476,6 +476,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     
     Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 12)
 
+    -- Cover
     local BottomCover = Instance.new("Frame")
     BottomCover.Name = "BottomCover"
     BottomCover.Size = UDim2.new(1, 0, 0, 15)
@@ -485,7 +486,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     BottomCover.ZIndex = 100
     BottomCover.Parent = TopBar
 
-    -- Sidebar and Container Setup
+    -- Sidebar Left And Container Setup
     local Sidebar = Instance.new("Frame")
     Sidebar.Size = UDim2.new(0, SidebarWidth, 1, -45)
     Sidebar.Position = UDim2.new(0, 5, 0, 40)
@@ -493,6 +494,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     Sidebar.ZIndex = 5
     Sidebar.Parent = ContentContainer
     
+    -- Container Right
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(1, -125, 1, -45)
     Container.Position = UDim2.new(0, 120, 0, 40)
