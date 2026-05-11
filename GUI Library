@@ -296,6 +296,7 @@ MobileToggle.MouseButton1Click:Connect(function()
 -- [[ MAIN GUI 1ST GUI ]] --
    local LTitle = Config.LoadingTitle or "Zyqril Hub"
     local LSub = Config.LoadingSubtitle or "Preparing your experience..."
+    local Thumb = Config.Thumbnail
 
     local LoadingFrame = Instance.new("Frame")
     LoadingFrame.Size = UDim2.new(0, 360, 0, 190)
@@ -371,11 +372,29 @@ MobileToggle.MouseButton1Click:Connect(function()
     TopLine.Parent = LoadingFrame
 
     local SpinnerFrame = Instance.new("Frame")
-    SpinnerFrame.Size = UDim2.new(0, 85, 0, 85) 
-    SpinnerFrame.Position = UDim2.new(0.5, 0, 0.65, 0)
+    SpinnerFrame.Size = UDim2.new(0, 100, 0, 100) 
+    SpinnerFrame.Position = Thumb and UDim2.new(0, 85, 0.65, 0) or UDim2.new(0.5, 0, 0.65, 0)
     SpinnerFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     SpinnerFrame.BackgroundTransparency = 1
     SpinnerFrame.Parent = LoadingFrame
+
+    local ThumbnailFrame
+    local ThumbStroke
+    if Thumb then
+        ThumbnailFrame = Instance.new("ImageLabel")
+        ThumbnailFrame.Name = "Thumbnail"
+        ThumbnailFrame.Size = UDim2.new(0, 150, 0, 120)
+        ThumbnailFrame.Position = UDim2.new(1, -100, 0.65, 0)
+        ThumbnailFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+        ThumbnailFrame.BackgroundColor3 = Settings.Element
+        ThumbnailFrame.Image = "rbxassetid://" .. tostring(Thumb)
+        ThumbnailFrame.Parent = LoadingFrame
+        Instance.new("UICorner", ThumbnailFrame).CornerRadius = UDim.new(0, 12)
+        ThumbStroke = Instance.new("UIStroke", ThumbnailFrame)
+        ThumbStroke.Color = Settings.Accent
+        ThumbStroke.Thickness = 2
+        ThumbStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    end
 
     local SpinImage = Instance.new("ImageLabel")
     SpinImage.Name = "SpinningImage"
@@ -394,7 +413,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     Instance.new("UICorner", SuccessRing).CornerRadius = UDim.new(1, 0)
 
     local Hole = Instance.new("Frame")
-    Hole.Size = UDim2.new(0, 72, 0, 72)
+    Hole.Size = UDim2.new(0, 85, 0, 85)
     Hole.Position = UDim2.new(0.5, 0, 0.5, 0)
     Hole.AnchorPoint = Vector2.new(0.5, 0.5)
     Hole.BackgroundColor3 = Settings.Background
@@ -415,18 +434,29 @@ MobileToggle.MouseButton1Click:Connect(function()
 
     task.spawn(function()
         local TweenService = game:GetService("TweenService")
+        local spinTime = 4
+        local startTime = tick()
+        local speed = 10
+        local isSpinning = true
         
-        local spinTime = math.random(1, 5)
-        local start = tick()
-        
+        -- Permanent Spinning Loop
         task.spawn(function()
-            while tick() - start < spinTime do
-                SpinImage.Rotation = SpinImage.Rotation + 10
+            while isSpinning do
+                SpinImage.Rotation = SpinImage.Rotation + speed
                 task.wait()
             end
         end)
-        
-        task.wait(spinTime)
+
+        task.wait(2)
+
+        local slowDuration = 2
+        local slowStart = tick()
+        while tick() - slowStart < slowDuration do
+            local alpha = (tick() - slowStart) / slowDuration
+            speed = math.max(1, 10 * (1 - alpha)) -- Smoothly drops from 10 to 1
+            task.wait()
+        end
+        speed = 1
 
         StatusText.Text = "Success!"
         
@@ -445,9 +475,10 @@ MobileToggle.MouseButton1Click:Connect(function()
         TweenService:Create(SuccessRing, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 1, 0)}):Play()
         
         CheckImage.Visible = true
-        TweenService:Create(CheckImage, TweenInfo.new(0.6, Enum.EasingStyle.Back), {Size = UDim2.new(0, 50, 0, 50)}):Play()
+        TweenService:Create(CheckImage, TweenInfo.new(0.6, Enum.EasingStyle.Back), {Size = UDim2.new(0, 60, 0, 60)}):Play()
         
         task.wait(1.5)
+        isSpinning = false -- Stop rotation just before destroy
 
         local fadeInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut)
         TweenService:Create(LoadingFrame, fadeInfo, {BackgroundTransparency = 1}):Play()
@@ -460,6 +491,10 @@ MobileToggle.MouseButton1Click:Connect(function()
         TweenService:Create(Hole, fadeInfo, {BackgroundTransparency = 1}):Play()
         TweenService:Create(CheckImage, fadeInfo, {ImageTransparency = 1}):Play()
         TweenService:Create(HideCorners, fadeInfo, {BackgroundTransparency = 1}):Play()
+        if ThumbnailFrame then
+            TweenService:Create(ThumbnailFrame, fadeInfo, {ImageTransparency = 1, BackgroundTransparency = 1}):Play()
+            TweenService:Create(ThumbStroke, fadeInfo, {Transparency = 1}):Play()
+        end
 
         task.wait(0.8)
         LoadingFrame:Destroy()
@@ -486,15 +521,31 @@ MobileToggle.MouseButton1Click:Connect(function()
     BottomCover.ZIndex = 100
     BottomCover.Parent = TopBar
 
-    -- Sidebar Left And Container Setup
-    local Sidebar = Instance.new("Frame")
+    -- Side Bar Left And Container Set Up
+      local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Size = UDim2.new(0, SidebarWidth, 1, -45)
     Sidebar.Position = UDim2.new(0, 5, 0, 40)
     Sidebar.BackgroundTransparency = 1
     Sidebar.ZIndex = 5
     Sidebar.Parent = ContentContainer
+    Sidebar.ScrollBarThickness = 2
+    Sidebar.ScrollBarImageColor3 = Settings.Accent
+    Sidebar.ScrollBarImageTransparency = 0.5
+    Sidebar.BorderSizePixel = 0
+    Sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Sidebar.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Sidebar.ScrollingDirection = Enum.ScrollingDirection.Y
+    Sidebar.VerticalScrollBarInset = Enum.ScrollBarInset.None
+    Sidebar.BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
+    Sidebar.MidImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
+    Sidebar.TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
+
+   local SidebarPadding = Instance.new("UIPadding")
+    SidebarPadding.PaddingTop = UDim.new(0, 4)
+    SidebarPadding.PaddingLeft = UDim.new(0, 1)
+    SidebarPadding.PaddingRight = UDim.new(0, 5)
+    SidebarPadding.Parent = Sidebar
     
-    -- Container Right
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(1, -125, 1, -45)
     Container.Position = UDim2.new(0, 120, 0, 40)
@@ -1462,4 +1513,3 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
-
