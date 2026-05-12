@@ -8,14 +8,14 @@ local CoreGui = game:GetService("CoreGui")
 
 -- [[ THEMES LIBRARY ]] --
 local Themes = {
-    Default = { Accent = Color3.fromRGB(55, 120, 120), Background = Color3.fromRGB(15, 15, 15), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(20, 25, 25), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(0, 0, 0) },
-    White = { Accent = Color3.fromRGB(55, 120, 120), Background = Color3.fromRGB(245, 245, 245), TopBar = Color3.fromRGB(230, 230, 230), Element = Color3.fromRGB(220, 220, 220), Text = Color3.fromRGB(20, 20, 20), Shadow = Color3.fromRGB(150, 150, 150) },
-    Beige = { Accent = Color3.fromRGB(160, 130, 90), Background = Color3.fromRGB(245, 245, 220), TopBar = Color3.fromRGB(235, 235, 210), Element = Color3.fromRGB(225, 225, 200), Text = Color3.fromRGB(50, 50, 50), Shadow = Color3.fromRGB(130, 130, 110) },
-    Blue = { Accent = Color3.fromRGB(65, 135, 255), Background = Color3.fromRGB(15, 25, 35), TopBar = Color3.fromRGB(20, 35, 50), Element = Color3.fromRGB(30, 45, 60), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(5, 10, 15) },
-    Black = { Accent = Color3.fromRGB(200, 200, 200), Background = Color3.fromRGB(5, 5, 5), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(15, 15, 15), Text = Color3.fromRGB(220, 220, 220), Shadow = Color3.fromRGB(0, 0, 0) },
-    Orange = { Accent = Color3.fromRGB(255, 140, 65), Background = Color3.fromRGB(35, 20, 15), TopBar = Color3.fromRGB(50, 30, 20), Element = Color3.fromRGB(60, 40, 25), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(15, 5, 0) },
-    Green = { Accent = Color3.fromRGB(80, 200, 120), Background = Color3.fromRGB(15, 35, 20), TopBar = Color3.fromRGB(20, 50, 30), Element = Color3.fromRGB(30, 60, 40), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(5, 15, 10) },
-    Pink = { Accent = Color3.fromRGB(255, 150, 200), Background = Color3.fromRGB(40, 20, 30), TopBar = Color3.fromRGB(55, 30, 45), Element = Color3.fromRGB(70, 40, 60), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(20, 5, 15) }
+    Default = { Accent = Color3.fromRGB(255, 255, 255), Background = Color3.fromRGB(15, 15, 15), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(20, 25, 25), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(0, 0, 0) },
+    White = { Accent = Color3.fromRGB(55, 120, 120), Background = Color3.fromRGB(245, 245, 245), TopBar = Color3.fromRGB(230, 230, 230), Element = Color3.fromRGB(220, 220, 220), Text = Color3.fromRGB(20, 20, 20), Scheme = Color3.fromRGB(150, 150, 150) },
+    Beige = { Accent = Color3.fromRGB(160, 130, 90), Background = Color3.fromRGB(245, 245, 220), TopBar = Color3.fromRGB(235, 235, 210), Element = Color3.fromRGB(225, 225, 200), Text = Color3.fromRGB(50, 50, 50), Scheme = Color3.fromRGB(130, 130, 110) },
+    Blue = { Accent = Color3.fromRGB(65, 135, 255), Background = Color3.fromRGB(15, 25, 35), TopBar = Color3.fromRGB(20, 35, 50), Element = Color3.fromRGB(30, 45, 60), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(5, 10, 15) },
+    Black = { Accent = Color3.fromRGB(200, 200, 200), Background = Color3.fromRGB(5, 5, 5), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(15, 15, 15), Text = Color3.fromRGB(220, 220, 220), Scheme = Color3.fromRGB(0, 0, 0) },
+    Orange = { Accent = Color3.fromRGB(255, 140, 65), Background = Color3.fromRGB(35, 20, 15), TopBar = Color3.fromRGB(50, 30, 20), Element = Color3.fromRGB(60, 40, 25), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(15, 5, 0) },
+    Green = { Accent = Color3.fromRGB(80, 200, 120), Background = Color3.fromRGB(15, 35, 20), TopBar = Color3.fromRGB(20, 50, 30), Element = Color3.fromRGB(30, 60, 40), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(5, 15, 10) },
+    Pink = { Accent = Color3.fromRGB(255, 150, 200), Background = Color3.fromRGB(40, 20, 30), TopBar = Color3.fromRGB(55, 30, 45), Element = Color3.fromRGB(70, 40, 60), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(20, 5, 15) }
 }
 
 local Settings = Themes.Default
@@ -278,7 +278,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     Shadow.Position = UDim2.new(0, -20, 0, -20)
     Shadow.BackgroundTransparency = 1
     Shadow.Image = "rbxassetid://5587865193"
-    Shadow.ImageColor3 = Settings.Shadow
+    Shadow.ImageColor3 = Settings.Scheme
     Shadow.ImageTransparency = 0.5
     Shadow.ZIndex = 0
     Shadow.ScaleType = Enum.ScaleType.Slice
@@ -832,7 +832,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabBtn.Size = UDim2.new(1, 0, 0, 30)
     TabBtn.BackgroundColor3 = Settings.Element
     TabBtn.Text = TabName
-    TabBtn.TextColor3 = Settings.Text
+    TabBtn.TextColor3 = Settings.Scheme
     TabBtn.Font = Enum.Font.GothamBold
     TabBtn.TextSize = 14
     TabBtn.TextXAlignment = Enum.TextXAlignment.Left
@@ -858,7 +858,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabIcon.Position = UDim2.new(0, -28, 0.5, -10)
     TabIcon.BackgroundTransparency = 1
     TabIcon.Image = "rbxassetid://" .. (tonumber(ImageID) or 0)
-    TabIcon.ImageColor3 = Settings.Text
+    TabIcon.ImageColor3 = Settings.Scheme
     TabIcon.Visible = (ImageID ~= nil)
     TabIcon.Parent = TabBtn
 
@@ -867,7 +867,6 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabPage.BackgroundTransparency = 1
     TabPage.Visible = false
     
-    -- Scrolling Thumb Configuration
     TabPage.ScrollBarThickness = 4
     TabPage.ScrollBarImageColor3 = Settings.Accent
     TabPage.ScrollBarImageTransparency = 0
@@ -875,7 +874,6 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabPage.VerticalScrollBarInset = Enum.ScrollBarInset.None
     TabPage.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
     
-    -- This removes the background track/line
     TabPage.BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
     TabPage.MidImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
     TabPage.TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
@@ -1287,6 +1285,216 @@ end
             return DropdownMethods
         end
 
+       -- [[ ELEMENT: COLOR PICKER ]] --
+        function TabMethods:CreateColorPicker(Config)
+            Config.Name = Config.Name or "Color Picker"
+            Config.Color = Config.Color or Color3.fromRGB(255, 255, 255)
+            
+            local PickerFrame = Instance.new("Frame")
+            PickerFrame.Size = UDim2.new(1, -5, 0, 40)
+            PickerFrame.BackgroundColor3 = Settings.Element
+            PickerFrame.BackgroundTransparency = 0.1
+            PickerFrame.ClipsDescendants = true
+            PickerFrame.Parent = TabPage
+            Instance.new("UICorner", PickerFrame).CornerRadius = UDim.new(0, 8)
+
+            local Header = Instance.new("TextButton")
+            Header.Size = UDim2.new(1, 0, 0, 40)
+            Header.BackgroundTransparency = 1
+            Header.Text = ""
+            Header.Parent = PickerFrame
+
+            local Label = Instance.new("TextLabel")
+            Label.Size = UDim2.new(1, -80, 1, 0)
+            Label.Position = UDim2.new(0, 15, 0, 0)
+            Label.BackgroundTransparency = 1
+            Label.Text = Config.Name
+            Label.TextColor3 = Settings.Text
+            Label.TextXAlignment = Enum.TextXAlignment.Left
+            Label.Font = Enum.Font.GothamSemibold
+            Label.TextSize = 14
+            Label.Parent = Header
+
+            local ColorDisplay = Instance.new("Frame")
+            ColorDisplay.Size = UDim2.new(0, 40, 0, 20)
+            ColorDisplay.Position = UDim2.new(1, -55, 0.5, -10)
+            ColorDisplay.BackgroundColor3 = Config.Color
+            ColorDisplay.Parent = Header
+            Instance.new("UICorner", ColorDisplay).CornerRadius = UDim.new(0, 4)
+            local DisplayStroke = Instance.new("UIStroke", ColorDisplay)
+            DisplayStroke.Color = Settings.Accent
+            DisplayStroke.Thickness = 1.5
+
+            local Content = Instance.new("Frame")
+            Content.Size = UDim2.new(1, 0, 0, 180) 
+            Content.Position = UDim2.new(0, 0, 0, 45)
+            Content.BackgroundTransparency = 1
+            Content.Visible = false
+            Content.Parent = PickerFrame
+
+            local Canvas = Instance.new("ImageLabel")
+            Canvas.Size = UDim2.new(0.5, 0, 0, 120)
+            Canvas.Position = UDim2.new(0, 15, 0, 0)
+            Canvas.Image = "rbxassetid://4155801252"
+            Canvas.ScaleType = Enum.ScaleType.Stretch
+            Canvas.BackgroundColor3 = Color3.fromHSV(0, 1, 1)
+            Canvas.Parent = Content
+            Instance.new("UICorner", Canvas).CornerRadius = UDim.new(0, 8)
+
+            local Cursor = Instance.new("Frame")
+            Cursor.Size = UDim2.new(0, 10, 0, 10)
+            Cursor.AnchorPoint = Vector2.new(0.5, 0.5)
+            Cursor.BackgroundColor3 = Color3.new(1, 1, 1)
+            Cursor.Parent = Canvas
+            Instance.new("UICorner", Cursor).CornerRadius = UDim.new(1, 0)
+            local CursorStroke = Instance.new("UIStroke", Cursor)
+            CursorStroke.Thickness = 2
+            CursorStroke.Color = Settings.Scheme
+
+            local RGBContainer = Instance.new("Frame")
+            RGBContainer.Size = UDim2.new(0.35, 0, 0, 30)
+            RGBContainer.Position = UDim2.new(0.58, 0, 0, 0)
+            RGBContainer.BackgroundTransparency = 1
+            RGBContainer.Parent = Content
+
+            local function CreateInputBox(pos, size, text, parent)
+                local Box = Instance.new("TextBox")
+                Box.Size = size
+                Box.Position = pos
+                Box.BackgroundColor3 = Settings.TopBar
+                Box.BackgroundTransparency = 0.5
+                Box.TextColor3 = Settings.Text
+                Box.Font = Enum.Font.GothamBold
+                Box.TextSize = 11
+                Box.Text = text
+                Box.ClearTextOnFocus = false
+                Box.Parent = parent
+                Instance.new("UICorner", Box).CornerRadius = UDim.new(0, 8)
+                
+                local BoxStroke = Instance.new("UIStroke", Box)
+                BoxStroke.Color = Settings.Accent
+                BoxStroke.Transparency = 0
+                BoxStroke.Thickness = 1.2
+                BoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                return Box
+            end
+
+            local RBox = CreateInputBox(UDim2.new(0, 0, 0, 0), UDim2.new(0.3, 0, 1, 0), "255", RGBContainer)
+            local GBox = CreateInputBox(UDim2.new(0.35, 0, 0, 0), UDim2.new(0.3, 0, 1, 0), "255", RGBContainer)
+            local BBox = CreateInputBox(UDim2.new(0.7, 0, 0, 0), UDim2.new(0.3, 0, 1, 0), "255", RGBContainer)
+            local HexBox = CreateInputBox(UDim2.new(0.58, 0, 0, 40), UDim2.new(0.35, 0, 0, 30), "#FFFFFF", Content)
+
+            local HueSlider = Instance.new("Frame")
+            HueSlider.Size = UDim2.new(1, -30, 0, 12)
+            HueSlider.Position = UDim2.new(0, 15, 0, 140)
+            HueSlider.BackgroundColor3 = Color3.new(1, 1, 1)
+            HueSlider.BorderSizePixel = 0
+            HueSlider.Parent = Content
+            Instance.new("UICorner", HueSlider).CornerRadius = UDim.new(1, 0)
+
+            local HueGradient = Instance.new("UIGradient")
+            HueGradient.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 45, 0)),
+                ColorSequenceKeypoint.new(0.1, Color3.fromRGB(255, 150, 0)),
+                ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 240, 0)),
+                ColorSequenceKeypoint.new(0.35, Color3.fromRGB(0, 255, 0)),
+                ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 240, 255)),
+                ColorSequenceKeypoint.new(0.65, Color3.fromRGB(0, 50, 255)),
+                ColorSequenceKeypoint.new(0.8, Color3.fromRGB(160, 0, 255)),
+                ColorSequenceKeypoint.new(0.9, Color3.fromRGB(255, 0, 150)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 45, 0))
+            })
+            HueGradient.Parent = HueSlider
+
+            local HueButton = Instance.new("TextButton")
+            HueButton.Size = UDim2.new(1, 0, 1, 0)
+            HueButton.BackgroundTransparency = 1
+            HueButton.Text = ""
+            HueButton.Parent = HueSlider
+
+            local HueDragger = Instance.new("Frame")
+            HueDragger.Size = UDim2.new(0, 8, 0, 8) 
+            HueDragger.Position = UDim2.new(0, 0, 0.5, 0)
+            HueDragger.AnchorPoint = Vector2.new(0.5, 0.5)
+            HueDragger.BackgroundTransparency = 1 
+            HueDragger.Parent = HueSlider
+            Instance.new("UICorner", HueDragger).CornerRadius = UDim.new(1, 0)
+            
+            local DraggerStroke = Instance.new("UIStroke", HueDragger)
+            DraggerStroke.Color = Settings.Accent
+            DraggerStroke.Thickness = 1.5
+
+            local UserInputService = game:GetService("UserInputService")
+            local Hue, Sat, Val = Color3.toHSV(Config.Color)
+            
+            local function UpdateColor(fromInput)
+                local SelectedColor = Color3.fromHSV(Hue, Sat, Val)
+                ColorDisplay.BackgroundColor3 = SelectedColor
+                Canvas.BackgroundColor3 = Color3.fromHSV(Hue, 1, 1)
+                HueDragger.Position = UDim2.new(Hue, 0, 0.5, 0)
+                
+                if not fromInput then
+                    RBox.Text = math.floor(SelectedColor.R * 255)
+                    GBox.Text = math.floor(SelectedColor.G * 255)
+                    BBox.Text = math.floor(SelectedColor.B * 255)
+                    HexBox.Text = "#" .. SelectedColor:ToHex():upper()
+                end
+                
+                if Config.Callback then
+                    task.spawn(function()
+                        Config.Callback(SelectedColor)
+                    end)
+                end
+            end
+
+            local function HandleInput(input, obj, type)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    local connection
+                    connection = game:GetService("RunService").RenderStepped:Connect(function()
+                        local inputPos = UserInputService:GetMouseLocation()
+                        local relX = math.clamp((inputPos.X - obj.AbsolutePosition.X) / obj.AbsoluteSize.X, 0, 1)
+                        local relY = math.clamp((inputPos.Y - 36 - obj.AbsolutePosition.Y) / obj.AbsoluteSize.Y, 0, 1)
+
+                        if type == "Canvas" then
+                            Sat, Val = relX, 1 - relY
+                            Cursor.Position = UDim2.new(relX, 0, relY, 0)
+                        elseif type == "Hue" then
+                            Hue = relX
+                        end
+                        UpdateColor()
+                    end)
+
+                    local endConnection
+                    endConnection = UserInputService.InputEnded:Connect(function(input2)
+                        if input2.UserInputType == Enum.UserInputType.MouseButton1 or input2.UserInputType == Enum.UserInputType.Touch then
+                            connection:Disconnect()
+                            endConnection:Disconnect()
+                        end
+                    end)
+                end
+            end
+
+            Canvas.InputBegan:Connect(function(i) HandleInput(i, Canvas, "Canvas") end)
+            HueButton.InputBegan:Connect(function(i) HandleInput(i, HueSlider, "Hue") end)
+
+            local Toggled = false
+            Header.MouseButton1Click:Connect(function()
+                Toggled = not Toggled
+                Content.Visible = Toggled
+                game:GetService("TweenService"):Create(PickerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {
+                    Size = Toggled and UDim2.new(1, -5, 0, 215) or UDim2.new(1, -5, 0, 40)
+                }):Play()
+            end)
+
+            UpdateColor()
+            return {
+                Set = function(_, col) 
+                    Hue, Sat, Val = Color3.toHSV(col)
+                    UpdateColor() 
+                end
+            }
+        end
+
       -- [[ ELEMENT: BUTTON ]] --
         function TabMethods:CreateButton(Config)
             local ButtonFrame = Instance.new("Frame")
@@ -1584,4 +1792,3 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
-
