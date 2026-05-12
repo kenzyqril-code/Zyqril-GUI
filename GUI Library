@@ -1144,6 +1144,7 @@ end
             local DropdownFrame = Instance.new("Frame")
             DropdownFrame.Size = UDim2.new(1, -5, 0, 40)
             DropdownFrame.BackgroundColor3 = Settings.Element
+            DropdownFrame.BackgroundTransparency = 0.1
             DropdownFrame.ClipsDescendants = true
             DropdownFrame.Parent = TabPage
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 8)
@@ -1157,7 +1158,7 @@ end
             Header.Parent = DropdownFrame
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -40, 1, 0)
+            Label.Size = UDim2.new(1, -45, 1, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
             local defaultText = (Config.CurrentOption and Config.CurrentOption[1]) or Config.CurrentValue or "None"
@@ -1165,7 +1166,7 @@ end
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 15
+            Label.TextSize = 14
             Label.Parent = Header
 
             local Arrow = Instance.new("TextLabel")
@@ -1180,36 +1181,49 @@ end
             local OptionList = Instance.new("ScrollingFrame")
             OptionList.Size = UDim2.new(1, -10, 0, 100)
             OptionList.Position = UDim2.new(0, 5, 0, 40)
-            OptionList.BackgroundTransparency = 1
+            OptionList.BackgroundTransparency = 0.5
             OptionList.BorderSizePixel = 0
             OptionList.ScrollBarThickness = 3
             OptionList.ScrollBarImageColor3 = Settings.Accent
             OptionList.ScrollBarImageTransparency = 0
             OptionList.VerticalScrollBarInset = Enum.ScrollBarInset.None
+            OptionList.VerticalScrollBarBottomImage = ""
+            OptionList.VerticalScrollBarTopImage = ""
             OptionList.CanvasSize = UDim2.new(0, 0, 0, 0)
             OptionList.AutomaticCanvasSize = Enum.AutomaticSize.Y
             OptionList.Parent = DropdownFrame
-            Instance.new("UIListLayout", OptionList).Padding = UDim.new(0, 2)
+            
+            local ListLayout = Instance.new("UIListLayout", OptionList)
+            ListLayout.Padding = UDim.new(0, 4)
+            ListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
             local Toggled = false
             Header.MouseButton1Click:Connect(function()
                 Toggled = not Toggled
-                local TargetSize = Toggled and UDim2.new(1, -5, 0, 145) or UDim2.new(1, -5, 0, 40)
+                local TargetSize = Toggled and UDim2.new(1, -5, 0, 150) or UDim2.new(1, -5, 0, 40)
                 TweenService:Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = TargetSize}):Play()
                 Arrow.Text = Toggled and "▲" or "▼"
             end)
 
             for _, option in pairs(Config.Options) do
                 local OptBtn = Instance.new("TextButton")
-                OptBtn.Size = UDim2.new(1, -5, 0, 30)
+                OptBtn.Size = UDim2.new(1, -6, 0, 28)
                 OptBtn.BackgroundColor3 = Settings.TopBar
-                OptBtn.BackgroundTransparency = 0.2
+                OptBtn.BackgroundTransparency = 0.5
                 OptBtn.Text = tostring(option)
                 OptBtn.TextColor3 = Settings.Text
-                OptBtn.Font = Enum.Font.Gotham
-                OptBtn.TextSize = 13
+                OptBtn.Font = Enum.Font.GothamBold
+                OptBtn.TextSize = 11
                 OptBtn.Parent = OptionList
-                Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 4)
+                
+                local BtnCorner = Instance.new("UICorner", OptBtn)
+                BtnCorner.CornerRadius = UDim.new(0, 6)
+
+                local BtnStroke = Instance.new("UIStroke", OptBtn)
+                BtnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                BtnStroke.Color = Settings.Accent
+                BtnStroke.Transparency = 0.7
+                BtnStroke.Thickness = 1
 
                 OptBtn.MouseButton1Click:Connect(function()
                     Label.Text = Config.Name .. ": " .. option
@@ -1217,6 +1231,10 @@ end
                     Toggled = false
                     TweenService:Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, 40)}):Play()
                     Arrow.Text = "▼"
+                    
+                    TweenService:Create(OptBtn, TweenInfo.new(0.1), {BackgroundTransparency = 0}):Play()
+                    task.wait(0.1)
+                    TweenService:Create(OptBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0.5}):Play()
                 end)
             end
         end
