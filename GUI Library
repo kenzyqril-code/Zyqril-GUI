@@ -1148,7 +1148,7 @@ end
             DropdownFrame.Size = UDim2.new(1, -5, 0, 40)
             DropdownFrame.BackgroundColor3 = Settings.Element
             DropdownFrame.BackgroundTransparency = 0.1
-            DropdownFrame.ClipsDescendants = true -- Acts as the main "wall"
+            DropdownFrame.ClipsDescendants = true
             DropdownFrame.Parent = TabPage
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 8)
             
@@ -1167,7 +1167,8 @@ end
             Label.Size = UDim2.new(1, -45, 1, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
-            Label.Text = Config.Name .. ": " .. tostring(Config.CurrentOption[1])
+            local InitialText = typeof(Config.CurrentOption) == "table" and tostring(Config.CurrentOption[1]) or tostring(Config.CurrentOption)
+            Label.Text = Config.Name .. ": " .. InitialText
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
@@ -1183,13 +1184,12 @@ end
             Arrow.TextSize = 12
             Arrow.Parent = Header
 
-            -- The "Wall" container: Separates the scrolling area from the Header
             local ListHolder = Instance.new("Frame")
             ListHolder.Name = "ListHolder"
-            ListHolder.Size = UDim2.new(1, -10, 1, -50) -- Fills frame but stays below header
+            ListHolder.Size = UDim2.new(1, -10, 1, -50)
             ListHolder.Position = UDim2.new(0, 5, 0, 45)
             ListHolder.BackgroundTransparency = 1
-            ListHolder.ClipsDescendants = true -- This creates the "wall" so options don't scroll over the name
+            ListHolder.ClipsDescendants = true
             ListHolder.Visible = false
             ListHolder.Parent = DropdownFrame
 
@@ -1203,7 +1203,7 @@ end
             OptionList.CanvasSize = UDim2.new(0, 0, 0, 0)
             OptionList.AutomaticCanvasSize = Enum.AutomaticSize.Y
             OptionList.ScrollingEnabled = true
-            OptionList.ClipsDescendants = false -- Allows strokes to breathe within the holder
+            OptionList.ClipsDescendants = false
             OptionList.Parent = ListHolder
             
             local ListLayout = Instance.new("UIListLayout", OptionList)
@@ -1211,7 +1211,6 @@ end
             ListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
             ListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-            -- Padding at the very top so the first option's stroke isn't touching the "wall"
             local TopPadding = Instance.new("UIPadding", OptionList)
             TopPadding.PaddingTop = UDim.new(0, 5)
             TopPadding.PaddingBottom = UDim.new(0, 5)
@@ -1277,10 +1276,11 @@ end
             end
 
             function DropdownMethods:Set(NewOption)
-                Label.Text = Config.Name .. ": " .. tostring(NewOption)
+                local DisplayValue = typeof(NewOption) == "table" and tostring(NewOption[1]) or tostring(NewOption)
+                Label.Text = Config.Name .. ": " .. DisplayValue
                 if Config.Callback then
                     task.spawn(function()
-                        Config.Callback({NewOption})
+                        Config.Callback(typeof(NewOption) == "table" and NewOption or {NewOption})
                     end)
                 end
             end
