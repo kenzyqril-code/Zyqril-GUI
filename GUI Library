@@ -1211,19 +1211,19 @@ end
             ListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
             ListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-            local TopPadding = Instance.new("UIPadding", OptionList)
-            TopPadding.PaddingTop = UDim.new(0, 5)
-            TopPadding.PaddingBottom = UDim.new(0, 5)
+            local ListPadding = Instance.new("UIPadding", OptionList)
+            ListPadding.PaddingTop = UDim.new(0, 5)
+            ListPadding.PaddingBottom = UDim.new(0, 10) -- Fixed: Added space at bottom to prevent button clipping
 
             local Toggled = false
             local function UpdateSize()
                 if Toggled then
                     ListHolder.Visible = true
                     local ListContentSize = ListLayout.AbsoluteContentSize.Y
-                    local TargetHeight = math.clamp(ListContentSize + 65, 40, 235)
+                    -- Added 15px buffer to the clamp to ensure the last button is fully reachable
+                    local TargetHeight = math.clamp(ListContentSize + 75, 40, 240)
                     game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -5, 0, TargetHeight)}):Play()
                 else
-                    -- Instant hide of list content to prevent leaking outside frame while it shrinks
                     ListHolder.Visible = false 
                     game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -5, 0, 40)}):Play()
                 end
