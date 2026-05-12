@@ -1221,13 +1221,11 @@ end
                     ListHolder.Visible = true
                     local ListContentSize = ListLayout.AbsoluteContentSize.Y
                     local TargetHeight = math.clamp(ListContentSize + 65, 40, 235)
-                    game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, TargetHeight)}):Play()
+                    game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -5, 0, TargetHeight)}):Play()
                 else
-                    local Tween = game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, 40)})
-                    Tween:Play()
-                    Tween.Completed:Connect(function()
-                        if not Toggled then ListHolder.Visible = false end
-                    end)
+                    -- Instant hide of list content to prevent leaking outside frame while it shrinks
+                    ListHolder.Visible = false 
+                    game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -5, 0, 40)}):Play()
                 end
             end
 
