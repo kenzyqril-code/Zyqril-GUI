@@ -1139,10 +1139,10 @@ end
             return SliderMethods
         end
 
-        -- [[ ELEMENT: DROPDOWN ]] --
+       -- [[ ELEMENT: DROPDOWN ]] --
         function TabMethods:CreateDropdown(Config)
             local DropdownFrame = Instance.new("Frame")
-            DropdownFrame.Size = UDim2.new(1, -5, 0, 30)
+            DropdownFrame.Size = UDim2.new(1, -5, 0, 40)
             DropdownFrame.BackgroundColor3 = Settings.Element
             DropdownFrame.ClipsDescendants = true
             DropdownFrame.Parent = TabPage
@@ -1160,7 +1160,8 @@ end
             Label.Size = UDim2.new(1, -40, 1, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
-            Label.Text = Config.Name .. ": " .. (Config.CurrentValue or "None")
+            local defaultText = (Config.CurrentOption and Config.CurrentOption[1]) or Config.CurrentValue or "None"
+            Label.Text = Config.Name .. ": " .. defaultText
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
@@ -1208,7 +1209,7 @@ end
 
                 OptBtn.MouseButton1Click:Connect(function()
                     Label.Text = Config.Name .. ": " .. option
-                    Config.Callback(option)
+                    Config.Callback({option})
                     Toggled = false
                     TweenService:Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, 40)}):Play()
                     Arrow.Text = "▼"
