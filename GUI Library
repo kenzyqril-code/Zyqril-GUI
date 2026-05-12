@@ -1181,8 +1181,10 @@ end
             OptionList.Size = UDim2.new(1, -10, 0, 100)
             OptionList.Position = UDim2.new(0, 5, 0, 40)
             OptionList.BackgroundTransparency = 1
-            OptionList.ScrollBarThickness = 2
+            OptionList.BorderSizePixel = 0
+            OptionList.ScrollBarThickness = 3
             OptionList.ScrollBarImageColor3 = Settings.Accent
+            OptionList.VerticalScrollBarInset = Enum.ScrollBarInset.None
             OptionList.CanvasSize = UDim2.new(0, 0, 0, 0)
             OptionList.AutomaticCanvasSize = Enum.AutomaticSize.Y
             OptionList.Parent = DropdownFrame
@@ -1199,7 +1201,8 @@ end
             for _, option in pairs(Config.Options) do
                 local OptBtn = Instance.new("TextButton")
                 OptBtn.Size = UDim2.new(1, -5, 0, 30)
-                OptBtn.BackgroundColor3 = Settings.TopBar
+                OptBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                OptBtn.BackgroundTransparency = 0.92
                 OptBtn.Text = tostring(option)
                 OptBtn.TextColor3 = Settings.Text
                 OptBtn.Font = Enum.Font.Gotham
