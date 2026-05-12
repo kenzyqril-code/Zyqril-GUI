@@ -1141,19 +1141,25 @@ end
 
        -- [[ ELEMENT: DROPDOWN ]] --
         function TabMethods:CreateDropdown(Config)
+            Config.Options = Config.Options or {"None"}
+            Config.CurrentOption = Config.CurrentOption or {Config.Options[1]}
+            
             local DropdownFrame = Instance.new("Frame")
             DropdownFrame.Size = UDim2.new(1, -5, 0, 40)
             DropdownFrame.BackgroundColor3 = Settings.Element
             DropdownFrame.BackgroundTransparency = 0.1
-            DropdownFrame.ClipsDescendants = true
+            DropdownFrame.ClipsDescendants = true -- Acts as the main "wall"
             DropdownFrame.Parent = TabPage
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 8)
             
-            table.insert(AllElements, {Frame = DropdownFrame, Name = Config.Name, Tab = TabPage})
+            if AllElements then
+                table.insert(AllElements, {Frame = DropdownFrame, Name = Config.Name, Tab = TabPage})
+            end
 
             local Header = Instance.new("TextButton")
             Header.Size = UDim2.new(1, 0, 0, 40)
             Header.BackgroundTransparency = 1
+            Header.ZIndex = 10
             Header.Text = ""
             Header.Parent = DropdownFrame
 
@@ -1161,8 +1167,7 @@ end
             Label.Size = UDim2.new(1, -45, 1, 0)
             Label.Position = UDim2.new(0, 15, 0, 0)
             Label.BackgroundTransparency = 1
-            local defaultText = (Config.CurrentOption and Config.CurrentOption[1]) or Config.CurrentValue or "None"
-            Label.Text = Config.Name .. ": " .. defaultText
+            Label.Text = Config.Name .. ": " .. tostring(Config.CurrentOption[1])
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Font = Enum.Font.GothamSemibold
@@ -1178,69 +1183,109 @@ end
             Arrow.TextSize = 12
             Arrow.Parent = Header
 
+            -- The "Wall" container: Separates the scrolling area from the Header
+            local ListHolder = Instance.new("Frame")
+            ListHolder.Name = "ListHolder"
+            ListHolder.Size = UDim2.new(1, -10, 1, -50) -- Fills frame but stays below header
+            ListHolder.Position = UDim2.new(0, 5, 0, 45)
+            ListHolder.BackgroundTransparency = 1
+            ListHolder.ClipsDescendants = true -- This creates the "wall" so options don't scroll over the name
+            ListHolder.Visible = false
+            ListHolder.Parent = DropdownFrame
+
             local OptionList = Instance.new("ScrollingFrame")
-            OptionList.Size = UDim2.new(1, -10, 0, 100)
-            OptionList.Position = UDim2.new(0, 5, 0, 40)
-            OptionList.BackgroundTransparency = 0.5
+            OptionList.Size = UDim2.new(1, 0, 1, 0) 
+            OptionList.BackgroundTransparency = 1
             OptionList.BorderSizePixel = 0
-            OptionList.ScrollBarThickness = 3
+            OptionList.ScrollBarThickness = 2
             OptionList.ScrollBarImageColor3 = Settings.Accent
-            OptionList.ScrollBarImageTransparency = 0
-            OptionList.VerticalScrollBarInset = Enum.ScrollBarInset.None
-            OptionList.VerticalScrollBarBottomImage = ""
-            OptionList.VerticalScrollBarTopImage = ""
+            OptionList.ScrollBarImageTransparency = 0.2
             OptionList.CanvasSize = UDim2.new(0, 0, 0, 0)
             OptionList.AutomaticCanvasSize = Enum.AutomaticSize.Y
-            OptionList.Parent = DropdownFrame
+            OptionList.ScrollingEnabled = true
+            OptionList.ClipsDescendants = false -- Allows strokes to breathe within the holder
+            OptionList.Parent = ListHolder
             
             local ListLayout = Instance.new("UIListLayout", OptionList)
-            ListLayout.Padding = UDim.new(0, 4)
+            ListLayout.Padding = UDim.new(0, 8) 
+            ListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
             ListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
+            -- Padding at the very top so the first option's stroke isn't touching the "wall"
+            local TopPadding = Instance.new("UIPadding", OptionList)
+            TopPadding.PaddingTop = UDim.new(0, 5)
+            TopPadding.PaddingBottom = UDim.new(0, 5)
+
             local Toggled = false
+            local function UpdateSize()
+                if Toggled then
+                    ListHolder.Visible = true
+                    local ListContentSize = ListLayout.AbsoluteContentSize.Y
+                    local TargetHeight = math.clamp(ListContentSize + 65, 40, 235)
+                    game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, TargetHeight)}):Play()
+                else
+                    local Tween = game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, 40)})
+                    Tween:Play()
+                    Tween.Completed:Connect(function()
+                        if not Toggled then ListHolder.Visible = false end
+                    end)
+                end
+            end
+
             Header.MouseButton1Click:Connect(function()
                 Toggled = not Toggled
-                local TargetSize = Toggled and UDim2.new(1, -5, 0, 150) or UDim2.new(1, -5, 0, 40)
-                TweenService:Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = TargetSize}):Play()
+                UpdateSize()
                 Arrow.Text = Toggled and "▲" or "▼"
             end)
 
             local DropdownMethods = {}
 
-            function DropdownMethods:Set(NewOption)
-                Label.Text = Config.Name .. ": " .. NewOption
-                Config.Callback({NewOption})
-            end
+            function DropdownMethods:Refresh(NewOptions)
+                for _, v in pairs(OptionList:GetChildren()) do
+                    if v:IsA("TextButton") then v:Destroy() end
+                end
 
-            for _, option in pairs(Config.Options) do
-                local OptBtn = Instance.new("TextButton")
-                OptBtn.Size = UDim2.new(1, -6, 0, 28)
-                OptBtn.BackgroundColor3 = Settings.TopBar
-                OptBtn.BackgroundTransparency = 0.5
-                OptBtn.Text = tostring(option)
-                OptBtn.TextColor3 = Settings.Text
-                OptBtn.Font = Enum.Font.GothamBold
-                OptBtn.TextSize = 11
-                OptBtn.Parent = OptionList
-                
-                Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
-                local BtnStroke = Instance.new("UIStroke", OptBtn)
-                BtnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                BtnStroke.Color = Settings.Accent
-                BtnStroke.Transparency = 0.7
+                Config.Options = NewOptions or {}
 
-                OptBtn.MouseButton1Click:Connect(function()
-                    DropdownMethods:Set(option)
-                    Toggled = false
-                    TweenService:Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, 40)}):Play()
-                    Arrow.Text = "▼"
+                for _, option in pairs(Config.Options) do
+                    local OptBtn = Instance.new("TextButton")
+                    OptBtn.Size = UDim2.new(0.96, 0, 0, 30)
+                    OptBtn.BackgroundColor3 = Settings.TopBar
+                    OptBtn.BackgroundTransparency = 0.6
+                    OptBtn.Text = tostring(option)
+                    OptBtn.TextColor3 = Settings.Text
+                    OptBtn.Font = Enum.Font.GothamBold
+                    OptBtn.TextSize = 12
+                    OptBtn.Parent = OptionList
                     
-                    TweenService:Create(OptBtn, TweenInfo.new(0.1), {BackgroundTransparency = 0}):Play()
-                    task.wait(0.1)
-                    TweenService:Create(OptBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0.5}):Play()
-                end)
+                    Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
+                    local BtnStroke = Instance.new("UIStroke", OptBtn)
+                    BtnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                    BtnStroke.Color = Settings.Accent
+                    BtnStroke.Transparency = 0.5
+                    BtnStroke.Thickness = 1.2
+
+                    OptBtn.MouseButton1Click:Connect(function()
+                        DropdownMethods:Set(option)
+                        Toggled = false
+                        UpdateSize()
+                        Arrow.Text = "▼"
+                    end)
+                end
+                
+                if Toggled then UpdateSize() end
             end
 
+            function DropdownMethods:Set(NewOption)
+                Label.Text = Config.Name .. ": " .. tostring(NewOption)
+                if Config.Callback then
+                    task.spawn(function()
+                        Config.Callback({NewOption})
+                    end)
+                end
+            end
+
+            DropdownMethods:Refresh(Config.Options)
             return DropdownMethods
         end
 
@@ -1541,3 +1586,4 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
