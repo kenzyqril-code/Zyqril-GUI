@@ -8,14 +8,14 @@ local CoreGui = game:GetService("CoreGui")
 
 -- [[ THEMES LIBRARY ]] --
 local Themes = {
-    Default = { Accent = Color3.fromRGB(255, 255, 255), Background = Color3.fromRGB(15, 15, 15), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(20, 25, 25), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(0, 0, 0) },
-    White = { Accent = Color3.fromRGB(55, 120, 120), Background = Color3.fromRGB(245, 245, 245), TopBar = Color3.fromRGB(230, 230, 230), Element = Color3.fromRGB(220, 220, 220), Text = Color3.fromRGB(20, 20, 20), Scheme = Color3.fromRGB(150, 150, 150) },
-    Beige = { Accent = Color3.fromRGB(160, 130, 90), Background = Color3.fromRGB(245, 245, 220), TopBar = Color3.fromRGB(235, 235, 210), Element = Color3.fromRGB(225, 225, 200), Text = Color3.fromRGB(50, 50, 50), Scheme = Color3.fromRGB(130, 130, 110) },
-    Blue = { Accent = Color3.fromRGB(65, 135, 255), Background = Color3.fromRGB(15, 25, 35), TopBar = Color3.fromRGB(20, 35, 50), Element = Color3.fromRGB(30, 45, 60), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(5, 10, 15) },
-    Black = { Accent = Color3.fromRGB(200, 200, 200), Background = Color3.fromRGB(5, 5, 5), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(15, 15, 15), Text = Color3.fromRGB(220, 220, 220), Scheme = Color3.fromRGB(0, 0, 0) },
-    Orange = { Accent = Color3.fromRGB(255, 140, 65), Background = Color3.fromRGB(35, 20, 15), TopBar = Color3.fromRGB(50, 30, 20), Element = Color3.fromRGB(60, 40, 25), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(15, 5, 0) },
-    Green = { Accent = Color3.fromRGB(80, 200, 120), Background = Color3.fromRGB(15, 35, 20), TopBar = Color3.fromRGB(20, 50, 30), Element = Color3.fromRGB(30, 60, 40), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(5, 15, 10) },
-    Pink = { Accent = Color3.fromRGB(255, 150, 200), Background = Color3.fromRGB(40, 20, 30), TopBar = Color3.fromRGB(55, 30, 45), Element = Color3.fromRGB(70, 40, 60), Text = Color3.fromRGB(255, 255, 255), Scheme = Color3.fromRGB(20, 5, 15) }
+    Default = { Accent = Color3.fromRGB(0, 202, 177), Background = Color3.fromRGB(15, 15, 15), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(20, 25, 25), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(0, 0, 0) },
+    White = { Accent = Color3.fromRGB(55, 120, 120), Background = Color3.fromRGB(245, 245, 245), TopBar = Color3.fromRGB(230, 230, 230), Element = Color3.fromRGB(220, 220, 220), Text = Color3.fromRGB(20, 20, 20), Shadow = Color3.fromRGB(150, 150, 150) },
+    Beige = { Accent = Color3.fromRGB(160, 130, 90), Background = Color3.fromRGB(245, 245, 220), TopBar = Color3.fromRGB(235, 235, 210), Element = Color3.fromRGB(225, 225, 200), Text = Color3.fromRGB(50, 50, 50), Shadow = Color3.fromRGB(130, 130, 110) },
+    Blue = { Accent = Color3.fromRGB(65, 135, 255), Background = Color3.fromRGB(15, 25, 35), TopBar = Color3.fromRGB(20, 35, 50), Element = Color3.fromRGB(30, 45, 60), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(5, 10, 15) },
+    Black = { Accent = Color3.fromRGB(200, 200, 200), Background = Color3.fromRGB(5, 5, 5), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(15, 15, 15), Text = Color3.fromRGB(220, 220, 220), Shadow = Color3.fromRGB(0, 0, 0) },
+    Orange = { Accent = Color3.fromRGB(255, 140, 65), Background = Color3.fromRGB(35, 20, 15), TopBar = Color3.fromRGB(50, 30, 20), Element = Color3.fromRGB(60, 40, 25), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(15, 5, 0) },
+    Green = { Accent = Color3.fromRGB(80, 200, 120), Background = Color3.fromRGB(15, 35, 20), TopBar = Color3.fromRGB(20, 50, 30), Element = Color3.fromRGB(30, 60, 40), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(5, 15, 10) },
+    Pink = { Accent = Color3.fromRGB(255, 150, 200), Background = Color3.fromRGB(40, 20, 30), TopBar = Color3.fromRGB(55, 30, 45), Element = Color3.fromRGB(70, 40, 60), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(20, 5, 15) }
 }
 
 local Settings = Themes.Default
@@ -278,7 +278,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     Shadow.Position = UDim2.new(0, -20, 0, -20)
     Shadow.BackgroundTransparency = 1
     Shadow.Image = "rbxassetid://5587865193"
-    Shadow.ImageColor3 = Settings.Scheme
+    Shadow.ImageColor3 = Settings.Shadow
     Shadow.ImageTransparency = 0.5
     Shadow.ZIndex = 0
     Shadow.ScaleType = Enum.ScaleType.Slice
@@ -832,7 +832,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabBtn.Size = UDim2.new(1, 0, 0, 30)
     TabBtn.BackgroundColor3 = Settings.Element
     TabBtn.Text = TabName
-    TabBtn.TextColor3 = Settings.Scheme
+    TabBtn.TextColor3 = Settings.Text
     TabBtn.Font = Enum.Font.GothamBold
     TabBtn.TextSize = 14
     TabBtn.TextXAlignment = Enum.TextXAlignment.Left
@@ -858,7 +858,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabIcon.Position = UDim2.new(0, -28, 0.5, -10)
     TabIcon.BackgroundTransparency = 1
     TabIcon.Image = "rbxassetid://" .. (tonumber(ImageID) or 0)
-    TabIcon.ImageColor3 = Settings.Scheme
+    TabIcon.ImageColor3 = Settings.Text
     TabIcon.Visible = (ImageID ~= nil)
     TabIcon.Parent = TabBtn
 
@@ -1349,7 +1349,7 @@ end
             Instance.new("UICorner", Cursor).CornerRadius = UDim.new(1, 0)
             local CursorStroke = Instance.new("UIStroke", Cursor)
             CursorStroke.Thickness = 2
-            CursorStroke.Color = Settings.Scheme
+            CursorStroke.Color = Settings.Accent
 
             local RGBContainer = Instance.new("Frame")
             RGBContainer.Size = UDim2.new(0.35, 0, 0, 30)
