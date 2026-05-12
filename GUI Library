@@ -1205,6 +1205,13 @@ end
                 Arrow.Text = Toggled and "▲" or "▼"
             end)
 
+            local DropdownMethods = {}
+
+            function DropdownMethods:Set(NewOption)
+                Label.Text = Config.Name .. ": " .. NewOption
+                Config.Callback({NewOption})
+            end
+
             for _, option in pairs(Config.Options) do
                 local OptBtn = Instance.new("TextButton")
                 OptBtn.Size = UDim2.new(1, -6, 0, 28)
@@ -1216,18 +1223,14 @@ end
                 OptBtn.TextSize = 11
                 OptBtn.Parent = OptionList
                 
-                local BtnCorner = Instance.new("UICorner", OptBtn)
-                BtnCorner.CornerRadius = UDim.new(0, 6)
-
+                Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
                 local BtnStroke = Instance.new("UIStroke", OptBtn)
                 BtnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 BtnStroke.Color = Settings.Accent
                 BtnStroke.Transparency = 0.7
-                BtnStroke.Thickness = 1
 
                 OptBtn.MouseButton1Click:Connect(function()
-                    Label.Text = Config.Name .. ": " .. option
-                    Config.Callback({option})
+                    DropdownMethods:Set(option)
                     Toggled = false
                     TweenService:Create(DropdownFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, -5, 0, 40)}):Play()
                     Arrow.Text = "▼"
@@ -1237,6 +1240,8 @@ end
                     TweenService:Create(OptBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0.5}):Play()
                 end)
             end
+
+            return DropdownMethods
         end
 
       -- [[ ELEMENT: BUTTON ]] --
