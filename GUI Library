@@ -8,14 +8,69 @@ local CoreGui = game:GetService("CoreGui")
 
 -- [[ THEMES LIBRARY ]] --
 local Themes = {
-    Default = { Accent = Color3.fromRGB(0, 202, 177), Background = Color3.fromRGB(15, 15, 15), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(20, 25, 25), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(0, 0, 0) },
-    White = { Accent = Color3.fromRGB(55, 120, 120), Background = Color3.fromRGB(245, 245, 245), TopBar = Color3.fromRGB(230, 230, 230), Element = Color3.fromRGB(220, 220, 220), Text = Color3.fromRGB(20, 20, 20), Shadow = Color3.fromRGB(150, 150, 150) },
-    Beige = { Accent = Color3.fromRGB(160, 130, 90), Background = Color3.fromRGB(245, 245, 220), TopBar = Color3.fromRGB(235, 235, 210), Element = Color3.fromRGB(225, 225, 200), Text = Color3.fromRGB(50, 50, 50), Shadow = Color3.fromRGB(130, 130, 110) },
-    Blue = { Accent = Color3.fromRGB(65, 135, 255), Background = Color3.fromRGB(15, 25, 35), TopBar = Color3.fromRGB(20, 35, 50), Element = Color3.fromRGB(30, 45, 60), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(5, 10, 15) },
-    Black = { Accent = Color3.fromRGB(200, 200, 200), Background = Color3.fromRGB(5, 5, 5), TopBar = Color3.fromRGB(10, 10, 10), Element = Color3.fromRGB(15, 15, 15), Text = Color3.fromRGB(220, 220, 220), Shadow = Color3.fromRGB(0, 0, 0) },
-    Orange = { Accent = Color3.fromRGB(255, 140, 65), Background = Color3.fromRGB(35, 20, 15), TopBar = Color3.fromRGB(50, 30, 20), Element = Color3.fromRGB(60, 40, 25), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(15, 5, 0) },
-    Green = { Accent = Color3.fromRGB(80, 200, 120), Background = Color3.fromRGB(15, 35, 20), TopBar = Color3.fromRGB(20, 50, 30), Element = Color3.fromRGB(30, 60, 40), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(5, 15, 10) },
-    Pink = { Accent = Color3.fromRGB(255, 150, 200), Background = Color3.fromRGB(40, 20, 30), TopBar = Color3.fromRGB(55, 30, 45), Element = Color3.fromRGB(70, 40, 60), Text = Color3.fromRGB(255, 255, 255), Shadow = Color3.fromRGB(20, 5, 15) }
+Default = { 
+Accent = Color3.fromRGB(0, 140, 140), 
+Background = Color3.fromRGB(15, 15, 15), 
+TopBar = Color3.fromRGB(10, 10, 10), 
+Element = Color3.fromRGB(20, 25, 25), 
+Text = Color3.fromRGB(255, 255, 255), 
+Scheme = Color3.fromRGB(35, 35, 35) },
+    
+Glacier = { 
+Accent = Color3.fromRGB(55, 120, 120), 
+Background = Color3.fromRGB(245, 245, 245), 
+TopBar = Color3.fromRGB(230, 230, 230), 
+Element = Color3.fromRGB(220, 220, 220), 
+Text = Color3.fromRGB(20, 20, 20), 
+Scheme = Color3.fromRGB(150, 150, 150) },
+    
+Beige = { 
+Accent = Color3.fromRGB(160, 130, 90), 
+Background = Color3.fromRGB(245, 245, 220), 
+TopBar = Color3.fromRGB(235, 235, 210), 
+Element = Color3.fromRGB(225, 225, 200), 
+Text = Color3.fromRGB(50, 50, 50), 
+Scheme = Color3.fromRGB(130, 130, 110) },
+    
+SeaBlue = { 
+Accent = Color3.fromRGB(65, 135, 255), 
+Background = Color3.fromRGB(15, 25, 35), 
+TopBar = Color3.fromRGB(20, 35, 50), 
+Element = Color3.fromRGB(30, 45, 60), 
+Text = Color3.fromRGB(255, 255, 255), 
+Scheme = Color3.fromRGB(5, 10, 15) },
+    
+Eclipse = { 
+Accent = Color3.fromRGB(255, 220, 0), 
+Background = Color3.fromRGB(30, 25, 0), 
+TopBar = Color3.fromRGB(45, 35, 0), 
+Element = Color3.fromRGB(60, 50, 5), 
+Text = Color3.fromRGB(255, 255, 255), 
+Scheme = Color3.fromRGB(85, 70, 10) },
+    
+Amber = { 
+Accent = Color3.fromRGB(255, 140, 65), 
+Background = Color3.fromRGB(35, 20, 15), 
+TopBar = Color3.fromRGB(50, 30, 20), 
+Element = Color3.fromRGB(60, 40, 25), 
+Text = Color3.fromRGB(255, 255, 255), 
+Scheme = Color3.fromRGB(15, 5, 0) },
+    
+Everglade = { 
+Accent = Color3.fromRGB(80, 200, 120), 
+Background = Color3.fromRGB(15, 35, 20), 
+TopBar = Color3.fromRGB(20, 50, 30), 
+Element = Color3.fromRGB(30, 60, 40), 
+Text = Color3.fromRGB(255, 255, 255), 
+Scheme = Color3.fromRGB(5, 15, 10) },
+    
+Mystic = { 
+Accent = Color3.fromRGB(255, 150, 200), 
+Background = Color3.fromRGB(40, 20, 30), 
+TopBar = Color3.fromRGB(55, 30, 45),
+Element = Color3.fromRGB(70, 40, 60), 
+Text = Color3.fromRGB(255, 255, 255), 
+Scheme = Color3.fromRGB(20, 5, 15) }
 }
 
 local Settings = Themes.Default
@@ -51,7 +106,7 @@ if not ScreenGui:FindFirstChild("Holder") then
     Padding.Parent = Holder
 end
 
--- [[ NOTIFICATION FUNCTION ]] --
+-- [[ NOTIFICATION SYSTEM ]] --
 function Zyqril:Notify(Config)
     local title = Config.Title or "Notification"
     local content = Config.Content or ""
@@ -133,7 +188,7 @@ function Zyqril:Notify(Config)
     local TimerBackground = Instance.new("Frame")
     TimerBackground.Size = UDim2.new(1, -20, 0, 2)
     TimerBackground.Position = UDim2.new(0, 10, 0, 0)
-    TimerBackground.BackgroundColor3 = Settings.TopBar
+    TimerBackground.BackgroundColor3 = Settings.Scheme
     TimerBackground.BorderSizePixel = 0
     TimerBackground.Parent = TimerContainer
 
@@ -271,19 +326,6 @@ MobileToggle.MouseButton1Click:Connect(function()
         Main.Visible = true
         MobileToggle.Visible = false
     end)
-
-    local Shadow = Instance.new("ImageLabel")
-    Shadow.Name = "Shadow"
-    Shadow.Size = UDim2.new(1, 40, 1, 40)
-    Shadow.Position = UDim2.new(0, -20, 0, -20)
-    Shadow.BackgroundTransparency = 1
-    Shadow.Image = "rbxassetid://5587865193"
-    Shadow.ImageColor3 = Settings.Shadow
-    Shadow.ImageTransparency = 0.5
-    Shadow.ZIndex = 0
-    Shadow.ScaleType = Enum.ScaleType.Slice
-    Shadow.SliceCenter = Rect.new(128, 128, 128, 128)
-    Shadow.Parent = Main
 
     local ContentContainer = Instance.new("Frame")
     ContentContainer.Name = "ContentContainer"
@@ -501,7 +543,7 @@ MobileToggle.MouseButton1Click:Connect(function()
         if Main then Main.Visible = true end
     end)
 
--- [[ TOP BAR ]] --
+-- [[ MAIN GUI TOP BAR ]] --
    local TopBar = Instance.new("Frame")
     TopBar.Name = "TopBar"
     TopBar.Size = UDim2.new(1, 0, 0, 35)
@@ -511,7 +553,6 @@ MobileToggle.MouseButton1Click:Connect(function()
     
     Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 12)
 
-    -- Cover
     local BottomCover = Instance.new("Frame")
     BottomCover.Name = "BottomCover"
     BottomCover.Size = UDim2.new(1, 0, 0, 15)
@@ -521,7 +562,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     BottomCover.ZIndex = 100
     BottomCover.Parent = TopBar
 
-    -- Side Bar Left And Container Set Up
+    -- [[ LEFT SIDE BAR ]] --
       local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Size = UDim2.new(0, SidebarWidth, 1, -45)
     Sidebar.Position = UDim2.new(0, 5, 0, 40)
@@ -591,7 +632,7 @@ MobileToggle.MouseButton1Click:Connect(function()
     Title.ZIndex = 101
     Title.Parent = TopBar
 
--- [[ SEARCH TOGGLE BUTTON ]] --
+-- [[ SEARCH BUTTON ]] --
 local SearchToggleBtn = Instance.new("ImageButton")
 SearchToggleBtn.Name = "SearchToggleBtn"
 SearchToggleBtn.Size = UDim2.new(0, 22, 0, 22)
@@ -660,7 +701,7 @@ local BindInput = Instance.new("TextBox", BindRow)
 BindInput.Text = tostring(ToggleKey.Name)
 BindInput.Size = UDim2.new(0, 80, 0, 24)
 BindInput.Position = UDim2.new(1, -90, 0.5, -12)
-BindInput.BackgroundColor3 = Settings.TopBar
+BindInput.BackgroundColor3 = Settings.Scheme
 BindInput.TextColor3 = Settings.Text
 BindInput.Font = Enum.Font.GothamBold
 BindInput.TextSize = 12
@@ -719,7 +760,7 @@ AnalyticsBtn.MouseButton1Click:Connect(function()
         TweenService:Create(AnalyticsBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Accent}):Play()
         TweenService:Create(AnalyticsCircle, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0.5, -9)}):Play()
     else
-        TweenService:Create(AnalyticsBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.TopBar}):Play()
+        TweenService:Create(AnalyticsBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Scheme}):Play()
         TweenService:Create(AnalyticsCircle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -9)}):Play()
     end
 end)
@@ -972,10 +1013,17 @@ function TabMethods:CreateToggle(Config)
     TglBtn.Size = UDim2.new(0, 45, 0, 22)
     TglBtn.AnchorPoint = Vector2.new(1, 0.5)
     TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
-    TglBtn.BackgroundColor3 = Settings.TopBar 
+    TglBtn.BackgroundColor3 = Settings.Scheme 
     TglBtn.Text = ""
     TglBtn.Parent = TglFrame
     Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
+
+local TglStroke = Instance.new("UIStroke")
+TglStroke.Thickness = 1.2
+TglStroke.Color = Settings.Accent
+TglStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+TglStroke.Transparency = 0.5
+TglStroke.Parent = TglBtn
 
     local Circle = Instance.new("Frame")
     Circle.Size = UDim2.new(0, 18, 0, 18)
@@ -993,7 +1041,7 @@ function TabMethods:CreateToggle(Config)
             TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Accent}):Play()
             TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0.5, -9)}):Play()
         else
-            TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.TopBar}):Play()
+            TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Scheme}):Play()
             TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -9)}):Play()
         end
         
@@ -1054,7 +1102,7 @@ end
             SliderBar.Size = UDim2.new(0, 140, 0, 26)
             SliderBar.AnchorPoint = Vector2.new(1, 0.5)
             SliderBar.Position = UDim2.new(1, -10, 0.5, 0)
-            SliderBar.BackgroundColor3 = Settings.TopBar 
+            SliderBar.BackgroundColor3 = Settings.Scheme 
             SliderBar.ClipsDescendants = true 
             SliderBar.Active = true
             SliderBar.Parent = SliderFrame
@@ -1218,7 +1266,6 @@ end
                 if Toggled then
                     ListHolder.Visible = true
                     local ListContentSize = ListLayout.AbsoluteContentSize.Y
-                    -- Added 15px buffer to the clamp to ensure the last button is fully reachable
                     local TargetHeight = math.clamp(ListContentSize + 75, 40, 240)
                     game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -5, 0, TargetHeight)}):Play()
                 else
@@ -1245,7 +1292,8 @@ end
                 for _, option in pairs(Config.Options) do
                     local OptBtn = Instance.new("TextButton")
                     OptBtn.Size = UDim2.new(0.96, 0, 0, 30)
-                    OptBtn.BackgroundColor3 = Settings.TopBar
+                    OptBtn.BackgroundColor3 =
+Settings.Scheme
                     OptBtn.BackgroundTransparency = 0.6
                     OptBtn.Text = tostring(option)
                     OptBtn.TextColor3 = Settings.Text
@@ -1361,7 +1409,7 @@ end
                 local Box = Instance.new("TextBox")
                 Box.Size = size
                 Box.Position = pos
-                Box.BackgroundColor3 = Settings.TopBar
+                Box.BackgroundColor3 = Settings.Scheme
                 Box.BackgroundTransparency = 0.5
                 Box.TextColor3 = Settings.Text
                 Box.Font = Enum.Font.GothamBold
@@ -1529,7 +1577,7 @@ end
             InteractFrame.Size = UDim2.new(0, 70, 0, 24)
             InteractFrame.AnchorPoint = Vector2.new(1, 0.5)
             InteractFrame.Position = UDim2.new(1, -10, 0.5, 0)
-            InteractFrame.BackgroundColor3 = Settings.TopBar
+            InteractFrame.BackgroundColor3 = Settings.Scheme
             InteractFrame.Parent = ButtonFrame
             Instance.new("UICorner", InteractFrame).CornerRadius = UDim.new(0, 6)
 
@@ -1559,7 +1607,7 @@ end
                 TweenService:Create(InteractFrame, TweenInfo.new(0.1), {BackgroundColor3 = Settings.Accent}):Play()
                 TweenService:Create(InteractStroke, TweenInfo.new(0.1), {Transparency = 0}):Play()
                 task.wait(0.1)
-                TweenService:Create(InteractFrame, TweenInfo.new(0.1), {BackgroundColor3 = Settings.TopBar}):Play()
+                TweenService:Create(InteractFrame, TweenInfo.new(0.1), {BackgroundColor3 = Settings.Scheme}):Play()
                 TweenService:Create(InteractStroke, TweenInfo.new(0.1), {Transparency = 0.5}):Play()
                 Config.Callback()
             end)
@@ -1705,13 +1753,13 @@ end
             LabelPadding.Parent = Label
 
             local InputHolder = Instance.new("Frame")
-            InputHolder.Size = UDim2.new(0, 85, 0, 24) -- Height reduced to 24 to match button's InteractFrame
+            InputHolder.Size = UDim2.new(0, 85, 0, 24)
             InputHolder.AnchorPoint = Vector2.new(1, 0.5)
             InputHolder.Position = UDim2.new(1, -10, 0.5, 0)
-            InputHolder.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            InputHolder.BackgroundColor3 = Settings.Scheme
             InputHolder.Parent = InputFrame
 
-            Instance.new("UICorner", InputHolder).CornerRadius = UDim.new(0, 6) -- Corner radius matched to button
+            Instance.new("UICorner", InputHolder).CornerRadius = UDim.new(0, 6)
             local HolderStroke = Instance.new("UIStroke", InputHolder)
             HolderStroke.Color = Settings.Accent
             HolderStroke.Transparency = 0.5
@@ -1724,8 +1772,8 @@ end
             TextBox.Text = ""
             TextBox.PlaceholderText = Config.PlaceholderText or "Type..."
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-            TextBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
-            TextBox.TextSize = 11 -- Text size matched to button's interact text
+            TextBox.PlaceholderColor3 = Settings.Text
+            TextBox.TextSize = 11
             TextBox.Font = Enum.Font.GothamBold
             TextBox.ClipsDescendants = true
             TextBox.Parent = InputHolder
