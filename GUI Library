@@ -1686,42 +1686,66 @@ Settings.Scheme
             return ParagraphMethods
         end
 
-     -- [[ LABEL ]] --
-        function TabMethods:CreateLabel(LabelText)
-            local LabelFrame = Instance.new("Frame")
-            LabelFrame.Size = UDim2.new(1, -5, 0, 0) 
-            LabelFrame.BackgroundColor3 = Settings.Element
-            LabelFrame.BackgroundTransparency = 0.1
-            LabelFrame.AutomaticSize = Enum.AutomaticSize.Y
-            LabelFrame.Parent = TabPage
-            Instance.new("UICorner", LabelFrame).CornerRadius = UDim.new(0, 8)
+     -- [[ ELEMENT: LABEL ]] --
+function TabMethods:CreateLabel(LabelText, IconID)
+    local LabelFrame = Instance.new("Frame")
+    LabelFrame.Size = UDim2.new(1, -5, 0, 0) 
+    LabelFrame.BackgroundColor3 = Settings.Element
+    LabelFrame.BackgroundTransparency = 0.1
+    LabelFrame.AutomaticSize = Enum.AutomaticSize.Y
+    LabelFrame.Parent = TabPage
+    Instance.new("UICorner", LabelFrame).CornerRadius = UDim.new(0, 8)
 
-            local TextLabel = Instance.new("TextLabel")
-            TextLabel.Size = UDim2.new(1, -95, 0, 0)
-            TextLabel.Position = UDim2.new(0, 15, 0, 0)
-            TextLabel.BackgroundTransparency = 1
-            TextLabel.Text = LabelText
-            TextLabel.TextColor3 = Settings.Text
-            TextLabel.Font = Enum.Font.GothamMedium
-            TextLabel.TextSize = 14
-            TextLabel.TextXAlignment = Enum.TextXAlignment.Left
-            TextLabel.TextWrapped = true
-            TextLabel.AutomaticSize = Enum.AutomaticSize.Y
-            TextLabel.Parent = LabelFrame
+    local Icon = Instance.new("ImageLabel")
+    Icon.Name = "LabelIcon"
+    Icon.Size = UDim2.new(0, 20, 0, 20)
+    Icon.Position = UDim2.new(0, 12, 0.5, -10)
+    Icon.BackgroundTransparency = 1
+    Icon.ImageColor3 = Settings.Text
+    Icon.Visible = false
+    Icon.Parent = LabelFrame
 
-            local LabelPadding = Instance.new("UIPadding")
-            LabelPadding.PaddingTop = UDim.new(0, 10)
-            LabelPadding.PaddingBottom = UDim.new(0, 10)
-            LabelPadding.Parent = LabelFrame
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.Text = LabelText
+    TextLabel.TextColor3 = Settings.Text
+    TextLabel.Font = Enum.Font.GothamMedium
+    TextLabel.TextSize = 14
+    TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TextLabel.TextWrapped = true
+    TextLabel.AutomaticSize = Enum.AutomaticSize.Y
+    TextLabel.Parent = LabelFrame
 
-            table.insert(AllElements, {Frame = LabelFrame, Name = LabelText, Tab = TabPage})
-
-            local LabelMethods = {}
-            function LabelMethods:Set(NewText)
-                TextLabel.Text = NewText
-            end
-            return LabelMethods
+    if IconID and IconID ~= "" then
+        local FinalIcon = IconID
+        if tonumber(IconID) then
+            FinalIcon = "rbxassetid://" .. IconID
         end
+        
+        Icon.Image = FinalIcon
+        Icon.Visible = true
+        
+        TextLabel.Size = UDim2.new(1, -55, 0, 0)
+        TextLabel.Position = UDim2.new(0, 42, 0, 0)
+    else
+        Icon.Visible = false
+        TextLabel.Size = UDim2.new(1, -30, 0, 0)
+        TextLabel.Position = UDim2.new(0, 15, 0, 0)
+    end
+
+    local LabelPadding = Instance.new("UIPadding")
+    LabelPadding.PaddingTop = UDim.new(0, 10)
+    LabelPadding.PaddingBottom = UDim.new(0, 10)
+    LabelPadding.Parent = LabelFrame
+
+    table.insert(AllElements, {Frame = LabelFrame, Name = LabelText, Tab = TabPage})
+
+    local LabelMethods = {}
+    function LabelMethods:Set(NewText)
+        TextLabel.Text = NewText
+    end
+    return LabelMethods
+end
 
        -- [[ ELEMENT: INPUT BOX ]] --
         function TabMethods:CreateInput(Config)
@@ -1840,3 +1864,4 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
