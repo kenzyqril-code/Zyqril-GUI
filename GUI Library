@@ -1063,7 +1063,7 @@ TglStroke.Parent = TglBtn
     return ToggleMethods
 end
 
-     -- [[ ELEMENT: SLIDER ]] --
+    -- [[ ELEMENT: SLIDER ]] --
         function TabMethods:CreateSlider(Config)
             local SliderFrame = Instance.new("Frame")
             SliderFrame.Size = UDim2.new(1, -5, 0, 0)
@@ -1134,6 +1134,17 @@ end
             ValueLabel.ZIndex = 3 
             ValueLabel.Parent = SliderBar
 
+            local function Round(num, step)
+                local mult = 1 / step
+                local rounded = math.floor(num * mult + 0.5) / mult
+                local str = tostring(step)
+                local decimalPlaces = 0
+                if str:find("%.") then
+                    decimalPlaces = #str - str:find("%.")
+                end
+                return tonumber(string.format("%." .. decimalPlaces .. "f", rounded))
+            end
+
             local isDragging = false
             local function Update()
                 local MousePos = UserInputService:GetMouseLocation()
@@ -1141,7 +1152,7 @@ end
                 local Percent = math.clamp(RelativeX / SliderBar.AbsoluteSize.X, 0, 1)
                 
                 local RawValue = Min + (Max - Min) * Percent
-                local Value = math.floor(RawValue / Increment + 0.5) * Increment
+                local Value = Round(RawValue, Increment)
                 Value = math.clamp(Value, Min, Max)
                 
                 local DisplayPercent = math.clamp((Value - Min) / (Max - Min), 0, 1)
@@ -1172,7 +1183,7 @@ end
 
             local SliderMethods = {}
             function SliderMethods:Set(NewValue)
-                local Val = math.clamp(NewValue, Min, Max)
+                local Val = Round(math.clamp(NewValue, Min, Max), Increment)
                 local DisplayPercent = math.clamp((Val - Min) / (Max - Min), 0, 1)
                 ValueLabel.Text = tostring(Val) .. " " .. Suffix
                 Fill.Size = UDim2.new(DisplayPercent, 0, 1, 0)
@@ -1296,7 +1307,15 @@ end
                     OptBtn.TextColor3 = Settings.Text
                     OptBtn.Font = Enum.Font.GothamBold
                     OptBtn.TextSize = 12
+                    OptBtn.TextWrapped = true
+                    OptBtn.AutomaticSize = Enum.AutomaticSize.Y
                     OptBtn.Parent = OptionList
+                    
+                    local Padding = Instance.new("UIPadding", OptBtn)
+                    Padding.PaddingTop = UDim.new(0, 6)
+                    Padding.PaddingBottom = UDim.new(0, 6)
+                    Padding.PaddingLeft = UDim.new(0, 8)
+                    Padding.PaddingRight = UDim.new(0, 8)
                     
                     Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
                     local BtnStroke = Instance.new("UIStroke", OptBtn)
