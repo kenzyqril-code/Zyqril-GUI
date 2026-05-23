@@ -261,44 +261,103 @@ function Zyqril:CreateWindow(Config)
     if not success then GUI.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") end
 
 -- [[ MOBILE TOGGLE BUTTON ]] --
-local MobileToggle = Instance.new("ImageButton")
+local MobileToggle = Instance.new("TextButton")
 MobileToggle.Name = "MobileToggle"
-MobileToggle.Size = UDim2.new(0, 50, 0, 50)
+MobileToggle.Size = UDim2.new(0, 42, 0, 42)
 MobileToggle.Position = UDim2.new(0.1, 0, 0.1, 0)
-MobileToggle.BackgroundTransparency = 1
-MobileToggle.Image = "rbxassetid://100895094193345"
+MobileToggle.BackgroundColor3 = Settings.Background or Color3.fromRGB(20, 20, 20)
+MobileToggle.BackgroundTransparency = 0.15
+MobileToggle.Text = ""
 MobileToggle.Visible = false
 MobileToggle.Active = true
+MobileToggle.ClipsDescendants = false
 MobileToggle.Parent = GUI
 
-local dragging, dragStart, startPos
+local MobileToggleCorner = Instance.new("UICorner")
+MobileToggleCorner.CornerRadius = UDim.new(1, 0)
+MobileToggleCorner.Parent = MobileToggle
+
+local MobileToggleStroke = Instance.new("UIStroke")
+MobileToggleStroke.Thickness = 2
+MobileToggleStroke.Color = Settings.Accent or Color3.fromRGB(0, 255, 255)
+MobileToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+MobileToggleStroke.Parent = MobileToggle
+
+local GlowRing = Instance.new("UIStroke")
+GlowRing.Thickness = 4
+GlowRing.Color = Settings.Accent or Color3.fromRGB(0, 255, 255)
+GlowRing.Transparency = 0.85
+GlowRing.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+GlowRing.Parent = MobileToggle
+
+local holder = Instance.new("Frame")
+holder.Size = UDim2.new(1, 0, 1, 0)
+holder.BackgroundTransparency = 1
+holder.Rotation = -15
+holder.Parent = MobileToggle
+
+local shadow = Instance.new("TextLabel")
+shadow.Size = UDim2.new(1, 0, 1, 0)
+shadow.Position = UDim2.new(0, -1, 0, 1)
+shadow.BackgroundTransparency = 1
+shadow.Text = "Z"
+shadow.TextScaled = true
+shadow.Font = Enum.Font.GothamBlack
+shadow.TextColor3 = Color3.fromRGB(0, 0, 0)
+shadow.ZIndex = 1
+shadow.Parent = holder
+
+local z = Instance.new("TextLabel")
+z.Size = UDim2.new(1, 0, 1, 0)
+z.BackgroundTransparency = 1
+z.Text = "Z"
+z.TextScaled = true
+z.Font = Enum.Font.GothamBlack
+z.TextColor3 = Color3.fromRGB(255, 255, 255)
+z.ZIndex = 2
+z.Parent = holder
+
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 3
+stroke.Color = Color3.fromRGB(0, 100, 0)
+stroke.Transparency = 0.1
+stroke.Parent = z
+
+task.spawn(function()
+    while true do
+        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            Thickness = 5,
+            Transparency = 0.35
+        }):Play()
+        task.wait(0.8)
+        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            Thickness = 3,
+            Transparency = 0.1
+        }):Play()
+        task.wait(0.8)
+    end
+end)
+
+local dragging, dragStart, startPos, hasMoved
 MobileToggle.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
+        hasMoved = false
         dragStart = input.Position
         startPos = MobileToggle.Position
         
-        local originalPos = MobileToggle.Position
-        for i = 1, 8 do
-            local xOffset = math.random(-6, 6)
-            local yOffset = math.random(-6, 6)
-            MobileToggle.Position = originalPos + UDim2.new(0, xOffset, 0, yOffset)
-            task.wait(0.02)
-        end
-        MobileToggle.Position = originalPos
-        
-        task.wait(0.5)
-        
-        if not dragging then 
-            Main.Visible = true
-            MobileToggle.Visible = false
-        end
+        TweenService:Create(MobileToggle, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 36, 0, 36)
+        }):Play()
     end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
     if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local delta = input.Position - dragStart
+        if delta.Magnitude > 5 then
+            hasMoved = true
+        end
         MobileToggle.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
@@ -306,6 +365,25 @@ end)
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = false
+        
+        TweenService:Create(MobileToggle, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 42, 0, 42)
+        }):Play()
+        
+        if not hasMoved then
+            local BurstStroke = MobileToggleStroke
+            local OriginalColor = BurstStroke.Color
+            
+            local FlashTween = TweenService:Create(BurstStroke, TweenInfo.new(0.15, Enum.EasingStyle.QuadOut), {Color = Color3.new(1, 1, 1)})
+            local FadeTween = TweenService:Create(BurstStroke, TweenInfo.new(0.25, Enum.EasingStyle.QuadIn), {Color = OriginalColor})
+            
+            FlashTween:Play()
+            FlashTween.Completed:Connect(function() FadeTween:Play() end)
+            
+            task.wait(0.1)
+            Main.Visible = true
+            MobileToggle.Visible = false
+        end
     end
 end)
 
@@ -592,15 +670,45 @@ Container.BackgroundTransparency = 1
 Container.ZIndex = 5
 Container.Parent = ContentContainer
 
--- [[ TAB TOGGLE BUTTON ]] --
-    local TabToggleButton = Instance.new("ImageButton")
+-- [[ SHOW/HIDE BUTTON ]] --
+    local TabToggleButton = Instance.new("TextButton")
     TabToggleButton.Name = "TabToggleButton"
     TabToggleButton.Size = UDim2.new(0, 24, 0, 24)
-    TabToggleButton.Position = UDim2.new(1, -115, 0.5, -12)
+    TabToggleButton.Position = UDim2.new(1, -120, 0.5, -12)
     TabToggleButton.BackgroundTransparency = 1
-    TabToggleButton.Image = "rbxassetid://84026879274102"
+    TabToggleButton.Text = ""
     TabToggleButton.ZIndex = 105
     TabToggleButton.Parent = TopBar
+
+    local CustomIconFrame = Instance.new("Frame")
+    CustomIconFrame.Size = UDim2.new(1, 0, 1, 0)
+    CustomIconFrame.BackgroundTransparency = 1
+    CustomIconFrame.Parent = TabToggleButton
+
+    local Line1 = Instance.new("Frame")
+    Line1.Size = UDim2.new(1, 0, 0, 3)
+    Line1.Position = UDim2.new(0, 0, 0, 3)
+    Line1.BackgroundColor3 = Color3.new(1, 1, 1)
+    Line1.BorderSizePixel = 0
+    Line1.Parent = CustomIconFrame
+
+    local Line2 = Instance.new("Frame")
+    Line2.Size = UDim2.new(1, 0, 0, 3)
+    Line2.Position = UDim2.new(0, 0, 0, 10)
+    Line2.BackgroundColor3 = Color3.new(1, 1, 1)
+    Line2.BorderSizePixel = 0
+    Line2.Parent = CustomIconFrame
+
+    local Line3 = Instance.new("Frame")
+    Line3.Size = UDim2.new(1, 0, 0, 3)
+    Line3.Position = UDim2.new(0, 0, 0, 17)
+    Line3.BackgroundColor3 = Color3.new(1, 1, 1)
+    Line3.BorderSizePixel = 0
+    Line3.Parent = CustomIconFrame
+
+    Instance.new("UICorner", Line1).CornerRadius = UDim.new(1, 0)
+    Instance.new("UICorner", Line2).CornerRadius = UDim.new(1, 0)
+    Instance.new("UICorner", Line3).CornerRadius = UDim.new(1, 0)
 
     TabToggleButton.MouseButton1Click:Connect(function()
         IsTabsHidden = not IsTabsHidden
@@ -614,7 +722,10 @@ Container.Parent = ContentContainer
         TweenService:Create(Sidebar, Info, {Position = TargetSidebarPos}):Play()
         TweenService:Create(Container, Info, {Size = TargetContentSize, Position = TargetContentPos}):Play()
         
-        TabToggleButton.Image = IsTabsHidden and "rbxassetid://15567843390" or "rbxassetid://84026879274102"
+        local TargetColor = IsTabsHidden and Settings.Accent or Color3.new(1, 1, 1)
+        TweenService:Create(Line1, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
+        TweenService:Create(Line2, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
+        TweenService:Create(Line3, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
     end)
 
     local Title = Instance.new("TextLabel")
@@ -631,24 +742,87 @@ Container.Parent = ContentContainer
     Title.Parent = TopBar
 
 -- [[ SEARCH BUTTON ]] --
-local SearchToggleBtn = Instance.new("ImageButton")
+local SearchToggleBtn = Instance.new("TextButton")
 SearchToggleBtn.Name = "SearchToggleBtn"
-SearchToggleBtn.Size = UDim2.new(0, 22, 0, 22)
+SearchToggleBtn.Size = UDim2.new(0, 24, 0, 24)
 SearchToggleBtn.Position = UDim2.new(1, -85, 0.5, -12)
 SearchToggleBtn.BackgroundTransparency = 1
-SearchToggleBtn.Image = "rbxassetid://139935609048710"
+SearchToggleBtn.Text = ""
 SearchToggleBtn.ZIndex = 101
 SearchToggleBtn.Parent = TopBar
 
+local SearchIconFrame = Instance.new("Frame")
+SearchIconFrame.Size = UDim2.new(1, 0, 1, 0)
+SearchIconFrame.BackgroundTransparency = 1
+SearchIconFrame.Rotation = -45
+SearchIconFrame.Parent = SearchToggleBtn
+
+local circle = Instance.new("Frame")
+circle.Size = UDim2.new(0, 14, 0, 14)
+circle.Position = UDim2.new(0, 4, 0, 2)
+circle.BackgroundTransparency = 1
+circle.BorderSizePixel = 0
+circle.Parent = SearchIconFrame
+
+local circleCorner = Instance.new("UICorner")
+circleCorner.CornerRadius = UDim.new(1, 0)
+circleCorner.Parent = circle
+
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 2
+stroke.Color = Color3.new(1, 1, 1)
+stroke.Parent = circle
+
+local line = Instance.new("Frame")
+line.Size = UDim2.new(0, 2, 0, 8)
+line.Position = UDim2.new(0, 10, 0, 16)
+line.BackgroundColor3 = Color3.new(1, 1, 1)
+line.BorderSizePixel = 0
+line.Rotation = 0
+line.Parent = SearchIconFrame
+
+local lineCorner = Instance.new("UICorner")
+lineCorner.CornerRadius = UDim.new(1, 0)
+lineCorner.Parent = line
+
 -- [[ KEYBIND BUTTON ]] --
-local KeybindBtn = Instance.new("ImageButton")
+local KeybindBtn = Instance.new("TextButton")
 KeybindBtn.Name = "KeybindBtn"
-KeybindBtn.Size = UDim2.new(0, 25, 0, 25)
-KeybindBtn.Position = UDim2.new(1, -60, 0.5, -12)
+KeybindBtn.Size = UDim2.new(0, 24, 0, 24)
+KeybindBtn.Position = UDim2.new(1, -58, 0.5, -12)
 KeybindBtn.BackgroundTransparency = 1
-KeybindBtn.Image = "rbxassetid://18569843302"
+KeybindBtn.Text = ""
 KeybindBtn.ZIndex = 101
 KeybindBtn.Parent = TopBar
+
+local KeybindIconFrame = Instance.new("Frame")
+KeybindIconFrame.Size = UDim2.new(1, 0, 1, 0)
+KeybindIconFrame.BackgroundTransparency = 1
+KeybindIconFrame.Parent = KeybindBtn
+
+local Dot1 = Instance.new("Frame")
+Dot1.Size = UDim2.new(0, 4, 0, 4)
+Dot1.Position = UDim2.new(0, 2, 0.5, -2)
+Dot1.BackgroundColor3 = Color3.new(1, 1, 1)
+Dot1.BorderSizePixel = 0
+Dot1.Parent = KeybindIconFrame
+Instance.new("UICorner", Dot1).CornerRadius = UDim.new(1, 0)
+
+local Dot2 = Instance.new("Frame")
+Dot2.Size = UDim2.new(0, 4, 0, 4)
+Dot2.Position = UDim2.new(0, 10, 0.5, -2)
+Dot2.BackgroundColor3 = Color3.new(1, 1, 1)
+Dot2.BorderSizePixel = 0
+Dot2.Parent = KeybindIconFrame
+Instance.new("UICorner", Dot2).CornerRadius = UDim.new(1, 0)
+
+local Dot3 = Instance.new("Frame")
+Dot3.Size = UDim2.new(0, 4, 0, 4)
+Dot3.Position = UDim2.new(0, 18, 0.5, -2)
+Dot3.BackgroundColor3 = Color3.new(1, 1, 1)
+Dot3.BorderSizePixel = 0
+Dot3.Parent = KeybindIconFrame
+Instance.new("UICorner", Dot3).CornerRadius = UDim.new(1, 0)
 
 local KeybindFrame = Instance.new("Frame")
 KeybindFrame.Name = "KeybindFrame"
@@ -678,7 +852,6 @@ KeybindHeader.Font = Enum.Font.GothamBold
 KeybindHeader.TextSize = 14
 KeybindHeader.ZIndex = 51
 
--- Keybind Row
 local BindRow = Instance.new("Frame", KeybindFrame)
 BindRow.Size = UDim2.new(1, -20, 0, 40)
 BindRow.Position = UDim2.new(0, 10, 0, 45)
@@ -705,7 +878,6 @@ BindInput.Font = Enum.Font.GothamBold
 BindInput.TextSize = 12
 Instance.new("UICorner", BindInput).CornerRadius = UDim.new(0, 6)
 
--- Analytics Row
 local AnalyticsRow = Instance.new("Frame", KeybindFrame)
 AnalyticsRow.Size = UDim2.new(1, -20, 0, 40)
 AnalyticsRow.Position = UDim2.new(0, 10, 0, 95)
@@ -739,6 +911,11 @@ local analyticsOn = true
 
 KeybindBtn.MouseButton1Click:Connect(function()
     KeybindFrame.Visible = not KeybindFrame.Visible
+    
+    local TargetColor = KeybindFrame.Visible and Settings.Accent or Color3.new(1, 1, 1)
+    TweenService:Create(Dot1, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
+    TweenService:Create(Dot2, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
+    TweenService:Create(Dot3, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
 end)
 
 BindInput.FocusLost:Connect(function()
@@ -764,14 +941,38 @@ AnalyticsBtn.MouseButton1Click:Connect(function()
 end)
 
 -- [[ CLOSE BUTTON ]] --
-   local CloseBtn = Instance.new("ImageButton")
+   local CloseBtn = Instance.new("TextButton")
     CloseBtn.Name = "CloseBtn"
-    CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+    CloseBtn.Size = UDim2.new(0, 24, 0, 24)
     CloseBtn.Position = UDim2.new(1, -30, 0.5, -12)
     CloseBtn.BackgroundTransparency = 1
-    CloseBtn.Image = "rbxassetid://82404346839314"
+    CloseBtn.Text = ""
     CloseBtn.ZIndex = 101
     CloseBtn.Parent = TopBar
+
+    local CloseIconFrame = Instance.new("Frame")
+    CloseIconFrame.Size = UDim2.new(1, 0, 1, 0)
+    CloseIconFrame.BackgroundTransparency = 1
+    CloseIconFrame.Parent = CloseBtn
+
+    local CrossLine1 = Instance.new("Frame")
+    CrossLine1.Size = UDim2.new(1, 0, 0, 3)
+    CrossLine1.Position = UDim2.new(0, 0, 0.5, -1.5)
+    CrossLine1.BackgroundColor3 = Color3.new(1, 1, 1)
+    CrossLine1.BorderSizePixel = 0
+    CrossLine1.Rotation = 45
+    CrossLine1.Parent = CloseIconFrame
+    Instance.new("UICorner", CrossLine1).CornerRadius = UDim.new(1, 0)
+
+    local CrossLine2 = Instance.new("Frame")
+    CrossLine2.Size = UDim2.new(1, 0, 0, 3)
+    CrossLine2.Position = UDim2.new(0, 0, 0.5, -1.5)
+    CrossLine2.BackgroundColor3 = Color3.new(1, 1, 1)
+    CrossLine2.BorderSizePixel = 0
+    CrossLine2.Rotation = -45
+    CrossLine2.Parent = CloseIconFrame
+    Instance.new("UICorner", CrossLine2).CornerRadius = UDim.new(1, 0)
+
    CloseBtn.MouseButton1Click:Connect(function() 
         Main.Visible = false
         MobileToggle.Visible = true
@@ -858,6 +1059,10 @@ SearchToggleBtn.MouseButton1Click:Connect(function()
         TweenService:Create(SearchFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {Size = UDim2.new(1, 0, 0, 0)}):Play()
         task.delay(0.3, function() if not searchOpen then SearchFrame.Visible = false end end)
     end
+    
+    local TargetColor = searchOpen and Settings.Accent or Color3.new(1, 1, 1)
+    TweenService:Create(stroke, TweenInfo.new(0.2), {Color = TargetColor}):Play()
+    TweenService:Create(line, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
 end)
 
 local WindowMethods = {}
