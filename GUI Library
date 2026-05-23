@@ -990,7 +990,7 @@ end)
    -- [[ SEARCH BAR (SLIDING VERSION) ]] --
     local SearchFrame = Instance.new("Frame")
     SearchFrame.Name = "SearchFrame"
-    SearchFrame.Size = UDim2.new(1, -24, 0, 0)
+    SearchFrame.Size = UDim2.new(1, 0, 0, 30)
     SearchFrame.Position = UDim2.new(0, 12, 0, 0)
     SearchFrame.BackgroundColor3 = Settings.Element
     SearchFrame.BorderSizePixel = 0
@@ -998,12 +998,12 @@ end)
     SearchFrame.Visible = false
     SearchFrame.LayoutOrder = -1
     SearchFrame.Parent = Sidebar
-    Instance.new("UICorner", SearchFrame).CornerRadius = UDim.new(0, 6)
+    Instance.new("UICorner", SearchFrame).CornerRadius = UDim.new(0, 8)
 
     local SearchBoxStroke = Instance.new("UIStroke")
-    SearchBoxStroke.Thickness = 1.5
-    SearchBoxStroke.Color = Settings.Accent or Color3.fromRGB(0, 255, 255)
+    SearchBoxStroke.Color = Settings.Accent
     SearchBoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    SearchBoxStroke.Transparency = 0.6
     SearchBoxStroke.Parent = SearchFrame
 
     local SearchInput = Instance.new("TextBox")
@@ -1014,7 +1014,7 @@ end)
     SearchInput.PlaceholderText = "Search..."
     SearchInput.PlaceholderColor3 = Settings.Text
     SearchInput.TextColor3 = Settings.Text
-    SearchInput.TextSize = 12
+    SearchInput.TextSize = 14
     SearchInput.Font = Enum.Font.GothamMedium
     SearchInput.TextXAlignment = Enum.TextXAlignment.Left
     SearchInput.Parent = SearchFrame
