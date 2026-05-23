@@ -990,7 +990,7 @@ end)
    -- [[ SEARCH BAR (SLIDING VERSION) ]] --
     local SearchFrame = Instance.new("Frame")
     SearchFrame.Name = "SearchFrame"
-    SearchFrame.Size = UDim2.new(1, 0, 0, 30)
+    SearchFrame.Size = UDim2.new(1, -24, 0, 0)
     SearchFrame.Position = UDim2.new(0, 12, 0, 0)
     SearchFrame.BackgroundColor3 = Settings.Element
     SearchFrame.BorderSizePixel = 0
@@ -1003,7 +1003,7 @@ end)
     local SearchBoxStroke = Instance.new("UIStroke")
     SearchBoxStroke.Color = Settings.Accent
     SearchBoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    SearchBoxStroke.Transparency = 0.6
+    SearchBoxStroke.Transparency = 1
     SearchBoxStroke.Parent = SearchFrame
 
     local SearchInput = Instance.new("TextBox")
@@ -1022,6 +1022,31 @@ end)
     local ContainerLayout = Instance.new("UIListLayout", Container)
     ContainerLayout.Padding = UDim.new(0, 5)
     ContainerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- [[ SLIDE DOWN SEARCH LOGIC ]] --
+local searchOpen = false
+SearchToggleBtn.MouseButton1Click:Connect(function()
+    searchOpen = not searchOpen
+    if searchOpen then
+        SearchFrame.Visible = true
+        TweenService:Create(SearchFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -24, 0, 30)}):Play()
+        TweenService:Create(SearchBoxStroke, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 0.6}):Play()
+    else
+        TweenService:Create(SearchBoxStroke, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Transparency = 1}):Play()
+        
+        local closeTween = TweenService:Create(SearchFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(1, -24, 0, 0)})
+        closeTween:Play()
+        closeTween.Completed:Connect(function()
+            if not searchOpen then
+                SearchFrame.Visible = false
+            end
+        end)
+    end
+    
+    local TargetColor = searchOpen and Settings.Accent or Color3.new(1, 1, 1)
+    TweenService:Create(stroke, TweenInfo.new(0.2), {Color = TargetColor}):Play()
+    TweenService:Create(line, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
+end)
 
 -- [[ SLIDE DOWN SEARCH LOGIC ]] --
 local searchOpen = false
