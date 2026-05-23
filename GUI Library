@@ -259,7 +259,6 @@ function Zyqril:CreateWindow(Config)
         GUI.Parent = gethui and gethui() or CoreGui
     end)
     if not success then GUI.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") end
-
 -- [[ MOBILE TOGGLE BUTTON ]] --
 local MobileToggle = Instance.new("TextButton")
 MobileToggle.Name = "MobileToggle"
@@ -290,24 +289,53 @@ GlowRing.Transparency = 0.85
 GlowRing.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 GlowRing.Parent = MobileToggle
 
-local InnerZ = Instance.new("TextLabel")
-InnerZ.Size = UDim2.new(1, 0, 1, 0)
-InnerZ.BackgroundTransparency = 1
-InnerZ.Text = "Z"
-InnerZ.TextColor3 = Color3.new(1, 1, 1)
-InnerZ.Font = Enum.Font.GothamBold
-InnerZ.TextSize = 22
-InnerZ.ZIndex = MobileToggle.ZIndex + 1
-InnerZ.Parent = MobileToggle
+local holder = Instance.new("Frame")
+holder.Size = UDim2.new(1, 0, 1, 0)
+holder.BackgroundTransparency = 1
+holder.Rotation = -15
+holder.Parent = MobileToggle
 
-local Gradient = Instance.new("UIGradient")
-Gradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Settings.Accent or Color3.fromRGB(0, 255, 255)),
-    ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 1)),
-    ColorSequenceKeypoint.new(1, Settings.Accent or Color3.fromRGB(0, 255, 255))
-})
-Gradient.Rotation = 45
-Gradient.Parent = InnerZ
+local shadow = Instance.new("TextLabel")
+shadow.Size = UDim2.new(1, 0, 1, 0)
+shadow.Position = UDim2.new(0, -1, 0, 1)
+shadow.BackgroundTransparency = 1
+shadow.Text = "Z"
+shadow.TextScaled = true
+shadow.Font = Enum.Font.GothamBlack
+shadow.TextColor3 = Color3.fromRGB(0, 0, 0)
+shadow.ZIndex = 1
+shadow.Parent = holder
+
+local z = Instance.new("TextLabel")
+z.Size = UDim2.new(1, 0, 1, 0)
+z.BackgroundTransparency = 1
+z.Text = "Z"
+z.TextScaled = true
+z.Font = Enum.Font.GothamBlack
+z.TextColor3 = Color3.fromRGB(255, 255, 255)
+z.ZIndex = 2
+z.Parent = holder
+
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 3
+stroke.Color = Color3.fromRGB(0, 100, 0)
+stroke.Transparency = 0.1
+stroke.Parent = z
+
+task.spawn(function()
+    while true do
+        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            Thickness = 5,
+            Transparency = 0.35
+        }):Play()
+        task.wait(0.8)
+        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            Thickness = 3,
+            Transparency = 0.1
+        }):Play()
+        task.wait(0.8)
+    end
+end)
 
 local dragging, dragStart, startPos, hasMoved
 MobileToggle.InputBegan:Connect(function(input)
@@ -319,9 +347,6 @@ MobileToggle.InputBegan:Connect(function(input)
         
         TweenService:Create(MobileToggle, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 36, 0, 36)
-        }):Play()
-        TweenService:Create(InnerZ, TweenInfo.new(0.15, Enum.EasingStyle.QuadOut), {
-            TextSize = 18
         }):Play()
     end
 end)
@@ -342,9 +367,6 @@ UserInputService.InputEnded:Connect(function(input)
         
         TweenService:Create(MobileToggle, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 42, 0, 42)
-        }):Play()
-        TweenService:Create(InnerZ, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            TextSize = 22
         }):Play()
         
         if not hasMoved then
