@@ -290,53 +290,24 @@ GlowRing.Transparency = 0.85
 GlowRing.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 GlowRing.Parent = MobileToggle
 
-local holder = Instance.new("Frame")
-holder.Size = UDim2.new(1, 0, 1, 0)
-holder.BackgroundTransparency = 1
-holder.Rotation = -15
-holder.Parent = MobileToggle
+local InnerZ = Instance.new("TextLabel")
+InnerZ.Size = UDim2.new(1, 0, 1, 0)
+InnerZ.BackgroundTransparency = 1
+InnerZ.Text = "Z"
+InnerZ.TextColor3 = Color3.new(1, 1, 1)
+InnerZ.Font = Enum.Font.GothamBold
+InnerZ.TextSize = 22
+InnerZ.ZIndex = MobileToggle.ZIndex + 1
+InnerZ.Parent = MobileToggle
 
-local shadow = Instance.new("TextLabel")
-shadow.Size = UDim2.new(1, 0, 1, 0)
-shadow.Position = UDim2.new(0, -1, 0, 1)
-shadow.BackgroundTransparency = 1
-shadow.Text = "Z"
-shadow.TextScaled = true
-shadow.Font = Enum.Font.GothamBlack
-shadow.TextColor3 = Color3.fromRGB(0, 0, 0)
-shadow.ZIndex = 1
-shadow.Parent = holder
-
-local z = Instance.new("TextLabel")
-z.Size = UDim2.new(1, 0, 1, 0)
-z.BackgroundTransparency = 1
-z.Text = "Z"
-z.TextScaled = true
-z.Font = Enum.Font.GothamBlack
-z.TextColor3 = Color3.fromRGB(255, 255, 255)
-z.ZIndex = 2
-z.Parent = holder
-
-local stroke = Instance.new("UIStroke")
-stroke.Thickness = 3
-stroke.Color = Color3.fromRGB(0, 100, 0)
-stroke.Transparency = 0.1
-stroke.Parent = z
-
-task.spawn(function()
-    while true do
-        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-            Thickness = 5,
-            Transparency = 0.35
-        }):Play()
-        task.wait(0.8)
-        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-            Thickness = 3,
-            Transparency = 0.1
-        }):Play()
-        task.wait(0.8)
-    end
-end)
+local Gradient = Instance.new("UIGradient")
+Gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Settings.Accent or Color3.fromRGB(0, 255, 255)),
+    ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 1)),
+    ColorSequenceKeypoint.new(1, Settings.Accent or Color3.fromRGB(0, 255, 255))
+})
+Gradient.Rotation = 45
+Gradient.Parent = InnerZ
 
 local dragging, dragStart, startPos, hasMoved
 MobileToggle.InputBegan:Connect(function(input)
@@ -348,6 +319,9 @@ MobileToggle.InputBegan:Connect(function(input)
         
         TweenService:Create(MobileToggle, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 36, 0, 36)
+        }):Play()
+        TweenService:Create(InnerZ, TweenInfo.new(0.15, Enum.EasingStyle.QuadOut), {
+            TextSize = 18
         }):Play()
     end
 end)
@@ -368,6 +342,9 @@ UserInputService.InputEnded:Connect(function(input)
         
         TweenService:Create(MobileToggle, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 42, 0, 42)
+        }):Play()
+        TweenService:Create(InnerZ, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            TextSize = 22
         }):Play()
         
         if not hasMoved then
@@ -1010,10 +987,11 @@ end)
     SidebarLayout.Padding = UDim.new(0, 5)
     SidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-    -- [[ SEARCH BAR (SLIDING VERSION) ]] --
+   -- [[ SEARCH BAR (SLIDING VERSION) ]] --
     local SearchFrame = Instance.new("Frame")
     SearchFrame.Name = "SearchFrame"
-    SearchFrame.Size = UDim2.new(1, 0, 0, 0) -- Start height 0
+    SearchFrame.Size = UDim2.new(1, -24, 0, 0)
+    SearchFrame.Position = UDim2.new(0, 12, 0, 0)
     SearchFrame.BackgroundColor3 = Settings.Element
     SearchFrame.BorderSizePixel = 0
     SearchFrame.ClipsDescendants = true
@@ -1022,18 +1000,15 @@ end)
     SearchFrame.Parent = Sidebar
     Instance.new("UICorner", SearchFrame).CornerRadius = UDim.new(0, 6)
 
-    local SearchIcon = Instance.new("ImageLabel")
-    SearchIcon.Size = UDim2.new(0, 14, 0, 14)
-    SearchIcon.Position = UDim2.new(0, 8, 0, 7)
-    SearchIcon.BackgroundTransparency = 1
-    SearchIcon.Image = "rbxassetid://13222383803"
-    SearchIcon.ImageColor3 = Settings.Text
-    SearchIcon.ImageTransparency = 0.4
-    SearchIcon.Parent = SearchFrame
+    local SearchBoxStroke = Instance.new("UIStroke")
+    SearchBoxStroke.Thickness = 1.5
+    SearchBoxStroke.Color = Settings.Accent or Color3.fromRGB(0, 255, 255)
+    SearchBoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    SearchBoxStroke.Parent = SearchFrame
 
     local SearchInput = Instance.new("TextBox")
-    SearchInput.Size = UDim2.new(1, -30, 0, 28)
-    SearchInput.Position = UDim2.new(0, 28, 0, 0)
+    SearchInput.Size = UDim2.new(1, -16, 0, 28)
+    SearchInput.Position = UDim2.new(0, 8, 0, 0)
     SearchInput.BackgroundTransparency = 1
     SearchInput.Text = ""
     SearchInput.PlaceholderText = "Search..."
