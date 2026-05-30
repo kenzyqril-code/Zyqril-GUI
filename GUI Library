@@ -1851,7 +1851,7 @@ end
             return ButtonMethods
         end
 
-       -- [[ ELEMENT: PARAGRAPH ]] --
+      -- [[ ELEMENT: PARAGRAPH ]] --
        function TabMethods:CreateParagraph(Config)
             local ParagraphFrame = Instance.new("Frame")
             ParagraphFrame.Size = UDim2.new(1, -5, 0, 0) 
@@ -1874,7 +1874,7 @@ end
             local TitleLabel = Instance.new("TextLabel")
             TitleLabel.Size = UDim2.new(1, 0, 0, 0)
             TitleLabel.BackgroundTransparency = 1
-            TitleLabel.Text = Config.Title:upper() or "INFO"
+            TitleLabel.Text = Config.Title or "INFO"
             TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
             TitleLabel.TextSize = 14 -- Matched to Button Label Size
             TitleLabel.Font = Enum.Font.GothamBold
@@ -1902,7 +1902,7 @@ end
             local ParagraphMethods = {}
             function ParagraphMethods:Set(NewConfig)
                 if NewConfig.Title then
-                    TitleLabel.Text = NewConfig.Title:upper()
+                    TitleLabel.Text = NewConfig.Title
                 end
                 if NewConfig.Content then
                     ContentLabel.Text = NewConfig.Content
