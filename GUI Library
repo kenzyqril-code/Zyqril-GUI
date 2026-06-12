@@ -1196,7 +1196,7 @@ function TabMethods:CreateToggle(Config)
     local TglFrame = Instance.new("Frame")
     TglFrame.Size = UDim2.new(1, -5, 0, 35)
     TglFrame.BackgroundColor3 = Settings.Element
-    TglFrame.BackgroundTransparency = 0.1
+    TglFrame.BackgroundTransparency = 0.65
     TglFrame.AutomaticSize = Enum.AutomaticSize.Y
     TglFrame.Parent = TabPage
     Instance.new("UICorner", TglFrame).CornerRadius = UDim.new(0, 8)
@@ -1210,7 +1210,7 @@ function TabMethods:CreateToggle(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.GothamSemibold
+    Label.Font = Enum.Font.GothamBold
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1222,7 +1222,7 @@ function TabMethods:CreateToggle(Config)
     LabelPadding.Parent = Label
 
     local TglBtn = Instance.new("TextButton")
-    TglBtn.Size = UDim2.new(0, 45, 0, 22)
+    TglBtn.Size = UDim2.new(0, 48, 0, 24)
     TglBtn.AnchorPoint = Vector2.new(1, 0.5)
     TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
     TglBtn.BackgroundColor3 = Settings.Scheme
@@ -1230,17 +1230,18 @@ function TabMethods:CreateToggle(Config)
     TglBtn.Parent = TglFrame
     Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
 
-local TglStroke = Instance.new("UIStroke")
-TglStroke.Thickness = 1.2
-TglStroke.Color = Settings.Accent
-TglStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-TglStroke.Transparency = 0.5
-TglStroke.Parent = TglBtn
+    local TglStroke = Instance.new("UIStroke")
+    TglStroke.Thickness = 1.2
+    TglStroke.Color = Settings.Accent
+    TglStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    TglStroke.Transparency = 0.5
+    TglStroke.Parent = TglBtn
 
     local Circle = Instance.new("Frame")
-    Circle.Size = UDim2.new(0, 18, 0, 18)
-    Circle.Position = UDim2.new(0, 2, 0.5, -9)
+    Circle.Size = UDim2.new(0, 24, 0, 20)
+    Circle.Position = UDim2.new(0, 2, 0.5, -10)
     Circle.BackgroundColor3 = Settings.Text 
+    Circle.ZIndex = TglBtn.ZIndex + 2
     Circle.Parent = TglBtn
     Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
 
@@ -1250,11 +1251,11 @@ TglStroke.Parent = TglBtn
     
     local function Update(IgnoreCallback)
         if ToggleMethods.CurrentValue then
-            TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Accent}):Play()
-            TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0.5, -9)}):Play()
+            TweenService:Create(TglBtn, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Settings.Accent}):Play()
+            TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -26, 0.5, -10)}):Play()
         else
-            TweenService:Create(TglBtn, TweenInfo.new(0.2), {BackgroundColor3 = Settings.Scheme}):Play()
-            TweenService:Create(Circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -9)}):Play()
+            TweenService:Create(TglBtn, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Settings.Scheme}):Play()
+            TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
         end
         
         if not IgnoreCallback then
@@ -1280,12 +1281,12 @@ TglStroke.Parent = TglBtn
     return ToggleMethods
 end
 
-    -- [[ ELEMENT: SLIDER ]] --
+   -- [[ ELEMENT: SLIDER ]] --
         function TabMethods:CreateSlider(Config)
             local SliderFrame = Instance.new("Frame")
             SliderFrame.Size = UDim2.new(1, -5, 0, 0)
             SliderFrame.BackgroundColor3 = Settings.Element
-            SliderFrame.BackgroundTransparency = 0.1
+            SliderFrame.BackgroundTransparency = 0.65
             SliderFrame.AutomaticSize = Enum.AutomaticSize.Y
             SliderFrame.Parent = TabPage
             Instance.new("UICorner", SliderFrame).CornerRadius = UDim.new(0, 8)
@@ -1299,8 +1300,8 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamSemibold
-            Label.TextSize = 15
+            Label.Font = Enum.Font.GothamBold
+            Label.TextSize = 14
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
             Label.Parent = SliderFrame
@@ -1375,7 +1376,7 @@ end
                 local DisplayPercent = math.clamp((Value - Min) / (Max - Min), 0, 1)
                 
                 ValueLabel.Text = tostring(Value) .. " " .. Suffix
-                Fill.Size = UDim2.new(DisplayPercent, 0, 1, 0)
+                TweenService:Create(Fill, TweenInfo.new(0.1, Enum.EasingStyle.Linear), {Size = UDim2.new(DisplayPercent, 0, 1, 0)}):Play()
                 Config.Callback(Value)
             end
 
@@ -1403,7 +1404,7 @@ end
                 local Val = Round(math.clamp(NewValue, Min, Max), Increment)
                 local DisplayPercent = math.clamp((Val - Min) / (Max - Min), 0, 1)
                 ValueLabel.Text = tostring(Val) .. " " .. Suffix
-                Fill.Size = UDim2.new(DisplayPercent, 0, 1, 0)
+                TweenService:Create(Fill, TweenInfo.new(0.15, Enum.EasingStyle.Linear), {Size = UDim2.new(DisplayPercent, 0, 1, 0)}):Play()
                 Config.Callback(Val)
             end
             return SliderMethods
@@ -1417,7 +1418,8 @@ end
             local DropdownFrame = Instance.new("Frame")
             DropdownFrame.Size = UDim2.new(1, -5, 0, 40)
             DropdownFrame.BackgroundColor3 = Settings.Element
-            DropdownFrame.BackgroundTransparency = 0.1
+            DropdownFrame.BackgroundTransparency =
+0.65
             DropdownFrame.ClipsDescendants = true
             DropdownFrame.Parent = TabPage
             Instance.new("UICorner", DropdownFrame).CornerRadius = UDim.new(0, 8)
@@ -1441,7 +1443,7 @@ end
             Label.Text = Config.Name .. ": " .. InitialText
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamSemibold
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14
             Label.Parent = Header
 
@@ -1574,7 +1576,7 @@ end
             local PickerFrame = Instance.new("Frame")
             PickerFrame.Size = UDim2.new(1, -5, 0, 40)
             PickerFrame.BackgroundColor3 = Settings.Element
-            PickerFrame.BackgroundTransparency = 0.1
+            PickerFrame.BackgroundTransparency = 0.65
             PickerFrame.ClipsDescendants = true
             PickerFrame.Parent = TabPage
             Instance.new("UICorner", PickerFrame).CornerRadius = UDim.new(0, 8)
@@ -1592,7 +1594,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamSemibold
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14
             Label.Parent = Header
 
@@ -1604,7 +1606,8 @@ end
             Instance.new("UICorner", ColorDisplay).CornerRadius = UDim.new(0, 4)
             local DisplayStroke = Instance.new("UIStroke", ColorDisplay)
             DisplayStroke.Color = Settings.Accent
-            DisplayStroke.Thickness = 1.5
+            DisplayStroke.Thickness = 1.2
+            DisplayStroke.Transparency = 0.5
 
             local Content = Instance.new("Frame")
             Content.Size = UDim2.new(1, 0, 0, 180) 
@@ -1654,7 +1657,7 @@ end
                 
                 local BoxStroke = Instance.new("UIStroke", Box)
                 BoxStroke.Color = Settings.Accent
-                BoxStroke.Transparency = 0
+                BoxStroke.Transparency = 0.5
                 BoxStroke.Thickness = 1.2
                 BoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 return Box
@@ -1781,7 +1784,7 @@ end
             local ButtonFrame = Instance.new("Frame")
             ButtonFrame.Size = UDim2.new(1, -5, 0, 0)
             ButtonFrame.BackgroundColor3 = Settings.Element
-            ButtonFrame.BackgroundTransparency = 0.1
+            ButtonFrame.BackgroundTransparency = 0.65
             ButtonFrame.AutomaticSize = Enum.AutomaticSize.Y
             ButtonFrame.Parent = TabPage
             Instance.new("UICorner", ButtonFrame).CornerRadius = UDim.new(0, 8)
@@ -1795,7 +1798,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamSemibold
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1863,7 +1866,7 @@ end
             local ParagraphFrame = Instance.new("Frame")
             ParagraphFrame.Size = UDim2.new(1, -5, 0, 0) 
             ParagraphFrame.BackgroundColor3 = Settings.Element
-            ParagraphFrame.BackgroundTransparency = 0.1
+            ParagraphFrame.BackgroundTransparency = 0.65
             ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y
             ParagraphFrame.Parent = TabPage
             Instance.new("UICorner", ParagraphFrame).CornerRadius = UDim.new(0, 8)
@@ -1875,7 +1878,7 @@ end
             local UIPadding = Instance.new("UIPadding", ParagraphFrame)
             UIPadding.PaddingTop = UDim.new(0, 10)
             UIPadding.PaddingBottom = UDim.new(0, 10)
-            UIPadding.PaddingLeft = UDim.new(0, 15) -- Matches Button/Toggle Label Position
+            UIPadding.PaddingLeft = UDim.new(0, 15)
             UIPadding.PaddingRight = UDim.new(0, 15)
 
             local TitleLabel = Instance.new("TextLabel")
@@ -1883,7 +1886,7 @@ end
             TitleLabel.BackgroundTransparency = 1
             TitleLabel.Text = Config.Title or "INFO"
             TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-            TitleLabel.TextSize = 14 -- Matched to Button Label Size
+            TitleLabel.TextSize = 14
             TitleLabel.Font = Enum.Font.GothamBold
             TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
             TitleLabel.TextWrapped = true
@@ -1924,7 +1927,7 @@ function TabMethods:CreateLabel(LabelText, IconID)
     local LabelFrame = Instance.new("Frame")
     LabelFrame.Size = UDim2.new(1, -5, 0, 0) 
     LabelFrame.BackgroundColor3 = Settings.Element
-    LabelFrame.BackgroundTransparency = 0.1
+    LabelFrame.BackgroundTransparency = 0.65
     LabelFrame.AutomaticSize = Enum.AutomaticSize.Y
     LabelFrame.Parent = TabPage
     Instance.new("UICorner", LabelFrame).CornerRadius = UDim.new(0, 8)
@@ -1985,7 +1988,7 @@ end
             local InputFrame = Instance.new("Frame")
             InputFrame.Size = UDim2.new(1, -5, 0, 0) 
             InputFrame.BackgroundColor3 = Settings.Element
-            InputFrame.BackgroundTransparency = 0.1
+            InputFrame.BackgroundTransparency = 0.65
             InputFrame.AutomaticSize = Enum.AutomaticSize.Y
             InputFrame.Parent = TabPage
 
@@ -1998,7 +2001,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamSemibold
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
