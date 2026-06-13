@@ -1246,7 +1246,7 @@ function TabMethods:CreateToggle(Config)
     Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
 
     local ToggleMethods = {
-        CurrentValue = Config.CurrentValue or Config.Default or false
+        CurrentValue = Config.CurrentValue or false
     }
     
     local function Update(IgnoreCallback)
@@ -1272,9 +1272,9 @@ function TabMethods:CreateToggle(Config)
         Label.Text = NewName
     end
 
-    function ToggleMethods:Set(NewState, IgnoreCallback)
+    function ToggleMethods:Set(NewState)
         ToggleMethods.CurrentValue = NewState
-        Update(IgnoreCallback)
+        Update(false)
     end
 
     Update(true)
