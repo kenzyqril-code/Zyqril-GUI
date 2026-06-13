@@ -1194,41 +1194,32 @@ function WindowMethods:CreateTab(TabName, ImageID)
 -- [[ ELEMENT: TOGGLE ]] --
 function TabMethods:CreateToggle(Config)
     local TglFrame = Instance.new("Frame")
-    TglFrame.Size = UDim2.new(1, -5, 0, 50)
+    TglFrame.Size = UDim2.new(1, -5, 0, 35)
     TglFrame.BackgroundColor3 = Settings.Element
     TglFrame.BackgroundTransparency = 0.65
     TglFrame.AutomaticSize = Enum.AutomaticSize.Y
     TglFrame.Parent = TabPage
-
     Instance.new("UICorner", TglFrame).CornerRadius = UDim.new(0, 8)
-
-    table.insert(AllElements, {
-        Frame = TglFrame,
-        Name = Config.Name,
-        Tab = TabPage
-    })
+    
+    table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
 
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, -95, 0, 20)
-    Label.Position = UDim2.new(0, 15, 0, 8)
+    Label.Size = UDim2.new(1, -95, 0, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
     Label.BackgroundTransparency = 1
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Font = Enum.Font.GothamBold
     Label.TextSize = 14
+    Label.TextWrapped = true
+    Label.AutomaticSize = Enum.AutomaticSize.Y
     Label.Parent = TglFrame
-
-    local StatusLabel = Instance.new("TextLabel")
-    StatusLabel.Size = UDim2.new(1, -95, 0, 16)
-    StatusLabel.Position = UDim2.new(0, 15, 0, 26)
-    StatusLabel.BackgroundTransparency = 1
-    StatusLabel.Text = Config.Status or ""
-    StatusLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
-    StatusLabel.TextXAlignment = Enum.TextXAlignment.Left
-    StatusLabel.Font = Enum.Font.Gotham
-    StatusLabel.TextSize = 12
-    StatusLabel.Parent = TglFrame
+    
+    local LabelPadding = Instance.new("UIPadding")
+    LabelPadding.PaddingTop = UDim.new(0, 10)
+    LabelPadding.PaddingBottom = UDim.new(0, 10)
+    LabelPadding.Parent = Label
 
     local TglBtn = Instance.new("TextButton")
     TglBtn.Size = UDim2.new(0, 48, 0, 24)
@@ -1237,7 +1228,6 @@ function TabMethods:CreateToggle(Config)
     TglBtn.BackgroundColor3 = Settings.Scheme
     TglBtn.Text = ""
     TglBtn.Parent = TglFrame
-
     Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
 
     local TglStroke = Instance.new("UIStroke")
@@ -1250,44 +1240,25 @@ function TabMethods:CreateToggle(Config)
     local Circle = Instance.new("Frame")
     Circle.Size = UDim2.new(0, 24, 0, 20)
     Circle.Position = UDim2.new(0, 2, 0.5, -10)
-    Circle.BackgroundColor3 = Settings.Text
+    Circle.BackgroundColor3 = Settings.Text 
     Circle.ZIndex = TglBtn.ZIndex + 2
     Circle.Parent = TglBtn
-
     Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
 
     local ToggleMethods = {
         CurrentValue = Config.CurrentValue or false
     }
-
+    
     local function Update(IgnoreCallback)
         if ToggleMethods.CurrentValue then
-            TweenService:Create(
-                TglBtn,
-                TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-                {BackgroundColor3 = Settings.Accent}
-            ):Play()
-
-            TweenService:Create(
-                Circle,
-                TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-                {Position = UDim2.new(1, -26, 0.5, -10)}
-            ):Play()
+            TweenService:Create(TglBtn, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Settings.Accent}):Play()
+            TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -26, 0.5, -10)}):Play()
         else
-            TweenService:Create(
-                TglBtn,
-                TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-                {BackgroundColor3 = Settings.Scheme}
-            ):Play()
-
-            TweenService:Create(
-                Circle,
-                TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-                {Position = UDim2.new(0, 2, 0.5, -10)}
-            ):Play()
+            TweenService:Create(TglBtn, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Settings.Scheme}):Play()
+            TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
         end
-
-        if not IgnoreCallback and Config.Callback then
+        
+        if not IgnoreCallback then
             Config.Callback(ToggleMethods.CurrentValue)
         end
     end
@@ -1296,19 +1267,26 @@ function TabMethods:CreateToggle(Config)
         ToggleMethods.CurrentValue = not ToggleMethods.CurrentValue
         Update()
     end)
+    
+local OriginalName = Config.Name
 
-    function ToggleMethods:SetName(NewName)
-        Label.Text = tostring(NewName)
-    end
+function ToggleMethods:SetName(NewName)
+    OriginalName = tostring(NewName)
+    Label.Text = OriginalName
+end
 
-    function ToggleMethods:SetStatus(Text)
-        StatusLabel.Text = tostring(Text)
-    end
+function ToggleMethods:SetLiveStatus(Status)
+    Label.Text = OriginalName .. " • " .. tostring(Status)
+end
 
-    function ToggleMethods:Set(NewState, IgnoreCallback)
-        ToggleMethods.CurrentValue = NewState
-        Update(IgnoreCallback)
-    end
+function ToggleMethods:ClearLiveStatus()
+    Label.Text = OriginalName
+end
+
+function ToggleMethods:Set(NewState, IgnoreCallback)
+    ToggleMethods.CurrentValue = NewState
+    Update(IgnoreCallback)
+end
 
     Update(true)
     return ToggleMethods
