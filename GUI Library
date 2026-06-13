@@ -1210,7 +1210,7 @@ function TabMethods:CreateToggle(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.BebasNeue
+    Label.Font = Enum.Font.GothamBold
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1258,7 +1258,7 @@ function TabMethods:CreateToggle(Config)
             TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
         end
         
-        if not IgnoreCallback and Config.Callback then
+        if not IgnoreCallback then
             Config.Callback(ToggleMethods.CurrentValue)
         end
     end
@@ -1272,9 +1272,9 @@ function TabMethods:CreateToggle(Config)
         Label.Text = NewName
     end
 
-    function ToggleMethods:Set(NewState)
+    function ToggleMethods:Set(NewState, IgnoreCallback)
         ToggleMethods.CurrentValue = NewState
-        Update(false)
+        Update(IgnoreCallback)
     end
 
     Update(true)
