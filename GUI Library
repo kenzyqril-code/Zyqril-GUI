@@ -1210,7 +1210,7 @@ function TabMethods:CreateToggle(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.GothamBold
+    Label.Font = Enum.Font.BebasNeue
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1246,7 +1246,7 @@ function TabMethods:CreateToggle(Config)
     Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
 
     local ToggleMethods = {
-        CurrentValue = Config.CurrentValue or false
+        CurrentValue = Config.CurrentValue or Config.Default or false
     }
     
     local function Update(IgnoreCallback)
@@ -1258,7 +1258,7 @@ function TabMethods:CreateToggle(Config)
             TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
         end
         
-        if not IgnoreCallback then
+        if not IgnoreCallback and Config.Callback then
             Config.Callback(ToggleMethods.CurrentValue)
         end
     end
@@ -2100,4 +2100,6 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
+
 
