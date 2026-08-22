@@ -5,6 +5,8 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
+local TextService = game:GetService("TextService")
+local Players = game:GetService("Players")
 
 -- [[ THEMES LIBRARY ]] --
 local Themes = {
@@ -725,18 +727,110 @@ SidebarPadding.Parent = Sidebar
         TweenService:Create(Line3, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
     end)
 
+ -- [[ TOP BAR NAME OR TITLE ]] --
     local Title = Instance.new("TextLabel")
     Title.Name = "Title"
-    Title.Size = UDim2.new(1, -95, 1, 0)
+    Title.Size = UDim2.new(0, 0, 1, 0)
     Title.Position = UDim2.new(0, 15, 0, 0)
     Title.BackgroundTransparency = 1
     Title.Text = Name
     Title.TextColor3 = Settings.Text
     Title.Font = Enum.Font.GothamBold
-    Title.TextSize = 14
+    Title.TextSize = 16
     Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.AutomaticSize = Enum.AutomaticSize.X
     Title.ZIndex = 101
     Title.Parent = TopBar
+
+    -- [[ AUTOMATIC LIVE USER COUNTER ]] --
+    local UserCounter = Instance.new("TextLabel")
+    UserCounter.Name = "UserCounter"
+    UserCounter.Size = UDim2.new(0, 150, 1, 0)
+    UserCounter.Position = UDim2.new(0, 25, 0, 0)
+    UserCounter.BackgroundTransparency = 1
+    UserCounter.Text = "Active Users: ..."
+    UserCounter.TextColor3 = Color3.fromRGB(246, 174, 65)
+    UserCounter.Font = Enum.Font.FredokaOne
+    UserCounter.TextSize = 12
+    UserCounter.TextXAlignment = Enum.TextXAlignment.Left
+    UserCounter.ZIndex = 101
+    UserCounter.Parent = TopBar
+
+    local function updateCounterPosition()
+        local textSize = TextService:GetTextSize(Title.Text, Title.TextSize, Title.Font, Vector2.new(1000, 30))
+        UserCounter.Position = UDim2.new(0, 20 + textSize.X, 0, 0)
+    end
+    
+    updateCounterPosition()
+    Title:GetPropertyChangedSignal("Text"):Connect(updateCounterPosition)
+
+    task.spawn(function()
+        local HttpService = game:GetService("HttpService")
+        local req = (syn and syn.request) or (http and http.request) or request or HttpService.RequestAsync
+
+        local BIN_ID = "6a894ba8da38895dfe02aadc"
+        local API_KEY = "$2a$10$AjnGzkNEMiJf8Srl1efaE.MMc91izl6n1.qvs5pvrnQ6osYiUlMnS"
+        
+        local MySessionId = "user_" .. tostring(Players.LocalPlayer.UserId)
+
+        local function syncActiveUsers()
+            pcall(function()
+                local getRes = req({
+                    Url = "https://api.jsonbin.io/v3/b/" .. BIN_ID .. "/latest",
+                    Method = "GET",
+                    Headers = { ["X-Master-Key"] = API_KEY }
+                })
+                
+                if getRes and getRes.Success then
+                    local data = HttpService:JSONDecode(getRes.Body)
+                    local record = (data and data.record) or {}
+                    local currentTime = os.time()
+                    local activeSessions = {}
+                    local uniqueUserIds = {}
+
+                    if type(record) == "table" then
+                        for id, timestamp in pairs(record) do
+                            if type(timestamp) == "number" and (currentTime - timestamp) < 20 then
+                                activeSessions[id] = timestamp
+                                uniqueUserIds[id] = true
+                            end
+                        end
+                    end
+
+                    activeSessions[MySessionId] = currentTime
+                    uniqueUserIds[MySessionId] = true
+
+                    local count = 0
+                    for _ in pairs(uniqueUserIds) do
+                        count = count + 1
+                    end
+
+                    task.defer(function()
+                        if UserCounter and UserCounter.Parent then
+                            UserCounter.Text = "Active Users: " .. tostring(count)
+                        end
+                    end)
+
+                    req({
+                        Url = "https://api.jsonbin.io/v3/b/" .. BIN_ID,
+                        Method = "PUT",
+                        Headers = {
+                            ["Content-Type"] = "application/json",
+                            ["X-Master-Key"] = API_KEY
+                        },
+                        Body = HttpService:JSONEncode(activeSessions)
+                    })
+                end
+            end)
+        end
+
+        syncActiveUsers()
+
+        while task.wait(10) do
+            if not TopBar or not TopBar.Parent then break end
+            syncActiveUsers()
+        end
+    end)
 
 -- [[ SEARCH BUTTON ]] --
 local SearchToggleBtn = Instance.new("TextButton")
@@ -2175,5 +2269,6 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
 
 
