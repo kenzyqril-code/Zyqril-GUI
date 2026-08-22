@@ -428,6 +428,77 @@ ContentContainer.ZIndex = 2
 ContentContainer.Parent = Main
 Instance.new("UICorner", ContentContainer).CornerRadius = UDim.new(0, 16)
 
+-- [[ DRAGGABLE PILL ]] --
+local DragPill = Instance.new("Frame")
+DragPill.Name = "DragPill"
+DragPill.Size = UDim2.new(0, 160, 0, 4)
+DragPill.AnchorPoint = Vector2.new(0.5, 0)
+DragPill.BackgroundColor3 = Settings.Accent or Color3.fromRGB(200, 200, 200)
+DragPill.BackgroundTransparency = 0.5
+DragPill.BorderSizePixel = 0
+DragPill.ZIndex = 200
+DragPill.Visible = Main.Visible
+DragPill.Parent = Main.Parent
+
+local PillCorner = Instance.new("UICorner")
+PillCorner.CornerRadius = UDim.new(1, 0)
+PillCorner.Parent = DragPill
+
+local function UpdatePill()
+    DragPill.Visible = Main.Visible
+    if Main.Visible then
+        DragPill.Position = UDim2.new(
+            Main.Position.X.Scale, 
+            Main.Position.X.Offset + (Main.AbsoluteSize.X / 2), 
+            Main.Position.Y.Scale, 
+            Main.Position.Y.Offset + Main.AbsoluteSize.Y + 6
+        )
+    end
+end
+
+UpdatePill()
+Main:GetPropertyChangedSignal("Position"):Connect(UpdatePill)
+Main:GetPropertyChangedSignal("Size"):Connect(UpdatePill)
+Main:GetPropertyChangedSignal("Visible"):Connect(UpdatePill)
+
+local pillDragging, pillDragStart, pillStartPos
+
+DragPill.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        pillDragging = true
+        pillDragStart = input.Position
+        pillStartPos = Main.Position
+        
+        TweenService:Create(DragPill, TweenInfo.new(0.15), {
+            BackgroundTransparency = 0.2,
+            Size = UDim2.new(0, 180, 0, 5)
+        }):Play()
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if pillDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - pillDragStart
+        Main.Position = UDim2.new(
+            pillStartPos.X.Scale, 
+            pillStartPos.X.Offset + delta.X, 
+            pillStartPos.Y.Scale, 
+            pillStartPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        pillDragging = false
+        
+        TweenService:Create(DragPill, TweenInfo.new(0.15), {
+            BackgroundTransparency = 0.5,
+            Size = UDim2.new(0, 160, 0, 4)
+        }):Play()
+    end
+end)
+
 -- [[ LOADING GUI ]] --
 local LTitle = Config.LoadingTitle or "Zyqril Hub"
 local LSub = Config.LoadingSubtitle or "Preparing your experience..."
