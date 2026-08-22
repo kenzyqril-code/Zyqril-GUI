@@ -5,6 +5,8 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
+local TextService = game:GetService("TextService")
+local Players = game:GetService("Players")
 
 -- [[ THEMES LIBRARY ]] --
 local Themes = {
@@ -173,7 +175,7 @@ function Zyqril:Notify(Config)
     TitleLabel.Text = tostring(title)
     TitleLabel.TextColor3 = Settings.Text
     TitleLabel.TextSize = 16
-    TitleLabel.Font = Enum.Font.FredokaOne
+    TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.TextWrapped = true
     TitleLabel.AutomaticSize = Enum.AutomaticSize.Y
@@ -205,7 +207,7 @@ function Zyqril:Notify(Config)
     ContentLabel.Text = tostring(content)
     ContentLabel.TextColor3 = Settings.Text
     ContentLabel.TextSize = 14
-    ContentLabel.Font = Enum.Font.FredokaOne
+    ContentLabel.Font = Enum.Font.GothamSemibold
     ContentLabel.TextWrapped = true
     ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
     ContentLabel.TextYAlignment = Enum.TextYAlignment.Top
@@ -537,7 +539,7 @@ LT.BackgroundTransparency = 1
 LT.Text = LTitle
 LT.TextColor3 = Color3.new(1, 1, 1)
 LT.TextSize = 16
-LT.Font = Enum.Font.FredokaOne
+LT.Font = Enum.Font.GothamBold
 LT.TextXAlignment = Enum.TextXAlignment.Left
 LT.ZIndex = 2
 LT.Parent = LoadingFrame
@@ -550,7 +552,7 @@ LS.Text = LSub
 LS.TextColor3 = AccentColor
 LS.TextTransparency = 0
 LS.TextSize = 11
-LS.Font = Enum.Font.FredokaOne
+LS.Font = Enum.Font.GothamMedium
 LS.TextXAlignment = Enum.TextXAlignment.Left
 LS.ZIndex = 2
 LS.Parent = LoadingFrame
@@ -571,7 +573,7 @@ StatusText.Position = UDim2.new(0, 30, 0, 80)
 StatusText.BackgroundTransparency = 1
 StatusText.Text = "LOADING... 0%"
 StatusText.TextColor3 = Color3.new(1, 1, 1)
-StatusText.Font = Enum.Font.FredokaOne 
+StatusText.Font = Enum.Font.GothamBold 
 StatusText.TextSize = 12
 StatusText.TextXAlignment = Enum.TextXAlignment.Left
 StatusText.ZIndex = 6
@@ -796,19 +798,110 @@ SidebarPadding.Parent = Sidebar
         TweenService:Create(Line3, TweenInfo.new(0.2), {BackgroundColor3 = TargetColor}):Play()
     end)
 
--- [[ MAIN GUI TITLE ]] --
+ -- [[ TOP BAR NAME OR TITLE ]] --
     local Title = Instance.new("TextLabel")
     Title.Name = "Title"
-    Title.Size = UDim2.new(1, -95, 1, 0)
+    Title.Size = UDim2.new(0, 0, 1, 0)
     Title.Position = UDim2.new(0, 15, 0, 0)
     Title.BackgroundTransparency = 1
     Title.Text = Name
     Title.TextColor3 = Settings.Text
     Title.Font = Enum.Font.FredokaOne
-    Title.TextSize = 20
+    Title.TextSize = 16
     Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.AutomaticSize = Enum.AutomaticSize.X
     Title.ZIndex = 101
     Title.Parent = TopBar
+
+    -- [[ AUTOMATIC LIVE USER COUNTER ]] --
+    local UserCounter = Instance.new("TextLabel")
+    UserCounter.Name = "UserCounter"
+    UserCounter.Size = UDim2.new(0, 150, 1, 0)
+    UserCounter.Position = UDim2.new(0, 25, 0, 0)
+    UserCounter.BackgroundTransparency = 1
+    UserCounter.Text = "Active Users: ..."
+    UserCounter.TextColor3 = Color3.fromRGB(246, 174, 65)
+    UserCounter.Font = Enum.Font.FredokaOne
+    UserCounter.TextSize = 12
+    UserCounter.TextXAlignment = Enum.TextXAlignment.Left
+    UserCounter.ZIndex = 101
+    UserCounter.Parent = TopBar
+
+    local function updateCounterPosition()
+        local textSize = TextService:GetTextSize(Title.Text, Title.TextSize, Title.Font, Vector2.new(1000, 30))
+        UserCounter.Position = UDim2.new(0, 20 + textSize.X, 0, 0)
+    end
+    
+    updateCounterPosition()
+    Title:GetPropertyChangedSignal("Text"):Connect(updateCounterPosition)
+
+    task.spawn(function()
+        local HttpService = game:GetService("HttpService")
+        local req = (syn and syn.request) or (http and http.request) or request or HttpService.RequestAsync
+
+        local BIN_ID = "6a894ba8da38895dfe02aadc"
+        local API_KEY = "$2a$10$AjnGzkNEMiJf8Srl1efaE.MMc91izl6n1.qvs5pvrnQ6osYiUlMnS"
+        
+        local MySessionId = "user_" .. tostring(Players.LocalPlayer.UserId)
+
+        local function syncActiveUsers()
+            pcall(function()
+                local getRes = req({
+                    Url = "https://api.jsonbin.io/v3/b/" .. BIN_ID .. "/latest",
+                    Method = "GET",
+                    Headers = { ["X-Master-Key"] = API_KEY }
+                })
+                
+                if getRes and getRes.Success then
+                    local data = HttpService:JSONDecode(getRes.Body)
+                    local record = (data and data.record) or {}
+                    local currentTime = os.time()
+                    local activeSessions = {}
+                    local uniqueUserIds = {}
+
+                    if type(record) == "table" then
+                        for id, timestamp in pairs(record) do
+                            if type(timestamp) == "number" and (currentTime - timestamp) < 20 then
+                                activeSessions[id] = timestamp
+                                uniqueUserIds[id] = true
+                            end
+                        end
+                    end
+
+                    activeSessions[MySessionId] = currentTime
+                    uniqueUserIds[MySessionId] = true
+
+                    local count = 0
+                    for _ in pairs(uniqueUserIds) do
+                        count = count + 1
+                    end
+
+                    task.defer(function()
+                        if UserCounter and UserCounter.Parent then
+                            UserCounter.Text = "Active Users: " .. tostring(count)
+                        end
+                    end)
+
+                    req({
+                        Url = "https://api.jsonbin.io/v3/b/" .. BIN_ID,
+                        Method = "PUT",
+                        Headers = {
+                            ["Content-Type"] = "application/json",
+                            ["X-Master-Key"] = API_KEY
+                        },
+                        Body = HttpService:JSONEncode(activeSessions)
+                    })
+                end
+            end)
+        end
+
+        syncActiveUsers()
+
+        while task.wait(10) do
+            if not TopBar or not TopBar.Parent then break end
+            syncActiveUsers()
+        end
+    end)
 
 -- [[ SEARCH BUTTON ]] --
 local SearchToggleBtn = Instance.new("TextButton")
@@ -917,7 +1010,7 @@ KeybindHeader.Text = "Zyqril's Keybinds"
 KeybindHeader.Size = UDim2.new(1, 0, 0, 40)
 KeybindHeader.BackgroundTransparency = 1
 KeybindHeader.TextColor3 = Settings.Text
-KeybindHeader.Font = Enum.Font.FredokaOne
+KeybindHeader.Font = Enum.Font.GothamBold
 KeybindHeader.TextSize = 14
 KeybindHeader.ZIndex = 51
 
@@ -933,7 +1026,7 @@ BindLabel.Size = UDim2.new(1, -100, 1, 0)
 BindLabel.Position = UDim2.new(0, 15, 0, 0)
 BindLabel.BackgroundTransparency = 1
 BindLabel.TextColor3 = Settings.Text
-BindLabel.Font = Enum.Font.FredokaOne
+BindLabel.Font = Enum.Font.GothamSemibold
 BindLabel.TextSize = 14
 BindLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -943,7 +1036,7 @@ BindInput.Size = UDim2.new(0, 80, 0, 24)
 BindInput.Position = UDim2.new(1, -90, 0.5, -12)
 BindInput.BackgroundColor3 = Settings.Scheme
 BindInput.TextColor3 = Settings.Text
-BindInput.Font = Enum.Font.FredokaOne
+BindInput.Font = Enum.Font.GothamBold
 BindInput.TextSize = 12
 Instance.new("UICorner", BindInput).CornerRadius = UDim.new(0, 6)
 
@@ -959,7 +1052,7 @@ AnalyticsLabel.Size = UDim2.new(1, -80, 1, 0)
 AnalyticsLabel.Position = UDim2.new(0, 15, 0, 0)
 AnalyticsLabel.BackgroundTransparency = 1
 AnalyticsLabel.TextColor3 = Settings.Text
-AnalyticsLabel.Font = Enum.Font.FredokaOne
+AnalyticsLabel.Font = Enum.Font.GothamSemibold
 AnalyticsLabel.TextSize = 14
 AnalyticsLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1108,7 +1201,7 @@ SearchInput.PlaceholderText = "Search..."
 SearchInput.PlaceholderColor3 = Settings.Text
 SearchInput.TextColor3 = Settings.Text
 SearchInput.TextSize = 14
-SearchInput.Font = Enum.Font.FredokaOne
+SearchInput.Font = Enum.Font.GothamMedium
 SearchInput.TextXAlignment = Enum.TextXAlignment.Left
 SearchInput.Parent = SearchFrame
 
@@ -1153,7 +1246,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabBtn.BackgroundTransparency = 1
     TabBtn.Text = TabName
     TabBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
-    TabBtn.Font = Enum.Font.FredokaOne
+    TabBtn.Font = Enum.Font.GothamBold
     TabBtn.TextSize = 16
     TabBtn.TextXAlignment = Enum.TextXAlignment.Left
     TabBtn.TextWrapped = true
@@ -1240,8 +1333,8 @@ function WindowMethods:CreateTab(TabName, ImageID)
             SectionLabel.Position = UDim2.new(0, 5, 0, 0)
             SectionLabel.BackgroundTransparency = 1
             SectionLabel.Text = SectionName
-            SectionLabel.TextColor3 = Color3.fromRGB(135, 206, 235)
-            SectionLabel.TextSize = 16
+            SectionLabel.TextColor3 = Color3.fromRGB(85, 230, 140)
+            SectionLabel.TextSize = 14
             SectionLabel.Font = Enum.Font.FredokaOne
             SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
             SectionLabel.Parent = SectionFrame
@@ -1274,7 +1367,7 @@ function TabMethods:CreateToggle(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.FredokaOne
+    Label.Font = Enum.Font.GothamBold
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1369,7 +1462,7 @@ function TabMethods:CreateSlider(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.FredokaOne
+    Label.Font = Enum.Font.GothamBold
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1388,7 +1481,7 @@ function TabMethods:CreateSlider(Config)
     local SliderBar = Instance.new("Frame")
     SliderBar.Size = UDim2.new(0, 85, 0, 4)
     SliderBar.AnchorPoint = Vector2.new(1, 0.5)
-    SliderBar.Position = UDim2.new(1, -22, 0.5, 0)
+    SliderBar.Position = UDim2.new(1, -22, 0.5, 0) -- ADJUSTED: Changed X offset from -10 to -22 to pull it away from the right edge
     SliderBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     SliderBar.BorderSizePixel = 0
     SliderBar.Active = true
@@ -1402,7 +1495,7 @@ function TabMethods:CreateSlider(Config)
     ValueLabel.BackgroundTransparency = 1
     ValueLabel.Text = tostring(Config.CurrentValue) .. Suffix
     ValueLabel.TextColor3 = Settings.Text 
-    ValueLabel.Font = Enum.Font.FredokaOne
+    ValueLabel.Font = Enum.Font.GothamBold
     ValueLabel.TextTransparency = 0.35
     ValueLabel.TextSize = 12
     ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
@@ -1532,7 +1625,7 @@ function TabMethods:CreateDropdown(Config)
     Label.BackgroundTransparency = 1
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.FredokaOne
+    Label.Font = Enum.Font.GothamBold
     Label.TextSize = 14
     Label.Parent = Header
 
@@ -1634,7 +1727,7 @@ function TabMethods:CreateDropdown(Config)
             OptBtn.BackgroundColor3 = Settings.Scheme
             OptBtn.Text = optStr
             OptBtn.TextColor3 = Settings.Text
-            OptBtn.Font = Enum.Font.FredokaOne
+            OptBtn.Font = Enum.Font.GothamBold
             OptBtn.TextSize = 12
             OptBtn.TextWrapped = true
             OptBtn.AutomaticSize = Enum.AutomaticSize.Y
@@ -1696,11 +1789,19 @@ function TabMethods:CreateDropdown(Config)
                     end
                 end
                 
-                if Config.MultipleOptions then
-                    Config.Callback(outputArray)
-                else
-                    Config.Callback(outputArray[1] or "None")
-                end
+                setmetatable(outputArray, {
+                    __index = function(t, k)
+                        if k == 1 then
+                            return rawget(t, 1) or "None"
+                        end
+                        return rawget(t, k)
+                    end,
+                    __tostring = function(t)
+                        return t[1] or "None"
+                    end
+                })
+                
+                Config.Callback(outputArray)
             end)
         end
     end
@@ -1735,7 +1836,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.FredokaOne
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14
             Label.Parent = Header
 
@@ -1789,7 +1890,7 @@ end
                 Box.BackgroundColor3 = Settings.Scheme
                 Box.BackgroundTransparency = 0.5
                 Box.TextColor3 = Settings.Text
-                Box.Font = Enum.Font.FredokaOne
+                Box.Font = Enum.Font.GothamBold
                 Box.TextSize = 11
                 Box.Text = text
                 Box.ClearTextOnFocus = false
@@ -1939,7 +2040,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.FredokaOne
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1964,7 +2065,7 @@ end
             ButtonText.BackgroundTransparency = 1
             ButtonText.Text = "Button"
             ButtonText.TextSize = 13
-            ButtonText.Font = Enum.Font.FredokaOne
+            ButtonText.Font = Enum.Font.GothamBold
             ButtonText.TextColor3 = Settings.Text
             ButtonText.TextXAlignment = Enum.TextXAlignment.Right
             ButtonText.TextWrapped = true
@@ -2028,7 +2129,7 @@ end
             TitleLabel.Text = Config.Title or "INFO"
             TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
             TitleLabel.TextSize = 14
-            TitleLabel.Font = Enum.Font.FredokaOne
+            TitleLabel.Font = Enum.Font.GothamBold
             TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
             TitleLabel.TextWrapped = true
             TitleLabel.AutomaticSize = Enum.AutomaticSize.Y
@@ -2041,7 +2142,7 @@ end
             ContentLabel.Text = Config.Content or ""
             ContentLabel.TextColor3 = Settings.Text
             ContentLabel.TextSize = 12
-            ContentLabel.Font = Enum.Font.FredokaOne
+            ContentLabel.Font = Enum.Font.GothamMedium
             ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
             ContentLabel.TextWrapped = true
             ContentLabel.AutomaticSize = Enum.AutomaticSize.Y
@@ -2086,7 +2187,7 @@ function TabMethods:CreateLabel(LabelText, IconID)
     TextLabel.BackgroundTransparency = 1
     TextLabel.Text = LabelText
     TextLabel.TextColor3 = Settings.Text
-    TextLabel.Font = Enum.Font.FredokaOne
+    TextLabel.Font = Enum.Font.GothamMedium
     TextLabel.TextSize = 14
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.TextWrapped = true
@@ -2142,7 +2243,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.FredokaOne
+            Label.Font = Enum.Font.GothamBold
             Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -2172,7 +2273,7 @@ end
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
             TextBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
             TextBox.TextSize = 11
-            TextBox.Font = Enum.Font.FredokaOne
+            TextBox.Font = Enum.Font.GothamBold
             TextBox.ClipsDescendants = false
             TextBox.ClearTextOnFocus = false
             TextBox.Parent = InputHolder
@@ -2239,3 +2340,6 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
+
+
+
