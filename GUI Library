@@ -502,184 +502,144 @@ UserInputService.InputEnded:Connect(function(input)
 end)
 
 -- [[ LOADING GUI ]] --
-local LTitle = Config.LoadingTitle or "Zyqril Hub"
-local LSub = Config.LoadingSubtitle or "Preparing your experience..."
-local AccentColor = Color3.fromRGB(0, 160, 255)
+local LTitle = Config and Config.LoadingTitle or "Zyqril Hub"
+local LSub = Config and Config.LoadingSubtitle or "Preparing your experience..."
+
+local IntroLine = Instance.new("Frame")
+IntroLine.Name = "IntroLine"
+IntroLine.Size = UDim2.new(0, 0, 0, 2)
+IntroLine.AnchorPoint = Vector2.new(0.5, 0.5)
+IntroLine.Position = UDim2.new(0.5, 0, 0.45, 0)
+IntroLine.BackgroundColor3 = Settings.Accent or Color3.fromRGB(0, 160, 255)
+IntroLine.BorderSizePixel = 0
+IntroLine.ZIndex = 10
+IntroLine.Parent = GUI
+
+local LineCorner = Instance.new("UICorner", IntroLine)
+LineCorner.CornerRadius = UDim.new(1, 0)
 
 local LoadingFrame = Instance.new("Frame")
-LoadingFrame.Size = UDim2.new(0, 360, 0, 190)
-LoadingFrame.BackgroundColor3 = Settings.Background or Color3.fromRGB(20, 20, 20)
-LoadingFrame.Parent = GUI
-Instance.new("UICorner", LoadingFrame).CornerRadius = UDim.new(0, 12)
-LoadingFrame.ClipsDescendants = true
-
+LoadingFrame.Name = "LoadingFrame"
+LoadingFrame.Size = UDim2.new(0, 320, 0, 0)
 LoadingFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-LoadingFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+LoadingFrame.Position = UDim2.new(0.5, 0, 0.45, 0)
+LoadingFrame.BackgroundColor3 = Settings.Background or Color3.fromRGB(20, 20, 20)
+LoadingFrame.BackgroundTransparency = 1
+LoadingFrame.ClipsDescendants = true
+LoadingFrame.Parent = GUI
 
-local TopBar = Instance.new("Frame")
-TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 55)
-TopBar.BackgroundColor3 = Settings.TopBar or Color3.fromRGB(25, 25, 25)
-TopBar.BorderSizePixel = 0
-TopBar.Parent = LoadingFrame
-local TBCorner = Instance.new("UICorner", TopBar)
-TBCorner.CornerRadius = UDim.new(0, 12)
-    
-local HideCorners = Instance.new("Frame")
-HideCorners.Size = UDim2.new(1, 0, 0, 10)
-HideCorners.Position = UDim2.new(0, 0, 1, -10)
-HideCorners.BackgroundColor3 = TopBar.BackgroundColor3
-HideCorners.BorderSizePixel = 0
-HideCorners.Parent = TopBar
+local FrameCorner = Instance.new("UICorner", LoadingFrame)
+FrameCorner.CornerRadius = UDim.new(0, 10)
+
+local FrameStroke = Instance.new("UIStroke", LoadingFrame)
+FrameStroke.Color = Settings.Accent or Color3.fromRGB(0, 160, 255)
+FrameStroke.Thickness = 1.5
+FrameStroke.Transparency = 1
 
 local LT = Instance.new("TextLabel")
-LT.Size = UDim2.new(1, -24, 0, 20)
-LT.Position = UDim2.new(0, 12, 0, 12)
+LT.Name = "LoadingTitle"
+LT.Size = UDim2.new(1, -30, 0, 24)
+LT.Position = UDim2.new(0, 15, 0, 18)
 LT.BackgroundTransparency = 1
 LT.Text = LTitle
-LT.TextColor3 = Color3.new(1, 1, 1)
-LT.TextSize = 16
-LT.Font = Enum.Font.GothamBold
+LT.TextColor3 = Color3.fromRGB(85, 230, 140)
+LT.TextTransparency = 1
+LT.TextSize = 18
+LT.Font = Enum.Font.FredokaOne
 LT.TextXAlignment = Enum.TextXAlignment.Left
 LT.ZIndex = 2
 LT.Parent = LoadingFrame
 
 local LS = Instance.new("TextLabel")
-LS.Size = UDim2.new(1, -24, 0, 16)
-LS.Position = UDim2.new(0, 12, 0, 32)
+LS.Name = "LoadingSubtitle"
+LS.Size = UDim2.new(1, -30, 0, 16)
+LS.Position = UDim2.new(0, 15, 0, 46)
 LS.BackgroundTransparency = 1
 LS.Text = LSub
-LS.TextColor3 = AccentColor
-LS.TextTransparency = 0
-LS.TextSize = 11
-LS.Font = Enum.Font.GothamMedium
+LS.TextColor3 = Color3.fromRGB(255, 255, 255)
+LS.TextTransparency = 1
+LS.TextSize = 13
+LS.Font = Enum.Font.FredokaOne
 LS.TextXAlignment = Enum.TextXAlignment.Left
 LS.ZIndex = 2
 LS.Parent = LoadingFrame
 
-local FloorLine = Instance.new("Frame")
-FloorLine.Name = "FloorLine"
-FloorLine.Size = UDim2.new(1, 0, 0, 1)
-FloorLine.Position = UDim2.new(0, 0, 0, 55)
-FloorLine.BackgroundColor3 = AccentColor
-FloorLine.BackgroundTransparency = 0.6
-FloorLine.BorderSizePixel = 0
-FloorLine.ZIndex = 3
-FloorLine.Parent = LoadingFrame
-
-local StatusText = Instance.new("TextLabel")
-StatusText.Size = UDim2.new(1, -60, 0, 20) 
-StatusText.Position = UDim2.new(0, 30, 0, 80)
-StatusText.BackgroundTransparency = 1
-StatusText.Text = "LOADING... 0%"
-StatusText.TextColor3 = Color3.new(1, 1, 1)
-StatusText.Font = Enum.Font.GothamBold 
-StatusText.TextSize = 12
-StatusText.TextXAlignment = Enum.TextXAlignment.Left
-StatusText.ZIndex = 6
-StatusText.Parent = LoadingFrame
-
-local TopLine = Instance.new("Frame")
-TopLine.Name = "TopLine"
-TopLine.Size = UDim2.new(1, -60, 0, 34)
-TopLine.Position = UDim2.new(0, 30, 0, 106)
-TopLine.BackgroundColor3 = Settings.Element or Color3.fromRGB(35, 35, 35)
-TopLine.BackgroundTransparency = 0
-TopLine.BorderSizePixel = 0
-TopLine.ZIndex = 3
-TopLine.ClipsDescendants = true
-TopLine.Parent = LoadingFrame
-Instance.new("UICorner", TopLine).CornerRadius = UDim.new(0, 4)
-
-local TopLineStroke = Instance.new("UIStroke")
-TopLineStroke.Color = AccentColor
-TopLineStroke.Thickness = 1.5
-TopLineStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-TopLineStroke.Parent = TopLine
-
-local ProgressFill = Instance.new("Frame")
-ProgressFill.Name = "ProgressFill"
-ProgressFill.Size = UDim2.new(0, 0, 1, 0)
-ProgressFill.Position = UDim2.new(0, 0, 0, 0)
-ProgressFill.BackgroundColor3 = AccentColor
-ProgressFill.BorderSizePixel = 0
-ProgressFill.ZIndex = 4
-ProgressFill.ClipsDescendants = true -- Parent to hide shine overflowing
-ProgressFill.Parent = TopLine
-Instance.new("UICorner", ProgressFill).CornerRadius = UDim.new(0, 4)
-
-local PulseWave = Instance.new("Frame")
-PulseWave.Name = "PulseWave"
-PulseWave.Size = UDim2.new(0, 180, 1, 0)
-PulseWave.Position = UDim2.new(0, -180, 0, 0)
-PulseWave.BackgroundColor3 = Color3.new(1, 1, 1)
-PulseWave.BorderSizePixel = 0
-PulseWave.ZIndex = 6
-PulseWave.Parent = ProgressFill -- Moved inside ProgressFill to follow its growth
-
-local PulseGradient = Instance.new("UIGradient")
-PulseGradient.Rotation = 45
-PulseGradient.Transparency = NumberSequence.new{
-    NumberSequenceKeypoint.new(0, 1),
-    NumberSequenceKeypoint.new(0.4, 0.45),
-    NumberSequenceKeypoint.new(0.5, 0.05),
-    NumberSequenceKeypoint.new(0.6, 0.45),
-    NumberSequenceKeypoint.new(1, 1)
-}
-PulseGradient.Parent = PulseWave
+if Main then 
+    Main.Visible = false 
+end
 
 task.spawn(function()
-    local TweenService = game:GetService("TweenService")
-    local RunService = game:GetService("RunService")
-    
-    local pulseLoading = true
-    task.spawn(function()
-        while pulseLoading do
-            PulseWave.Position = UDim2.new(0, -180, 0, 0)
-            local pTween = TweenService:Create(PulseWave, TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Position = UDim2.new(1, 30, 0, 0)})
-            pTween:Play()
-            pTween.Completed:Wait()
-            task.wait(0.15)
-        end
-    end)
+    local slowIntroLineInfo = TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local lineShrinkInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+    local frameOpenInfo = TweenInfo.new(0.65, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+    local frameCloseInfo = TweenInfo.new(0.65, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+    local fadeInfo = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 
-    local textUpdateConnection
-    textUpdateConnection = RunService.RenderStepped:Connect(function()
-        local displayProgress = ProgressFill.Size.X.Scale
-        StatusText.Text = "LOADING... " .. math.floor(displayProgress * 100) .. "%"
-    end)
-    
-    local fillTween = TweenService:Create(ProgressFill, TweenInfo.new(3.0, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 1, 0)})
-    fillTween:Play()
-    fillTween.Completed:Wait()
-    
-    pulseLoading = false
-    PulseWave:Destroy()
-    
-    if textUpdateConnection then 
-        textUpdateConnection:Disconnect() 
-    end
-    
-    StatusText.Text = "SUCCESS!"
-    StatusText.TextColor3 = AccentColor
-    
-    task.wait(0.8)
+    local lineExpand = TweenService:Create(IntroLine, slowIntroLineInfo, {
+        Size = UDim2.new(0, 320, 0, 2)
+    })
+    lineExpand:Play()
+    lineExpand.Completed:Wait()
 
-    local fadeInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut)
-    TweenService:Create(LoadingFrame, fadeInfo, {BackgroundTransparency = 1, Size = UDim2.new(0, 340, 0, 170)}):Play()
-    TweenService:Create(StatusText, fadeInfo, {TextTransparency = 1}):Play()
+    task.wait(0.1)
+
+    IntroLine:Destroy()
+    TweenService:Create(LoadingFrame, frameOpenInfo, {Size = UDim2.new(0, 320, 0, 85)}):Play()
+    TweenService:Create(LoadingFrame, fadeInfo, {BackgroundTransparency = 0.05}):Play()
+    TweenService:Create(FrameStroke, fadeInfo, {Transparency = 0.2}):Play()
+
+    task.wait(0.12)
+    TweenService:Create(LT, fadeInfo, {TextTransparency = 0}):Play()
+    
+    task.wait(0.08)
+    TweenService:Create(LS, fadeInfo, {TextTransparency = 0}):Play()
+
+    local floatUp = TweenService:Create(LoadingFrame, TweenInfo.new(2.0, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+        Position = UDim2.new(0.5, 0, 0.45, -6)
+    })
+    local floatDown = TweenService:Create(LoadingFrame, TweenInfo.new(2.0, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+        Position = UDim2.new(0.5, 0, 0.45, 0)
+    })
+    
+    floatUp:Play()
+    floatUp.Completed:Wait()
+    floatDown:Play()
+    floatDown.Completed:Wait()
+
     TweenService:Create(LT, fadeInfo, {TextTransparency = 1}):Play()
     TweenService:Create(LS, fadeInfo, {TextTransparency = 1}):Play()
-    TweenService:Create(FloorLine, fadeInfo, {BackgroundTransparency = 1}):Play()
-    TweenService:Create(TopBar, fadeInfo, {BackgroundTransparency = 1}):Play()
-    TweenService:Create(TopLine, fadeInfo, {BackgroundTransparency = 1}):Play()
-    TweenService:Create(TopLineStroke, fadeInfo, {Transparency = 1}):Play()
-    TweenService:Create(ProgressFill, fadeInfo, {BackgroundTransparency = 1}):Play()
-    TweenService:Create(HideCorners, fadeInfo, {BackgroundTransparency = 1}):Play()
+    TweenService:Create(FrameStroke, fadeInfo, {Transparency = 1}):Play()
+    
+    local frameCollapse = TweenService:Create(LoadingFrame, frameCloseInfo, {
+        Size = UDim2.new(0, 320, 0, 2)
+    })
+    frameCollapse:Play()
+    frameCollapse.Completed:Wait()
 
-    task.wait(0.5)
+    local OutroLine = Instance.new("Frame")
+    OutroLine.Name = "OutroLine"
+    OutroLine.Size = UDim2.new(0, 320, 0, 2)
+    OutroLine.AnchorPoint = Vector2.new(0.5, 0.5)
+    OutroLine.Position = UDim2.new(0.5, 0, 0.45, 0)
+    OutroLine.BackgroundColor3 = Settings.Accent or Color3.fromRGB(0, 160, 255)
+    OutroLine.BorderSizePixel = 0
+    OutroLine.ZIndex = 10
+    OutroLine.Parent = GUI
+    Instance.new("UICorner", OutroLine).CornerRadius = UDim.new(1, 0)
+
     LoadingFrame:Destroy()
-    if Main then Main.Visible = true end
+
+    local lineShrink = TweenService:Create(OutroLine, lineShrinkInfo, {
+        Size = UDim2.new(0, 0, 0, 2)
+    })
+    lineShrink:Play()
+    lineShrink.Completed:Wait()
+
+    OutroLine:Destroy()
+
+    if Main then
+        Main.Visible = true
+    end
 end)
 
 -- [[ MAIN GUI TOP BAR ]] --
@@ -2273,6 +2233,4 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 end
 
 return Zyqril
-
-
 
