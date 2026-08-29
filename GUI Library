@@ -383,8 +383,7 @@ UserInputService.InputEnded:Connect(function(input)
             FlashTween.Completed:Connect(function() FadeTween:Play() end)
             
             task.wait(0.1)
-            Main.Visible = true
-            MobileToggle.Visible = false
+            ShowMain()
         end
     end
 end)
@@ -403,6 +402,62 @@ Main.Visible = false
 Main.Parent = GUI
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 16)
 
+-- [[ MAIN GUI ANIMATION ]] --
+Main.AnchorPoint = Vector2.new(0.5, 0.5)
+Main.Position = UDim2.new(0.5, 0, 0.5, 0)
+
+local MainScale = Instance.new("UIScale")
+MainScale.Scale = 0
+MainScale.Parent = Main
+
+local isAnimating = false
+
+local function ShowMain()
+    if isAnimating then return end
+    isAnimating = true
+    
+    MainScale.Scale = 0.2
+    Main.Visible = true
+    if MobileToggle then MobileToggle.Visible = false end
+
+    local tween = TweenService:Create(
+        MainScale, 
+        TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), 
+        {Scale = 1}
+    )
+    tween:Play()
+    tween.Completed:Connect(function() isAnimating = false end)
+end
+
+local function HideMain()
+    if isAnimating then return end
+    isAnimating = true
+
+    local bounceUp = TweenService:Create(
+        MainScale, 
+        TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), 
+        {Scale = 1.08}
+    )
+    
+    local shrinkDown = TweenService:Create(
+        MainScale, 
+        TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.In), 
+        {Scale = 0}
+    )
+
+    bounceUp:Play()
+    bounceUp.Completed:Connect(function()
+        shrinkDown:Play()
+    end)
+
+    shrinkDown.Completed:Connect(function()
+        Main.Visible = false
+        if MobileToggle then MobileToggle.Visible = true end
+        isAnimating = false
+    end)
+end
+
+-- [[ MAIN GUI 2ND GUI CONTINUATION CODE ]] --
 local RightBackground = Instance.new("Frame")
 RightBackground.Name = "RightBackground"
 RightBackground.Size = UDim2.new(0, 329, 1, -43) 
@@ -417,8 +472,7 @@ local RightCorner = Instance.new("UICorner", RightBackground)
 RightCorner.CornerRadius = UDim.new(0, 12)
 
 MobileToggle.MouseButton1Click:Connect(function()
-    Main.Visible = true
-    MobileToggle.Visible = false
+    ShowMain()
 end)
 
 local ContentContainer = Instance.new("Frame")
@@ -449,11 +503,12 @@ PillCorner.Parent = DragPill
 local function UpdatePill()
     DragPill.Visible = Main.Visible
     if Main.Visible then
-        DragPill.Position = UDim2.new(
-            Main.Position.X.Scale, 
-            Main.Position.X.Offset + (Main.AbsoluteSize.X / 2), 
-            Main.Position.Y.Scale, 
-            Main.Position.Y.Offset + Main.AbsoluteSize.Y + 6
+        local mainPos = Main.AbsolutePosition
+        local mainSize = Main.AbsoluteSize
+        
+        DragPill.Position = UDim2.fromOffset(
+            mainPos.X + (mainSize.X / 2),
+            mainPos.Y + mainSize.Y + 8
         )
     end
 end
@@ -462,6 +517,10 @@ UpdatePill()
 Main:GetPropertyChangedSignal("Position"):Connect(UpdatePill)
 Main:GetPropertyChangedSignal("Size"):Connect(UpdatePill)
 Main:GetPropertyChangedSignal("Visible"):Connect(UpdatePill)
+
+if MainScale then
+    MainScale:GetPropertyChangedSignal("Scale"):Connect(UpdatePill)
+end
 
 local pillDragging, pillDragStart, pillStartPos
 
@@ -638,7 +697,7 @@ task.spawn(function()
     OutroLine:Destroy()
 
     if Main then
-        Main.Visible = true
+        ShowMain()
     end
 end)
 
@@ -1029,10 +1088,9 @@ end)
     CrossLine2.Parent = CloseIconFrame
     Instance.new("UICorner", CrossLine2).CornerRadius = UDim.new(1, 0)
 
-   CloseBtn.MouseButton1Click:Connect(function() 
-        Main.Visible = false
-        MobileToggle.Visible = true
-    end)
+CloseBtn.MouseButton1Click:Connect(function() 
+    HideMain()
+end)
 
     local Separator = Instance.new("Frame")
     Separator.Name = "Separator"
@@ -2198,7 +2256,6 @@ end
     end
 
 -- [[ SEARCH LOGIC ]] --    
-
 SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
         local InputText = SearchInput.Text:lower()
         
@@ -2215,19 +2272,18 @@ SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
         end
     end)
 
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if not gameProcessed and input.UserInputType == Enum.UserInputType.Keyboard then
-            if input.KeyCode == ToggleKey then
-                if Main.Visible then
-                    Main.Visible = false
-                    MobileToggle.Visible = true
-                else
-                    Main.Visible = true
-                    MobileToggle.Visible = false
-                end
+-- [[ KEYBIND LISTENER ]] --   
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.UserInputType == Enum.UserInputType.Keyboard then
+        if input.KeyCode == ToggleKey then
+            if Main.Visible then
+                HideMain()
+            else
+                ShowMain()
             end
         end
-    end)
+    end
+end)
 
     return WindowMethods 
 end
