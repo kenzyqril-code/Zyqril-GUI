@@ -272,71 +272,55 @@ MobileToggle.BackgroundTransparency = 0.15
 MobileToggle.Text = ""
 MobileToggle.Visible = false
 MobileToggle.Active = true
-MobileToggle.ClipsDescendants = false
+MobileToggle.ClipsDescendants = true
 MobileToggle.Parent = GUI
 
 local MobileToggleCorner = Instance.new("UICorner")
 MobileToggleCorner.CornerRadius = UDim.new(0, 10)
 MobileToggleCorner.Parent = MobileToggle
 
+local Icon = Instance.new("ImageLabel")
+Icon.Name = "Icon"
+Icon.Size = UDim2.new(1, 0, 1, 0)
+Icon.Position = UDim2.new(0, 0, 0, 0)
+Icon.BackgroundTransparency = 1
+Icon.Image = "rbxassetid://116508646973381"
+Icon.ScaleType = Enum.ScaleType.Crop
+Icon.Parent = MobileToggle
+
+local IconCorner = Instance.new("UICorner")
+IconCorner.CornerRadius = UDim.new(0, 10)
+IconCorner.Parent = Icon
+
 local MobileToggleStroke = Instance.new("UIStroke")
-MobileToggleStroke.Thickness = 2
-MobileToggleStroke.Color = Settings.Accent or Color3.fromRGB(0, 255, 255)
+MobileToggleStroke.Thickness = 1.5
+MobileToggleStroke.Color = Color3.fromRGB(255, 255, 255)
 MobileToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 MobileToggleStroke.Parent = MobileToggle
 
-local GlowRing = Instance.new("UIStroke")
-GlowRing.Thickness = 4
-GlowRing.Color = Settings.Accent or Color3.fromRGB(0, 255, 255)
-GlowRing.Transparency = 0.85
-GlowRing.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-GlowRing.Parent = MobileToggle
-
-local holder = Instance.new("Frame")
-holder.Size = UDim2.new(1, 0, 1, 0)
-holder.BackgroundTransparency = 1
-holder.Rotation = -15
-holder.Parent = MobileToggle
-
-local shadow = Instance.new("TextLabel")
-shadow.Size = UDim2.new(1, 0, 1, 0)
-shadow.Position = UDim2.new(0, -1, 0, 1)
-shadow.BackgroundTransparency = 1
-shadow.Text = "Z"
-shadow.TextScaled = true
-shadow.Font = Enum.Font.GothamBlack
-shadow.TextColor3 = Color3.fromRGB(0, 0, 0)
-shadow.ZIndex = 1
-shadow.Parent = holder
-
-local z = Instance.new("TextLabel")
-z.Size = UDim2.new(1, 0, 1, 0)
-z.BackgroundTransparency = 1
-z.Text = "Z"
-z.TextScaled = true
-z.Font = Enum.Font.GothamBlack
-z.TextColor3 = Color3.fromRGB(255, 255, 255)
-z.ZIndex = 2
-z.Parent = holder
-
-local stroke = Instance.new("UIStroke")
-stroke.Thickness = 3
-stroke.Color = Color3.fromRGB(0, 100, 0)
-stroke.Transparency = 0.1
-stroke.Parent = z
+local RainbowGradient = Instance.new("UIGradient")
+RainbowGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+    ColorSequenceKeypoint.new(0.16, Color3.fromRGB(255, 127, 0)),
+    ColorSequenceKeypoint.new(0.33, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 0)),
+    ColorSequenceKeypoint.new(0.66, Color3.fromRGB(0, 0, 255)),
+    ColorSequenceKeypoint.new(0.83, Color3.fromRGB(75, 0, 130)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+})
+RainbowGradient.Rotation = 0
+RainbowGradient.Parent = MobileToggleStroke
 
 task.spawn(function()
     while true do
-        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-            Thickness = 5,
-            Transparency = 0.35
-        }):Play()
-        task.wait(0.8)
-        TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-            Thickness = 3,
-            Transparency = 0.1
-        }):Play()
-        task.wait(0.8)
+        local spinTween = TweenService:Create(
+            RainbowGradient, 
+            TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), 
+            {Rotation = RainbowGradient.Rotation + 360}
+        )
+        spinTween:Play()
+        spinTween.Completed:Wait()
+        RainbowGradient.Rotation = 0
     end
 end)
 
@@ -373,16 +357,6 @@ UserInputService.InputEnded:Connect(function(input)
         }):Play()
         
         if not hasMoved then
-            local BurstStroke = MobileToggleStroke
-            local OriginalColor = BurstStroke.Color
-            
-            local FlashTween = TweenService:Create(BurstStroke, TweenInfo.new(0.15, Enum.EasingStyle.QuadOut), {Color = Color3.new(1, 1, 1)})
-            local FadeTween = TweenService:Create(BurstStroke, TweenInfo.new(0.25, Enum.EasingStyle.QuadIn), {Color = OriginalColor})
-            
-            FlashTween:Play()
-            FlashTween.Completed:Connect(function() FadeTween:Play() end)
-            
-            task.wait(0.1)
             ShowMain()
         end
     end
