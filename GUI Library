@@ -128,7 +128,7 @@ function Zyqril:Notify(Config)
     Frame.Position = UDim2.new(1.5, 0, 0, 0) 
     Frame.AnchorPoint = Vector2.new(0.5, 0)
     Frame.BackgroundColor3 = Settings.Background
-    Frame.BackgroundTransparency = 0
+    Frame.BackgroundTransparency = 0.20
     Frame.BorderSizePixel = 0
     Frame.AutomaticSize = Enum.AutomaticSize.Y
     Frame.Parent = Container
@@ -138,15 +138,15 @@ function Zyqril:Notify(Config)
 
     local UIStroke = Instance.new("UIStroke", Frame)
     UIStroke.Color = Settings.Text
-    UIStroke.Transparency = 0.8
-    UIStroke.Thickness = 2.5
+    UIStroke.Transparency = 1
+    UIStroke.Thickness = 0
     UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
     local InternalLayout = Instance.new("UIListLayout", Frame)
     InternalLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
     local InternalPadding = Instance.new("UIPadding", Frame)
-    InternalPadding.PaddingBottom = UDim.new(0, 10)
+    InternalPadding.PaddingBottom = UDim.new(0, 6)
 
     local Header = Instance.new("Frame")
     Header.Size = UDim2.new(1, 0, 0, 0) 
@@ -156,11 +156,11 @@ function Zyqril:Notify(Config)
     Header.Parent = Frame
     
     local HeaderPadding = Instance.new("UIPadding", Header)
-    HeaderPadding.PaddingTop = UDim.new(0, 10)
-    HeaderPadding.PaddingBottom = UDim.new(0, 5)
+    HeaderPadding.PaddingTop = UDim.new(0, 6)
+    HeaderPadding.PaddingBottom = UDim.new(0, 2)
 
     local Icon = Instance.new("ImageLabel")
-    Icon.Size = UDim2.new(0, 25, 0, 25)
+    Icon.Size = UDim2.new(0, 27, 0, 27)
     Icon.Position = UDim2.new(0, 10, 0, 0)
     Icon.BackgroundTransparency = 1
     Icon.Image = "rbxassetid://" .. imageID
@@ -169,27 +169,47 @@ function Zyqril:Notify(Config)
     Icon.Parent = Header
 
     local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(1, -50, 0, 0) 
-    TitleLabel.Position = imageID ~= 0 and UDim2.new(0, 40, 0, 0) or UDim2.new(0, 10, 0, 0)
+    TitleLabel.Size = UDim2.new(1, imageID ~= 0 and -55 or -20, 0, 0) 
+    TitleLabel.Position = imageID ~= 0 and UDim2.new(0, 48, 0, 0) or UDim2.new(0, 10, 0, 0)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = tostring(title)
     TitleLabel.TextColor3 = Settings.Text
     TitleLabel.TextSize = 16
-    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Font = Enum.Font.FredokaOne
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.TextWrapped = true
     TitleLabel.AutomaticSize = Enum.AutomaticSize.Y
     TitleLabel.Parent = Header
 
+    local ContentLabel = Instance.new("TextLabel")
+    ContentLabel.Size = UDim2.new(1, 0, 0, 0)
+    ContentLabel.BackgroundTransparency = 1
+    ContentLabel.Text = tostring(content)
+    ContentLabel.TextColor3 = Settings.Text
+    ContentLabel.TextSize = 14
+    ContentLabel.Font = Enum.Font.FredokaOne
+    ContentLabel.TextWrapped = true
+    ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ContentLabel.TextYAlignment = Enum.TextYAlignment.Top
+    ContentLabel.AutomaticSize = Enum.AutomaticSize.Y
+    ContentLabel.LayoutOrder = 2
+    ContentLabel.Parent = Frame
+
+    local TextPadding = Instance.new("UIPadding", ContentLabel)
+    TextPadding.PaddingLeft = UDim.new(0, 10)
+    TextPadding.PaddingRight = UDim.new(0, 10)
+    TextPadding.PaddingTop = UDim.new(0, 4)
+    TextPadding.PaddingBottom = UDim.new(0, 4)
+
     local TimerContainer = Instance.new("Frame")
-    TimerContainer.Size = UDim2.new(1, 0, 0, 2)
+    TimerContainer.Size = UDim2.new(1, 0, 0, 10)
     TimerContainer.BackgroundTransparency = 1
-    TimerContainer.LayoutOrder = 2
+    TimerContainer.LayoutOrder = 4
     TimerContainer.Parent = Frame
 
     local TimerBackground = Instance.new("Frame")
-    TimerBackground.Size = UDim2.new(1, -20, 0, 2)
-    TimerBackground.Position = UDim2.new(0, 10, 0, 0)
+    TimerBackground.Size = UDim2.new(1, -20, 0, 3)
+    TimerBackground.Position = UDim2.new(0, 10, 0, 3)
     TimerBackground.BackgroundColor3 = Settings.Scheme
     TimerBackground.BorderSizePixel = 0
     TimerBackground.Parent = TimerContainer
@@ -200,25 +220,6 @@ function Zyqril:Notify(Config)
     TimerBar.BorderSizePixel = 0
     TimerBar.Parent = TimerBackground
     Instance.new("UICorner", TimerBar)
-
-    local ContentLabel = Instance.new("TextLabel")
-    ContentLabel.Size = UDim2.new(1, 0, 0, 0)
-    ContentLabel.BackgroundTransparency = 1
-    ContentLabel.Text = tostring(content)
-    ContentLabel.TextColor3 = Settings.Text
-    ContentLabel.TextSize = 14
-    ContentLabel.Font = Enum.Font.GothamSemibold
-    ContentLabel.TextWrapped = true
-    ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
-    ContentLabel.TextYAlignment = Enum.TextYAlignment.Top
-    ContentLabel.AutomaticSize = Enum.AutomaticSize.Y
-    ContentLabel.LayoutOrder = 3
-    ContentLabel.Parent = Frame
-
-    local TextPadding = Instance.new("UIPadding", ContentLabel)
-    TextPadding.PaddingLeft = UDim.new(0, 10)
-    TextPadding.PaddingRight = UDim.new(0, 10)
-    TextPadding.PaddingTop = UDim.new(0, 8)
 
     Frame:TweenPosition(UDim2.new(0.5, 0, 0, 0), "Out", "Back", 0.8, true)
 
@@ -1062,9 +1063,16 @@ end)
     CrossLine2.Parent = CloseIconFrame
     Instance.new("UICorner", CrossLine2).CornerRadius = UDim.new(1, 0)
 
-CloseBtn.MouseButton1Click:Connect(function() 
-    HideMain()
-end)
+    -- Create the sound element and parent it to the button (or game.SoundService)
+    local ClickSound = Instance.new("Sound")
+    ClickSound.SoundId = "rbxassetid://124476359159008"
+    ClickSound.Volume = 1
+    ClickSound.Parent = CloseBtn
+
+    CloseBtn.MouseButton1Click:Connect(function() 
+        ClickSound:Play() -- Plays the sound instantly on click
+        HideMain()
+    end)
 
     local Separator = Instance.new("Frame")
     Separator.Name = "Separator"
@@ -2263,5 +2271,3 @@ end)
 end
 
 return Zyqril
-
-
