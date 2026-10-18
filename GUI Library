@@ -566,7 +566,7 @@ FrameCorner.CornerRadius = UDim.new(0, 10)
 
 local FrameStroke = Instance.new("UIStroke", LoadingFrame)
 FrameStroke.Color = Settings.Accent or Color3.fromRGB(0, 160, 255)
-FrameStroke.Thickness = 1.5
+FrameStroke.Thickness = 0
 FrameStroke.Transparency = 1
 
 local LT = Instance.new("TextLabel")
@@ -575,9 +575,9 @@ LT.Size = UDim2.new(1, -30, 0, 24)
 LT.Position = UDim2.new(0, 15, 0, 18)
 LT.BackgroundTransparency = 1
 LT.Text = LTitle
-LT.TextColor3 = Color3.fromRGB(85, 230, 140)
+LT.TextColor3 = Color3.fromRGB(255, 211, 105)
 LT.TextTransparency = 1
-LT.TextSize = 18
+LT.TextSize = 25
 LT.Font = Enum.Font.FredokaOne
 LT.TextXAlignment = Enum.TextXAlignment.Left
 LT.ZIndex = 2
@@ -591,7 +591,7 @@ LS.BackgroundTransparency = 1
 LS.Text = LSub
 LS.TextColor3 = Color3.fromRGB(255, 255, 255)
 LS.TextTransparency = 1
-LS.TextSize = 13
+LS.TextSize = 15
 LS.Font = Enum.Font.FredokaOne
 LS.TextXAlignment = Enum.TextXAlignment.Left
 LS.ZIndex = 2
@@ -618,7 +618,7 @@ task.spawn(function()
 
     IntroLine:Destroy()
     TweenService:Create(LoadingFrame, frameOpenInfo, {Size = UDim2.new(0, 320, 0, 85)}):Play()
-    TweenService:Create(LoadingFrame, fadeInfo, {BackgroundTransparency = 0.05}):Play()
+    TweenService:Create(LoadingFrame, fadeInfo, {BackgroundTransparency = 0.20}):Play()
     TweenService:Create(FrameStroke, fadeInfo, {Transparency = 0.2}):Play()
 
     task.wait(0.12)
@@ -1171,8 +1171,8 @@ function WindowMethods:CreateTab(TabName, ImageID)
     TabBtn.BackgroundTransparency = 1
     TabBtn.Text = TabName
     TabBtn.TextColor3 = Color3.fromRGB(150, 150, 150)
-    TabBtn.Font = Enum.Font.GothamBold
-    TabBtn.TextSize = 16
+    TabBtn.Font = Enum.Font.FredokaOne
+    TabBtn.TextSize = 17
     TabBtn.TextXAlignment = Enum.TextXAlignment.Left
     TabBtn.TextWrapped = true
     TabBtn.AutomaticSize = Enum.AutomaticSize.Y
@@ -1233,15 +1233,15 @@ function WindowMethods:CreateTab(TabName, ImageID)
         
         TabPage.Visible = true
         CurrentTab = TabPage
-        TweenService:Create(TabBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
-        TweenService:Create(TabIcon, TweenInfo.new(0.2), {ImageColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        TweenService:Create(TabBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(51, 153, 255)}):Play()
+        TweenService:Create(TabIcon, TweenInfo.new(0.2), {ImageColor3 = Color3.fromRGB(51, 153, 255)}):Play()
     end)
 
     if CurrentTab == nil then 
         TabPage.Visible = true 
         CurrentTab = TabPage 
-        TabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        TabIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+        TabBtn.TextColor3 = Color3.fromRGB(51, 153, 255)
+        TabIcon.ImageColor3 = Color3.fromRGB(51, 153, 255)
     end
 
     local TabMethods = {}
@@ -2263,4 +2263,5 @@ end)
 end
 
 return Zyqril
+
 
