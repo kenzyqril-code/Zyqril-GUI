@@ -780,10 +780,10 @@ end)
 -- [[ LEFT SIDE BAR ]] --
 local Sidebar = Instance.new("ScrollingFrame")
 Sidebar.Size = UDim2.new(0, SidebarWidth, 1, -10)
-Sidebar.Position = UDim2.new(0, 5, 0, 5) -- Binago mula 40 patungong 5
+Sidebar.Position = UDim2.new(0, 5, 0, 5)
 Sidebar.BackgroundTransparency = 1
 Sidebar.ZIndex = 5
-Sidebar.Parent = ContentContainer
+Sidebar.Parent = Main
 Sidebar.ScrollBarThickness = 2
 Sidebar.ScrollBarImageColor3 = Settings.Accent
 Sidebar.ScrollBarImageTransparency = 0
@@ -794,6 +794,11 @@ Sidebar.ScrollingDirection = Enum.ScrollingDirection.Y
 Sidebar.VerticalScrollBarInset = Enum.ScrollBarInset.None
 Sidebar.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right
 
+local SidebarLayout = Instance.new("UIListLayout")
+SidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+SidebarLayout.Padding = UDim.new(0, 6)
+SidebarLayout.Parent = Sidebar
+
 local SidebarPadding = Instance.new("UIPadding")
 SidebarPadding.PaddingTop = UDim.new(0, 4)
 SidebarPadding.PaddingLeft = UDim.new(0, 1)
@@ -803,11 +808,11 @@ SidebarPadding.Parent = Sidebar
 local Container = Instance.new("Frame")
 Container.Name = "Container"
 Container.Size = UDim2.new(1, -125, 1, -10)
-Container.Position = UDim2.new(0, 123.10, 0, 5) -- Binago mula 42.90 patungong 5
+Container.Position = UDim2.new(0, 123.10, 0, 5)
 Container.BackgroundTransparency = 1
 Container.ClipsDescendants = true
 Container.ZIndex = 5
-Container.Parent = ContentContainer
+Container.Parent = Main
 
 -- [[ SHOW/HIDE BUTTON ]] --
     local TabToggleButton = Instance.new("TextButton")
@@ -2414,3 +2419,4 @@ end)
 end
 
 return Zyqril
+
