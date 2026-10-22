@@ -1282,7 +1282,7 @@ SearchInput.PlaceholderText = "Search..."
 SearchInput.PlaceholderColor3 = Settings.Text
 SearchInput.TextColor3 = Settings.Text
 SearchInput.TextSize = 14
-SearchInput.Font = Enum.Font.GothamMedium
+SearchInput.Font = Enum.Font.Ubuntu
 SearchInput.TextXAlignment = Enum.TextXAlignment.Left
 SearchInput.Parent = SearchFrame
 
@@ -1448,7 +1448,7 @@ function TabMethods:CreateToggle(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.GothamBold
+    Label.Font = Enum.Font.FredokaOne
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1543,7 +1543,7 @@ function TabMethods:CreateSlider(Config)
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.GothamBold
+    Label.Font = Enum.Font.FredokaOne
     Label.TextSize = 14
     Label.TextWrapped = true
     Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -1576,7 +1576,7 @@ function TabMethods:CreateSlider(Config)
     ValueLabel.BackgroundTransparency = 1
     ValueLabel.Text = tostring(Config.CurrentValue) .. Suffix
     ValueLabel.TextColor3 = Settings.Text 
-    ValueLabel.Font = Enum.Font.GothamBold
+    ValueLabel.Font = Enum.Font.Ubuntu
     ValueLabel.TextTransparency = 0.35
     ValueLabel.TextSize = 12
     ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
@@ -1706,7 +1706,7 @@ function TabMethods:CreateDropdown(Config)
     Label.BackgroundTransparency = 1
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Font = Enum.Font.GothamBold
+    Label.Font = Enum.Font.FredokaOne
     Label.TextSize = 14
     Label.Parent = Header
 
@@ -1808,7 +1808,7 @@ function TabMethods:CreateDropdown(Config)
             OptBtn.BackgroundColor3 = Settings.Scheme
             OptBtn.Text = optStr
             OptBtn.TextColor3 = Settings.Text
-            OptBtn.Font = Enum.Font.GothamBold
+            OptBtn.Font = Enum.Font.Ubuntu
             OptBtn.TextSize = 12
             OptBtn.TextWrapped = true
             OptBtn.AutomaticSize = Enum.AutomaticSize.Y
@@ -1917,7 +1917,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamBold
+            Label.Font = Enum.Font.FredokaOne
             Label.TextSize = 14
             Label.Parent = Header
 
@@ -1971,7 +1971,7 @@ end
                 Box.BackgroundColor3 = Settings.Scheme
                 Box.BackgroundTransparency = 0.5
                 Box.TextColor3 = Settings.Text
-                Box.Font = Enum.Font.GothamBold
+                Box.Font = Enum.Font.Ubuntu
                 Box.TextSize = 11
                 Box.Text = text
                 Box.ClearTextOnFocus = false
@@ -2121,7 +2121,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamBold
+            Label.Font = Enum.Font.FredokaOne
             Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -2146,7 +2146,7 @@ end
             ButtonText.BackgroundTransparency = 1
             ButtonText.Text = "Button"
             ButtonText.TextSize = 13
-            ButtonText.Font = Enum.Font.GothamBold
+            ButtonText.Font = Enum.Font.Ubuntu
             ButtonText.TextColor3 = Settings.Text
             ButtonText.TextXAlignment = Enum.TextXAlignment.Right
             ButtonText.TextWrapped = true
@@ -2210,7 +2210,7 @@ end
             TitleLabel.Text = Config.Title or "INFO"
             TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
             TitleLabel.TextSize = 14
-            TitleLabel.Font = Enum.Font.GothamBold
+            TitleLabel.Font = Enum.Font.FredokaOne
             TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
             TitleLabel.TextWrapped = true
             TitleLabel.AutomaticSize = Enum.AutomaticSize.Y
@@ -2223,7 +2223,7 @@ end
             ContentLabel.Text = Config.Content or ""
             ContentLabel.TextColor3 = Settings.Text
             ContentLabel.TextSize = 12
-            ContentLabel.Font = Enum.Font.GothamMedium
+            ContentLabel.Font = Enum.Font.Ubuntu
             ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
             ContentLabel.TextWrapped = true
             ContentLabel.AutomaticSize = Enum.AutomaticSize.Y
@@ -2268,7 +2268,7 @@ function TabMethods:CreateLabel(LabelText, IconID)
     TextLabel.BackgroundTransparency = 1
     TextLabel.Text = LabelText
     TextLabel.TextColor3 = Settings.Text
-    TextLabel.Font = Enum.Font.GothamMedium
+    TextLabel.Font = Enum.Font.FredokaOne
     TextLabel.TextSize = 14
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.TextWrapped = true
@@ -2324,7 +2324,7 @@ end
             Label.Text = Config.Name
             Label.TextColor3 = Settings.Text
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.Font = Enum.Font.GothamBold
+            Label.Font = Enum.Font.FredokaOne
             Label.TextSize = 14 
             Label.TextWrapped = true
             Label.AutomaticSize = Enum.AutomaticSize.Y
@@ -2354,7 +2354,7 @@ end
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
             TextBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
             TextBox.TextSize = 11
-            TextBox.Font = Enum.Font.GothamBold
+            TextBox.Font = Enum.Font.Ubuntu
             TextBox.ClipsDescendants = false
             TextBox.ClearTextOnFocus = false
             TextBox.Parent = InputHolder
