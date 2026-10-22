@@ -187,7 +187,7 @@ function Zyqril:Notify(Config)
     ContentLabel.Text = tostring(content)
     ContentLabel.TextColor3 = Settings.Text
     ContentLabel.TextSize = 14
-    ContentLabel.Font = Enum.Font.FredokaOne
+    ContentLabel.Font = Enum.Font.Ubuntu
     ContentLabel.TextWrapped = true
     ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
     ContentLabel.TextYAlignment = Enum.TextYAlignment.Top
