@@ -1414,7 +1414,7 @@ function WindowMethods:CreateTab(TabName, ImageID)
             SectionLabel.Position = UDim2.new(0, 5, 0, 0)
             SectionLabel.BackgroundTransparency = 1
             SectionLabel.Text = SectionName
-            SectionLabel.TextColor3 = Color3.fromRGB(85, 170, 255)
+            SectionLabel.TextColor3 = Color3.fromRGB(46, 139, 87)
             SectionLabel.TextSize = 15
             SectionLabel.Font = Enum.Font.FredokaOne
             SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
