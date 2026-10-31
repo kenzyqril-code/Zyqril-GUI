@@ -1442,7 +1442,7 @@ function TabMethods:CreateToggle(Config)
     table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
 
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, -95, 0, 0)
+    Label.Size = UDim2.new(1, -65, 0, 0)
     Label.Position = UDim2.new(0, 15, 0, 0)
     Label.BackgroundTransparency = 1
     Label.Text = Config.Name
@@ -1463,18 +1463,27 @@ function TabMethods:CreateToggle(Config)
     TglBtn.Size = UDim2.new(0, 48, 0, 24)
     TglBtn.AnchorPoint = Vector2.new(1, 0.5)
     TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
-    TglBtn.BackgroundColor3 = Settings.Scheme
+    TglBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     TglBtn.Text = ""
     TglBtn.Parent = TglFrame
     Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
 
-    local Circle = Instance.new("Frame")
-    Circle.Size = UDim2.new(0, 24, 0, 20)
-    Circle.Position = UDim2.new(0, 2, 0.5, -10)
-    Circle.BackgroundColor3 = Color3.fromRGB(35, 35, 35) 
-    Circle.ZIndex = TglBtn.ZIndex + 2
-    Circle.Parent = TglBtn
-    Instance.new("UICorner", Circle).CornerRadius = UDim.new(1, 0)
+    local TglStroke = Instance.new("UIStroke")
+    TglStroke.Color = Color3.fromRGB(255, 255, 255)
+    TglStroke.Thickness = 1.2
+    TglStroke.Transparency = 0.4
+    TglStroke.Parent = TglBtn
+
+    local ToggleText = Instance.new("TextLabel")
+    ToggleText.Size = UDim2.new(1, 0, 1, 0)
+    ToggleText.BackgroundTransparency = 1
+    ToggleText.Text = "Off"
+    ToggleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleText.TextSize = 11
+    ToggleText.Font = Enum.Font.FredokaOne
+    ToggleText.TextXAlignment = Enum.TextXAlignment.Center
+    ToggleText.TextYAlignment = Enum.TextYAlignment.Center
+    ToggleText.Parent = TglBtn
 
     local ToggleMethods = {
         CurrentValue = Config.CurrentValue or false
@@ -1482,12 +1491,15 @@ function TabMethods:CreateToggle(Config)
     
     local function Update(IgnoreCallback)
         if ToggleMethods.CurrentValue then
-            TweenService:Create(TglBtn, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Settings.Accent}):Play()
-            TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(1, -26, 0.5, -10)}):Play()
+            ToggleText.Text = "On"
+            ToggleText.TextColor3 = Color3.fromRGB(0, 0, 0)
+            TweenService:Create(TglBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(255, 220, 0)}):Play()
+            TweenService:Create(TglStroke, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Transparency = 0.8}):Play()
         else
-            TweenService:Create(TglBtn, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(60, 60, 60) 
-}):Play()
-            TweenService:Create(Circle, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+            ToggleText.Text = "Off"
+            ToggleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TweenService:Create(TglBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
+            TweenService:Create(TglStroke, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Transparency = 0.4}):Play()
         end
         
         if not IgnoreCallback then
@@ -1495,30 +1507,37 @@ function TabMethods:CreateToggle(Config)
         end
     end
 
-    TglBtn.MouseButton1Click:Connect(function()
+    local function TriggerToggle()
         ToggleMethods.CurrentValue = not ToggleMethods.CurrentValue
         Update()
+    end
+
+    TglBtn.MouseButton1Click:Connect(TriggerToggle)
+    TglFrame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            TriggerToggle()
+        end
     end)
     
-local OriginalName = Config.Name
+    local OriginalName = Config.Name
 
-function ToggleMethods:SetName(NewName)
-    OriginalName = tostring(NewName)
-    Label.Text = OriginalName
-end
+    function ToggleMethods:SetName(NewName)
+        OriginalName = tostring(NewName)
+        Label.Text = OriginalName
+    end
 
-function ToggleMethods:SetLiveStatus(Status)
-    Label.Text = OriginalName .. " • " .. tostring(Status)
-end
+    function ToggleMethods:SetLiveStatus(Status)
+        Label.Text = OriginalName .. " • " .. tostring(Status)
+    end
 
-function ToggleMethods:ClearLiveStatus()
-    Label.Text = OriginalName
-end
+    function ToggleMethods:ClearLiveStatus()
+        Label.Text = OriginalName
+    end
 
-function ToggleMethods:Set(NewState, IgnoreCallback)
-    ToggleMethods.CurrentValue = NewState
-    Update(IgnoreCallback)
-end
+    function ToggleMethods:Set(NewState, IgnoreCallback)
+        ToggleMethods.CurrentValue = NewState
+        Update(IgnoreCallback)
+    end
 
     Update(true)
     return ToggleMethods
@@ -2339,7 +2358,7 @@ end
             InputHolder.Size = UDim2.new(0, 120, 0, 24)
             InputHolder.AnchorPoint = Vector2.new(1, 0.5)
             InputHolder.Position = UDim2.new(1, -12, 0.5, 0)
-            InputHolder.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            InputHolder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
             InputHolder.BackgroundTransparency = 0
             InputHolder.Parent = InputFrame
 
@@ -2350,7 +2369,7 @@ end
             TextBox.Position = UDim2.new(0, 8, 0, 0)
             TextBox.BackgroundTransparency = 1
             TextBox.Text = ""
-            TextBox.PlaceholderText = Config.PlaceholderText or "Type Here!"
+            TextBox.PlaceholderText = Config.PlaceholderText or "Type Something…"
             TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
             TextBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
             TextBox.TextSize = 11
