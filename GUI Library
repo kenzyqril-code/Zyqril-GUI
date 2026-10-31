@@ -1461,20 +1461,13 @@ function TabMethods:CreateToggle(Config)
     LabelPadding.PaddingRight = UDim.new(0, 60)
     LabelPadding.Parent = Label
 
-    local TglBtn = Instance.new("TextButton")
+    local TglBtn = Instance.new("Frame")
     TglBtn.Size = UDim2.new(0, 48, 0, 24)
     TglBtn.AnchorPoint = Vector2.new(1, 0.5)
     TglBtn.Position = UDim2.new(1, -10, 0.5, 0)
     TglBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    TglBtn.Text = ""
     TglBtn.Parent = TglFrame
     Instance.new("UICorner", TglBtn).CornerRadius = UDim.new(1, 0)
-
-    local TglStroke = Instance.new("UIStroke")
-    TglStroke.Color = Color3.fromRGB(255, 255, 255)
-    TglStroke.Thickness = 1.2
-    TglStroke.Transparency = 0.4
-    TglStroke.Parent = TglBtn
 
     local ToggleText = Instance.new("TextLabel")
     ToggleText.Size = UDim2.new(1, 0, 1, 0)
@@ -1496,12 +1489,10 @@ function TabMethods:CreateToggle(Config)
             ToggleText.Text = "On"
             ToggleText.TextColor3 = Color3.fromRGB(0, 0, 0)
             TweenService:Create(TglBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(255, 220, 0)}):Play()
-            TweenService:Create(TglStroke, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Transparency = 0.8}):Play()
         else
             ToggleText.Text = "Off"
             ToggleText.TextColor3 = Color3.fromRGB(255, 255, 255)
             TweenService:Create(TglBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
-            TweenService:Create(TglStroke, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Transparency = 0.4}):Play()
         end
         
         if not IgnoreCallback then
