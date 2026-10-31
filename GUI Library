@@ -1442,12 +1442,13 @@ function TabMethods:CreateToggle(Config)
     table.insert(AllElements, {Frame = TglFrame, Name = Config.Name, Tab = TabPage})
 
     local Label = Instance.new("TextLabel")
-    Label.Size = UDim2.new(1, -65, 0, 0)
+    Label.Size = UDim2.new(1, -65, 1, 0)
     Label.Position = UDim2.new(0, 15, 0, 0)
     Label.BackgroundTransparency = 1
     Label.Text = Config.Name
     Label.TextColor3 = Settings.Text
     Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.TextYAlignment = Enum.TextYAlignment.Center
     Label.Font = Enum.Font.FredokaOne
     Label.TextSize = 14
     Label.TextWrapped = true
@@ -1457,6 +1458,7 @@ function TabMethods:CreateToggle(Config)
     local LabelPadding = Instance.new("UIPadding")
     LabelPadding.PaddingTop = UDim.new(0, 10)
     LabelPadding.PaddingBottom = UDim.new(0, 10)
+    LabelPadding.PaddingRight = UDim.new(0, 60)
     LabelPadding.Parent = Label
 
     local TglBtn = Instance.new("TextButton")
