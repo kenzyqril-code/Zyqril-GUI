@@ -1514,10 +1514,21 @@ function TabMethods:CreateToggle(Config)
         Update()
     end
 
-    TglBtn.MouseButton1Click:Connect(TriggerToggle)
+    local downPosition = nil
+    
     TglFrame.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            TriggerToggle()
+            downPosition = input.Position
+        end
+    end)
+
+    TglFrame.InputEnded:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and downPosition then
+            local distance = (input.Position - downPosition).Magnitude
+            if distance < 10 then
+                TriggerToggle()
+            end
+            downPosition = nil
         end
     end)
     
